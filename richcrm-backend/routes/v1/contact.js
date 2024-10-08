@@ -5,6 +5,52 @@ var ContactController = require('../../controllers/contact');
 
 const router = express.Router();
 
+
+/**
+ * @api {get} v1/contact/:contactId Get a contact
+ * @apiName GetContact
+ * @apiGroup Contact
+ * 
+ * @apiParam {String} contactId Contact ID.
+ * 
+ * @apiSuccess {String} contactId Contact ID.
+ * @apiSuccess {Number} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
+ * @apiSuccess {String} firstName First Name of the Contact.
+ * @apiSuccess {String} lastName Last Name of the Contact.
+ * @apiSuccess {String} company Company name.
+ * @apiSuccess {String} position Position of the Contact in the company.
+ * @apiSuccess {String} cellNumber Cell phone number of the Contact.
+ * @apiSuccess {String} email Email address of the Contact.
+ * @apiSuccess {String} mailingAddress Mailing address of the Contact.
+ * @apiSuccess {String} wechatAccount WeChat Account of the Contact.
+ * @apiSuccess {String} note Note for this Contact.
+ * 
+ * 
+ * @apiSuccessExample Success-Response:
+ * {
+ *  "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
+ *  "contactType": 0,
+ *  "firstName": "Lawson",
+ *  "lastName": "Wu",
+ *  "company": "RichTech",
+ *  "position": "CTO",
+ *  "cellNumber": "0912345678",
+ *  "email": "test@gmail.com",
+ *  "mailingAddress": "Framingham MA 01701-4607",
+ *  "wechatAccount": "lawsonwu",
+ *  "note": "This is a test contact."
+ * }
+ */
+router.get(
+    "/:contactId",
+    check("contactId")
+        .notEmpty()
+        .isUUID()
+        .withMessage("Contact ID is required, or should be a valid UUID"),
+    validate,
+    ContactController.getContact
+)
+
 /**
  * @api {post} v1/contact/register Register a new contact
  * @apiName RegisterContact

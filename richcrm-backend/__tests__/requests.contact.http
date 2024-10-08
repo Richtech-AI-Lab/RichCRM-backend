@@ -10,10 +10,14 @@ content-type: application/json
     "position": "CTO",
     "email": "test@gmail.com",
     "cellNumber": "0912345678",
-    "mailingAddress": "Framingham MA 01701-4607",
+    "mailingAddress": "Anchorage AK 99501-2016",
     "wechatAccount": "lawsonwu",
     "note": "This is a test contact."
 }
+
+
+### Query contact by contactId
+GET http://localhost:3001/v1/contact/8d587c04-0d59-4b70-8264-922d26bf6f00
 
 
 ### Query contact by keyword
@@ -39,8 +43,8 @@ POST http://localhost:3001/v1/contact/update
 content-type: application/json
 
 {
-    "contactId": "bffc41d3-4ef5-4cc8-8889-6524971e8299",
-    "contactType": 4,
+    "contactId": "0a44db91-9efe-4619-85b4-fc1e0c8755d7",
+    "contactType": 0,
     "firstName": "Larry",
     "lastName": "Woooo",
     "company": "RichTech",
