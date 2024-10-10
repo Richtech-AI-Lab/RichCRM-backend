@@ -35,9 +35,10 @@ const standardizeAddress = async (addressLine1, addressLine2, city, state, zipCo
             data.components === undefined) {
             return null;
         }
-        return {
+        var result = {
             formattedAddress: data.last_line,
             addressLine1: data.delivery_line_1,
+            addressLine2: null,
             city: data.components.city_name,
             state: data.components.state_abbreviation,
             zipCode: data.components.zipcode,
@@ -45,6 +46,11 @@ const standardizeAddress = async (addressLine1, addressLine2, city, state, zipCo
             // latitude: data.metadata.latitude,
             // longitude: data.metadata.longitude
         };
+
+        if (data.components.secondary_number !== undefined) {
+            result.addressLine2 = data.components.secondary_number;
+        }
+        return result;
     } catch (err) {
         return null;
     }

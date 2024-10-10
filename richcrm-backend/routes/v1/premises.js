@@ -276,8 +276,6 @@ router.post(
  * @apiBody {String} assessmentsPaidById Assessments Paid By ID.
  * @apiBody {String} managingCompany Managing Company.
  * @apiBody {Boolean} isTwoFamily Is Two Family.
- * @apiBody {String} twoFamilyFirstFloorTenantId Tenant ID of the First Floor of the Two Family Premises.
- * @apiBody {String} twoFamilySecondFloorTenantId Tenant ID of the Second Floor of the Two Family Premises.
  * @apiBody {String} twoFamilyFirstFloorTenantId Client ID of the First Floor of the Two Family Premises.
  * @apiBody {String} twoFamilySecondFloorTenantId Client ID of the Second Floor of the Two Family Premises.
  * @apiBody {Boolean} needInspection Need Inspection.

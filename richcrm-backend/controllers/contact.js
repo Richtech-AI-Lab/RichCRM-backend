@@ -10,6 +10,45 @@ class ContactController {
 
     }
 
+    async getContact(req, res) {
+        const { contactId } = req.params;
+        try {
+            const contact = await ContactService.readContact(contactId);
+            if (contact !== null) {
+                return res.status(200).json({
+                    status: "success",
+                    data: [{
+                        contactId: contact.ContactId,
+                        contactType: contact.ContactType,
+                        firstName: contact.FirstName,
+                        lastName: contact.LastName,
+                        company: contact.Company,
+                        position: contact.Position,
+                        cellNumber: contact.CellNumber,
+                        email: contact.Email,
+                        mailingAddress: contact.MailingAddress,
+                        wechatAccount: contact.WechatAccount,
+                        note: contact.Note,
+                    }],
+                    message: '[ContactController][getContact] Contact retrieved successfully',
+                });
+            } else {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[ContactController][getContact] Contact does not exist',
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: `[ContactController][getContact] Internal server error: ${error}`,
+            });
+        }
+    }
+
     async registerContact(req, res) {
         const { contactType, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
 

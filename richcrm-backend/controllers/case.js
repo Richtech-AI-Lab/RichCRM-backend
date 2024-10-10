@@ -540,17 +540,17 @@ class CaseController {
 
             // Update additional clients list 
             if (additionalClients !== undefined && additionalClients.length > 0) {
-                caseObj.additionalClients = await this.updateAdditionalClients(caseObj.additionalClients, additionalClients);
+                caseObj.additionalClients = await this.updateAdditionalClients(additionalClients);
             }
 
             // Update contacts list
             if (contacts !== undefined && contacts.length > 0) {
-                caseObj.contacts = await this.updateAdditionalContacts(caseObj.contacts, contacts);
+                caseObj.contacts = await this.updateAdditionalContacts(contacts);
             }
 
             // Update additional organizations list
             if (additionalOrganizations !== undefined && additionalOrganizations.length > 0) {
-                caseObj.additionalOrganizations = await this.updateAdditionalOrganizations(caseObj.additionalOrganizations, additionalOrganizations);
+                caseObj.additionalOrganizations = await this.updateAdditionalOrganizations(additionalOrganizations);
             }
 
             // Update the case
@@ -673,57 +673,51 @@ class CaseController {
     }
 
     // Update additional clients list
-    async updateAdditionalClients(additionalClients, additionalClientsNew) {
+    async updateAdditionalClients(additionalClients) {
         if (additionalClients === undefined || additionalClients === null) {
             additionalClients = [];
         }
-        for (let i = 0; i < additionalClientsNew.length; i++) {
-            if (!additionalClients.includes(additionalClientsNew[i])) {
-                const client = await ClientService.readClient(additionalClientsNew[i]);
-                if (client === null) {
-                    console.log(`[CaseController][updateAdditionalClients] Invalid additional client id ${additionalClientsNew[i]}`);
-                    continue;
-                }
-                additionalClients.push(additionalClientsNew[i]);
+        var additionalClientIds = [];
+        for (let i = 0; i < additionalClients.length; i++) {
+            const client = await ClientService.readClient(additionalClients[i]);
+            if (client === null) {
+                console.log(`[CaseController][updateAdditionalClients] Invalid additional client id ${additionalClients[i]}`);
             }
+            additionalClientIds.push(additionalClients[i]);
         }
-        return additionalClients;
+        return additionalClientIds;
     }
 
     // Update contacts list
-    async updateAdditionalContacts(contacts, contactsNew) {
+    async updateAdditionalContacts(contacts) {
+        var contactIds = [];
         if (contacts === undefined || contacts === null) {
             contacts = [];
         }
-        for (let i = 0; i < contactsNew.length; i++) {
-            if (!contacts.includes(contactsNew[i])) {
-                const contact = await ContactService.readContact(contactsNew[i]);
-                if (contact === null) {
-                    console.log(`[CaseController][updateAdditionalContacts] Invalid contact id ${contactsNew[i]}`);
-                    continue;
-                }
-                contacts.push(contactsNew[i]);
+        for (let i = 0; i < contacts.length; i++) {
+            const contact = await ContactService.readContact(contacts[i]);
+            if (contact === null) {
+                console.log(`[CaseController][updateAdditionalContacts] Invalid contact id ${contacts[i]}`);
             }
+            contactIds.push(contacts[i]);
         }
-        return contacts;
+        return contactIds;
     }
 
     // Update additional organizations list
-    async updateAdditionalOrganizations(additionalOrganizations, additionalOrganizationsNew) {
+    async updateAdditionalOrganizations(additionalOrganizations) {
         if (additionalOrganizations === undefined || additionalOrganizations === null) {
             additionalOrganizations = [];
         }
-        for (let i = 0; i < additionalOrganizationsNew.length; i++) {
-            if (!additionalOrganizations.includes(additionalOrganizationsNew[i])) {
-                const organization = await OrganizationService.readOrganization(additionalOrganizationsNew[i]);
-                if (organization === null) {
-                    console.log(`[CaseController][updateAdditionalOrganizations] Invalid additional organization id ${additionalOrganizationsNew[i]}`);
-                    continue;
-                }
-                additionalOrganizations.push(additionalOrganizationsNew[i]);
+        var additionalOrganizationIds = [];
+        for (let i = 0; i < additionalOrganizations.length; i++) {
+            const organization = await OrganizationService.readOrganization(additionalOrganizations[i]);
+            if (organization === null) {
+                console.log(`[CaseController][updateAdditionalOrganizations] Invalid additional organization id ${additionalOrganizations[i]}`);
             }
+            additionalOrganizationIds.push(additionalOrganizations[i]);
         }
-        return additionalOrganizations;
+        return additionalOrganizationIds;
     }
 
     // Extract case from list

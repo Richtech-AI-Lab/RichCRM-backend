@@ -28,7 +28,7 @@ POST http://localhost:3001/v1/client/query/type
 content-type: application/json
 
 {
-    "clientType": 1
+    "clientType": 0
 }
 
 

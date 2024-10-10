@@ -10,12 +10,12 @@ content-type: application/json
 
 
 ### Register Address
-POST https://api.richcrm.org/v1/utils/address/register
+POST http://localhost:3001/v1/utils/address/register
 content-type: application/json
 
 {
     "addressLine1": "130 W Third St",
-    "addressLine2": "1203",
+    "addressLine2": "1201",
     "city": "New York",
     "state": "NY",
     "zipCode": "10012"
@@ -26,7 +26,7 @@ POST http://localhost:3001/v1/utils/address/delete
 content-type: application/json
 
 {
-    "addressId": "New York NY 10012-1296"
+    "addressId": "New York NY 10012-1296#201"
 }
 
 
