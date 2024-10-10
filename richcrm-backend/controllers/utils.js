@@ -19,7 +19,12 @@ class UtilsController {
                     message: 'The address you entered cannot be verified, please check and try again'
                 });
             }
-            const addressId = standardizedData.formattedAddress;
+
+            let addressId = standardizedData.formattedAddress;
+            if (standardizedData.addressLine2 !== null) {
+                addressId = `${standardizedData.formattedAddress}#${standardizedData.addressLine2}`;
+            }
+            
 
             // Check if address already exists
             const existingAddress = await AddressService.readAddress(addressId);
