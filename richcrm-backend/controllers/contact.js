@@ -1,5 +1,6 @@
 var ContactService = require("../db/contact/contact.service");
 var ClientService = require("../db/client/client.service");
+var CaseService = require("../db/case/case.service");
 var ClientController = require("./client");
 var AddressService = require("../db/address/address.service");
 const { v4: uuidv4 } = require('uuid');
@@ -12,6 +13,7 @@ class ContactController {
         this.registerContact = this.registerContact.bind(this);
         this.queryContacts = this.queryContacts.bind(this);
         this.queryContactsByType = this.queryContactsByType.bind(this);
+        this.queryContactsByCaseAndType = this.queryContactsByCaseAndType.bind(this);
         this.updateContact = this.updateContact.bind(this);
         this.deleteContact = this.deleteContact.bind(this);
         this.procContacts = this.procContacts.bind(this);
@@ -227,6 +229,48 @@ class ContactController {
                 status: "failed",
                 data: [],
                 message: `[ContactController][queryContactsByType] Internal server error: ${error}`,
+            });
+        }
+    }
+
+    async queryContactsByCaseAndType(req, res) {
+        const { caseId, contactType } = req.body;
+        var contactList = [];
+        try {
+            if (Types.castIntToEnum(Types.contactType, contactType) !== undefined) {
+                const caseObj = await CaseService.readCase(caseId);
+                if (caseObj === null) {
+                    return res.status(400).json({
+                        status: "failed",
+                        data: [],
+                        message: '[ContactController][queryContactsByCaseAndType] Case does not exist',
+                    });
+                }
+                const contactIds = caseObj.Contacts;
+                if (contactIds !== null && contactIds.length > 0) {
+                    for (let i = 0; i < contactIds.length; i++) {
+                        const contactId = contactIds[i];
+                        const contact = await ContactService.readContact(contactId);
+                        if (contact !== null) {
+                            const contactObj = this.procContact(contact);
+                            if (contactObj.contactType === contactType) {
+                                contactList.push(contactObj);
+                            }
+                        }
+                    }
+                }
+            }
+            return res.status(200).json({
+                status: "success",
+                data: contactList,
+                message: '[ContactController][queryContactsByCaseAndType] Contacts queried successfully',
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: `[ContactController][queryContactsByCaseAndType] Internal server error: ${error}`,
             });
         }
     }

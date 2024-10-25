@@ -256,6 +256,46 @@ router.post(
 )
 
 /**
+ * @api {post} v1/contact/query/case Query contacts by case ID and contact type
+ * @apiName QueryContactsByCaseAndType
+ * @apiGroup Contact
+ * 
+ * @apiBody {String} caseId [REQUIRED] Case ID.
+ * @apiBody {Number} contactType [REQUIRED] Contact Type (0-REALTOR, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
+ * 
+ * @apiSuccessExample Success-Response:
+ * [
+ *  {
+ *    "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
+ *    "contactType": 0,
+ *    "firstName": "Larry",
+ *    "lastName": "Woooo",
+ *    "company": "RichTech",
+ *    "position": null,
+ *    "cellNumber": "0912345678",
+ *    "email": "otter@gmail.com",
+ *    "mailingAddress": "Salt Lake City UT 84103-1112",
+ *    "wechatAccount": "lawsjsonwu",
+ *    "note": "This is a test contact."
+ *  },
+ * ]
+ */
+router.post(
+    "/query/caseandtype",
+    check("caseId")
+        .notEmpty()
+        .isUUID()
+        .withMessage("Case ID is required and should be an UUID"),
+    check("contactType")
+        .notEmpty()
+        .isInt()
+        .withMessage("Contact Type is required"),
+    validate,
+    ContactController.queryContactsByCaseAndType
+)
+
+
+/**
  * @api {post} v1/contact/update Update a contact
  * @apiName UpdateContact
  * @apiGroup Contact
