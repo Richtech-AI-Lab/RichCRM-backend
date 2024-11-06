@@ -106,7 +106,7 @@ class PremisesController {
             if (addressLine2 === undefined) {
                 addressLine2 = '';
             }
-            const premisesName = `${address.AddressLine1} ${propertyTypeEnum}`;
+            const premisesName = `${address.AddressLine1}`;
 
             const premises = {
                 premisesId: uuidv4(),
