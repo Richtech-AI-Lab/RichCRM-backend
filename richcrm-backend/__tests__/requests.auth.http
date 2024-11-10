@@ -3,9 +3,9 @@ POST http://localhost:3001/v1/auth/register
 content-type: application/json
 
 {
-    "emailAddress": "test1@gmail.com",
+    "emailAddress": "eden@richtech-ai-labs.com",
     "password": "1234561341",
-    "userName": "Test User 2",
+    "userName": "Eden Wu",
     "role": 1
 }
 
@@ -32,8 +32,18 @@ POST http://localhost:3001/v1/auth/update
 content-type: application/json
 
 {
-    "emailAddress": "test1@gmail.com",
+    "emailAddress": "eden@richtech-ai-labs.com",
     "password": "1234561341",
     "userName": "John Doe",
     "role": 2
+}
+
+### Change password
+POST http://localhost:3001/v1/auth/change-password
+content-type: application/json
+
+{
+    "emailAddress": "eden@richtech-ai-labs.com",
+    "currentPassword": "1234561341",
+    "newPassword": "1234561342"
 }

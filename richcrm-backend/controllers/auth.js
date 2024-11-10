@@ -1,4 +1,5 @@
 var UserService = require('../db/user/user.service');
+const Types = require("../db/types");
 
 class AuthController {
     async registerUser(req, res) {
@@ -68,14 +69,14 @@ class AuthController {
                     userName: user.UserName,
                     role: user.Role
                 }],
-                message: 'User logged in successfully'
+                message: '[AuthController][loginUser] User logged in successfully'
             });
         } catch (error) {
             console.error(error);
             res.status(500).json({
                 status: "failed",
                 data: [],
-                message: 'Internal server error'
+                message: '[AuthController][loginUser] Internal server error'
             });
         }
         res.end();
@@ -89,7 +90,7 @@ class AuthController {
                 return res.status(400).json({
                     status: "failed",
                     data: [],
-                    message: 'Invalid password'
+                    message: '[AuthController][deleteUser] Invalid password'
                 });
             }
             const result = await UserService.deleteUser(emailAddress);
@@ -97,23 +98,79 @@ class AuthController {
                 return res.status(400).json({
                     status: "failed",
                     data: [],
-                    message: 'User not found'
+                    message: '[AuthController][deleteUser] User deletion failed'
                 });
             }
             res.status(200).json({
                 status: "success",
                 data: [result],
-                message: 'User deleted successfully'
+                message: '[AuthController][deleteUser] User deleted successfully'
             });
         } catch (error) {
             console.error(error);
             res.status(500).json({
                 status: "failed",
                 data: [],
-                message: 'Internal server error'
+                message: '[AuthController][deleteUser] Internal server error'
             });
         }
         res.end();
+    }
+
+    async changePassword(req, res) {
+        const {emailAddress, currentPassword, newPassword} = req.body;
+        try {
+            const user = await UserService.readUser(emailAddress);
+            if (user === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[AuthController][changePassword] User not found'
+                });
+            }
+            if (user.Password !== currentPassword) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[AuthController][changePassword] Current password not matched'
+                });
+            }
+            if (newPassword === currentPassword) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[AuthController][changePassword] New password cannot be the same as current password'
+                });
+            }
+            
+
+            const result = await UserService.updateUser({emailAddress, password: newPassword});
+            if (result === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[AuthController][changePassword] Password change failed'
+                });
+            }
+            res.status(200).json({
+                status: "success",
+                data: [{
+                    emailAddress: user.EmailAddress,
+                    password: newPassword,
+                    role: user.Role,
+                    userName: user.UserName,
+                }],
+                message: '[AuthController][changePassword] Password changed successfully'
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: '[AuthController][changePassword] Internal server error'
+            });
+        }
+
     }
 
     async updateUser(req, res) {
@@ -124,32 +181,53 @@ class AuthController {
                 return res.status(400).json({
                     status: "failed",
                     data: [],
-                    message: 'User not found'
+                    message: '[AuthController][updateUser] User not found'
                 });
             }
-            const result = await UserService.updateUser({emailAddress, password, userName, role});
+            const userObj = {
+                emailAddress: user.EmailAddress,
+                password: user.Password,
+                userName: user.UserName,
+                role: user.Role
+            }
+            if (password !== undefined && password !== userObj.password && password !== '') {
+                userObj.password = password;
+            }
+
+            if (userName !== undefined && userName !== userObj.userName && userName !== '') {
+                userObj.userName = userName;
+            }
+
+            if (role !== undefined && role !== userObj.role && role !== '') {
+                const roleEnum = Types.castIntToEnum(Types.userRole, role);
+                if (roleEnum === undefined) {
+                    return res.status(400).json({
+                        status: "failed",
+                        data: [],
+                        message: '[AuthController][updateUser] Invalid role'
+                    });
+                }
+                userObj.role = role;
+            }
+            const result = await UserService.updateUser(userObj);
             if (result === null) {
                 return res.status(400).json({
                     status: "failed",
                     data: [],
-                    message: 'Update user failed'
+                    message: '[AuthController][updateUser] User update failed'
                 });
             }
             res.status(200).json({
                 status: "success",
-                data: [{
-                    password: result.Password,
-                    userName: result.UserName,
-                    role: result.Role
-                }],
-                message: 'User updated successfully'
+                data: [userObj],
+                message: '[AuthController][updateUser] User updated successfully'
             });
         } catch (error) {
             console.error(error);
             res.status(500).json({
                 status: "failed",
                 data: [],
-                message: 'Internal server error'
+                message: '[AuthController][updateUser] Internal server error'
             });
         }
         res.end();

@@ -54,26 +54,25 @@ class UserService {
 
     async updateUser (user) {
         // Check if the user object is valid
-        if (user.emailAddress === undefined ||
-            user.password === undefined ||
-            user.userName === undefined ||
-            user.role === undefined) {
+        if (user.emailAddress === undefined) {
             console.log('[USER-Update] Invalid user object');
             return null;
         }
         
 
         // Check if the role is valid
-        switch (user.role) {
-            case userRole.ADMIN:
-                break;
-            case userRole.ATTORNEY:
-                break;
-            case userRole.CLIENT:
-                break;
-            default:
-                console.log('[USER-Update] Invalid role');
-                return null;
+        if (user.role !== undefined && user.role !== null) {
+            switch (user.role) {
+                case userRole.ADMIN:
+                    break;
+                case userRole.ATTORNEY:
+                    break;
+                case userRole.CLIENT:
+                    break;
+                default:
+                    console.log('[USER-Update] Invalid role');
+                    return null;
+            }
         }
 
         const data = await User.updateUser(user);

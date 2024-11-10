@@ -16,11 +16,11 @@ content-type: application/json
 
 
 ### Read Case
-GET http://localhost:3001/v1/case/f654fe2c-713b-4806-9bca-138625d113dc
+GET http://localhost:3001/v1/case/15754707-1a8f-4a7b-b583-50dc66bd6765
 
 
 ### Read All Cases by Creator
-POST http://localhost:3001/v1/case/all
+POST https://api.richcrm.org/v1/case/all
 content-type: application/json
 
 {
@@ -43,16 +43,16 @@ POST http://localhost:3001/v1/case/query/contact
 content-type: application/json
 
 {
-    "contactId": "122aec8a-2a77-418a-840d-ec472d38b63b",
-    "closed": false
+    "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
+    "closed": true
 }
 
 ### Read All Cases by Keyword
-POST http://localhost:3001/v1/case/query/keyword
+POST https://api.richcrm.org/v1/case/query/keyword
 content-type: application/json
 
 {
-    "keyword": "Woo",
+    "keyword": "Eden",
     "closed": false
 }
 
@@ -97,7 +97,7 @@ POST http://localhost:3001/v1/case/delete
 content-type: application/json
 
 {
-    "caseId": "497592f5-d19a-4d42-9cdd-4a40b291ede0"
+    "caseId": "15754707-1a8f-4a7b-b583-50dc66bd6765"
 }
 
 
