@@ -42,6 +42,16 @@ content-type: application/json
 }
 
 
+### Query contact by case and contactType
+POST http://localhost:3001/v1/contact/query/caseandtype
+content-type: application/json
+
+{
+    "caseId": "c95501f1-4e0e-476a-bc69-938fbfbf3d1d",
+    "contactType": 0
+}
+
+
 ### Update a contact
 POST http://localhost:3001/v1/contact/update
 content-type: application/json

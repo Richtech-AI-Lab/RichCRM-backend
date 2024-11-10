@@ -318,16 +318,22 @@ class CaseController {
             // Update additional clients list 
             if (additionalClients !== undefined && additionalClients.length > 0) {
                 caseObj.additionalClients = await this.updateAdditionalClients(additionalClients);
+            } else {
+                caseObj.additionalClients = [];
             }
 
             // Update contacts list
             if (contacts !== undefined && contacts.length > 0) {
                 caseObj.contacts = await this.updateAdditionalContacts(contacts);
+            } else {
+                caseObj.contacts = [];
             }
 
             // Update additional organizations list
             if (additionalOrganizations !== undefined && additionalOrganizations.length > 0) {
                 caseObj.additionalOrganizations = await this.updateAdditionalOrganizations(additionalOrganizations);
+            } else {
+                caseObj.additionalOrganizations = [];
             }
 
         } catch (error) {
