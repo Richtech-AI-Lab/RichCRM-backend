@@ -8,6 +8,7 @@
  * @property {string} Password - User's password
  * @property {string} UserName - User's name
  * @property {enum} Role - User's role (ADMIN, ATTORNEY, CLIENT)
+ * @property {string} UploadFolderName - User's upload folder name
  */
 
 const db = require('../dynamodb');
@@ -43,7 +44,8 @@ class User {
                 EmailAddress: user.emailAddress,
                 Password: user.password,
                 UserName: user.userName,
-                Role: user.role
+                Role: user.role,
+                UploadFolderName: user.uploadFolderName
             }
         };
         await db.put(params).promise();
@@ -77,6 +79,10 @@ class User {
             updateExpressions.push("#r = :r");
             expressionAttributeNames['#r'] = 'Role';
             params.ExpressionAttributeValues[':r'] = user.role;
+        }
+        if (user.uploadFolderName !== undefined) {
+            updateExpressions.push("UploadFolderName = :ufn");
+            params.ExpressionAttributeValues[':ufn'] = user.uploadFolderName;
         }
 
         if (updateExpressions.length > 0) {

@@ -42,7 +42,6 @@ router.post(
  * @apiName GetAllTags
  * @apiGroup Tag
  * 
- * @apiSuccess {UUID} TagId Tag's ID
  * @apiSuccess {String} Label Tag's label
  * @apiSuccess {String} Color1 Tag's color1 in hex
  * @apiSuccess {String} Color2 Tag's color2 in hex
@@ -51,7 +50,6 @@ router.post(
  * @apiSuccessExample Example data on success:
  * [
  *   {
- *     "TagId": "123e4567-e89b-12d3-a456-426614174000",
  *     "Label": "Tag1",
  *     "Color1": "#FFFFFF",
  *     "Color2": "#000000",
