@@ -4,13 +4,13 @@ content-type: application/json
 
 {
     "contactType": 0,
+    "tags": ["Tag1", "Tag3"],
     "firstName": "Lawson",
     "lastName": "Wu",
     "company": "RichTech",
     "position": "CTO",
     "email": "test@gmail.com",
     "cellNumber": "0912345678",
-    "mailingAddress": "Anchorage AK 99501-2016",
     "wechatAccount": "lawsonwu",
     "note": "This is a test contact."
 }
@@ -38,7 +38,7 @@ POST http://localhost:3001/v1/contact/query/type
 content-type: application/json
 
 {
-    "contactType": 4
+    "contactType": 0
 }
 
 
@@ -57,8 +57,9 @@ POST http://localhost:3001/v1/contact/update
 content-type: application/json
 
 {
-    "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
+    "contactId": "df171ae8-6c0d-48d3-8cde-d0e7c0d1a07e",
     "contactType": 0,
+    "tags": ["Tag2", "Tag3"],
     "firstName": "Larry",
     "lastName": "Woooo",
     "company": "RichTech",
@@ -75,5 +76,5 @@ POST http://localhost:3001/v1/contact/delete
 content-type: application/json
 
 {
-    "contactId": "ef59b861-2130-4065-967b-314b5405be82"
+    "contactId": "8905a0b8-7848-4b9c-b149-d59f4185921c"
 }

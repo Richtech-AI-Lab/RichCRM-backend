@@ -35,7 +35,8 @@ content-type: application/json
     "emailAddress": "eden@richtech-ai-labs.com",
     "password": "1234561341",
     "userName": "John Doe",
-    "role": 2
+    "role": 2,
+    "uploadFolderName": "MG"
 }
 
 ### Change password

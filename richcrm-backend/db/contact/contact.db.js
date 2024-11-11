@@ -6,6 +6,7 @@
  * @typedef {object} Contact
  * @property {string} ContactId - Contact ID
  * @property {contactType} ContactType - Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER)
+ * @property {array} Tags - Tag Labels (foreign key to Tag)
  * @property {string} FirstName - Contact's first name
  * @property {string} LastName - Contact's last name
  * @property {string} Company - Company name
@@ -106,12 +107,25 @@ class Contact {
         return data;
     }
 
+    async getContactsByTag(tagId) {
+        const params = {
+            TableName: this.table,
+            FilterExpression: 'contains(Tags, :t)',
+            ExpressionAttributeValues: {
+                ':t': tagId,
+            },
+        };
+        const data = await db.scan(params).promise();
+        return data;
+    }
+
     async createContact(contact) {
         const params = {
             TableName: this.table,
             Item: {
                 ContactId: contact.contactId,
                 ContactType: contact.contactType,
+                Tags: contact.tags,
                 FirstName: contact.firstName,
                 LastName: contact.lastName,
                 Company: contact.company,
@@ -160,6 +174,11 @@ class Contact {
             params.ExpressionAttributeValues[':p'] = contact.position;
             params.ExpressionAttributeNames['#p'] = 'Position';
             params.UpdateExpression += ', #p = :p';
+        }
+
+        if (contact.tags !== undefined) {
+            params.ExpressionAttributeValues[':t'] = contact.tags;
+            params.UpdateExpression += ', Tags = :t';
         }
 
         if (contact.cellNumber !== undefined) {

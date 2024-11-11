@@ -122,6 +122,7 @@ router.post(
  * @apiBody {String} password Password of the User.
  * @apiBody {String} userName User name of the User.
  * @apiBody {Number} role Role of the User (0-Admin, 1-Attorney).
+ * @apiBody {String} uploadFolderName Folder name for user uploads.
  *
  * @apiSuccess {String} password Password of the User.
  * @apiSuccess {String} userName User name of the User.
@@ -131,7 +132,8 @@ router.post(
  * {
  *  "password": "password",
  *  "userName": "Test User",
- *  "role": 0
+ *  "role": 0,
+ *  "uploadFolderName": "MG"
  * }
  */
 router.post(
@@ -151,6 +153,8 @@ router.post(
     check("role")
         .notEmpty()
         .withMessage("Role is required"),
+    check("uploadFolderName")
+        .optional(),
     validate,
     AuthController.updateUser
 );

@@ -292,5 +292,11 @@ module.exports = {
         OTHER: 0,
         COMPANY: 1,
         TRUST: 2,
+    },
+
+    // [DB] TAG
+    tagType: {
+        OTHER: 0,
+        CONTACT: 1,
     }
 };

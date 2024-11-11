@@ -159,6 +159,7 @@ class AuthController {
                     password: newPassword,
                     role: user.Role,
                     userName: user.UserName,
+                    uploadFolderName: user.UploadFolderName,
                 }],
                 message: '[AuthController][changePassword] Password changed successfully'
             });
@@ -174,7 +175,7 @@ class AuthController {
     }
 
     async updateUser(req, res) {
-        const {emailAddress, password, userName, role} = req.body;
+        const {emailAddress, password, userName, role, uploadFolderName} = req.body;
         try {
             const user = await UserService.readUser(emailAddress);
             if (user === null) {
@@ -188,7 +189,8 @@ class AuthController {
                 emailAddress: user.EmailAddress,
                 password: user.Password,
                 userName: user.UserName,
-                role: user.Role
+                role: user.Role,
+                uploadFolderName: user.UploadFolderName,
             }
             if (password !== undefined && password !== userObj.password && password !== '') {
                 userObj.password = password;
@@ -209,6 +211,11 @@ class AuthController {
                 }
                 userObj.role = role;
             }
+
+            if (uploadFolderName !== undefined && uploadFolderName !== userObj.uploadFolderName && uploadFolderName.trim() !== '') {
+                userObj.uploadFolderName = uploadFolderName;
+            }
+
             const result = await UserService.updateUser(userObj);
             if (result === null) {
                 return res.status(400).json({
