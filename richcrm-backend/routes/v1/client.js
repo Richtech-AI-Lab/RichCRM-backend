@@ -21,6 +21,7 @@ const router = express.Router();
  * @apiSuccess {String} clientId Client ID.
  * @apiSuccess {Number} clientType Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST).
  * @apiSuccess {Number} title Title of the Client (0-NA, 1-MR, 2-MRS, 3-MS, 4-DR).
+ * @apiSuccess {Array} tags Tags of the Client.
  * @apiSuccess {String} firstName First Name of the Client.
  * @apiSuccess {String} lastName Last Name of the Client.
  * @apiSuccess {Number} gender Gender of the Client (0-NA, 1-MALE, 2-FEMALE).
@@ -34,6 +35,7 @@ const router = express.Router();
  *  "clientId":"123-45-6789",
  *  "clientType": 0,
  *  "title": 0,
+ *  "tags": ["Client"],
  *  "firstName": "John",
  *  "lastName": "Doe",
  *  "gender": 0,
@@ -85,6 +87,7 @@ router.post(
  * 
  * @apiSuccess {String} clientId Client ID.
  * @apiSuccess {Number} clientType Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST).
+ * @apiSuccess {Array} tags Tags of the Client.
  * @apiSuccess {Number} title Title of the Client (0-NA, 1-MR, 2-MRS, 3-MS, 4-DR).
  * @apiSuccess {String} firstName First Name of the Client.
  * @apiSuccess {String} lastName Last Name of the Client.
@@ -137,6 +140,7 @@ router.get(
  * @apiSuccess {String} clientId Client ID.
  * @apiSuccess {Number} clientType Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST).
  * @apiSuccess {Number} title Title of the Client (0-NA, 1-MR, 2-MRS, 3-MS, 4-DR).
+ * @apiSuccess {Array} tags Tags of the Client.
  * @apiSuccess {String} firstName First Name of the Client.
  * @apiSuccess {String} lastName Last Name of the Client.
  * @apiSuccess {String} gender Gender of the Client (0-NA, 1-MALE, 2-FEMALE).
@@ -193,6 +197,7 @@ router.post(
  * @apiSuccess {String} clientId Client ID.
  * @apiSuccess {Number} clientType Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST).
  * @apiSuccess {Number} title Title of the Client (0-NA, 1-MR, 2-MRS, 3-MS, 4-DR).
+ * @apiSuccess {Array} tags Tags of the Client.
  * @apiSuccess {String} firstName First Name of the Client.
  * @apiSuccess {String} lastName Last Name of the Client.
  * @apiSuccess {String} gender Gender of the Client (0-NA, 1-MALE, 2-FEMALE).
@@ -212,6 +217,7 @@ router.post(
  *  "clientId":"123-45-6789",
  *  "clientType": 1,
  *  "title": 0,
+ *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "John",
  *  "lastName": "Doe",
  *  "gender": 0,
@@ -247,6 +253,7 @@ router.post(
  * @apiSuccess {String} clientId Client ID.
  * @apiSuccess {Number} clientType Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST).
  * @apiSuccess {Number} title Title of the Client (0-NA, 1-MR, 2-MRS, 3-MS, 4-DR).
+ * @apiSuccess {Array} tags Tags of the Client.
  * @apiSuccess {String} firstName First Name of the Client.
  * @apiSuccess {String} lastName Last Name of the Client.
  * @apiSuccess {String} gender Gender of the Client (0-NA, 1-MALE, 2-FEMALE).
@@ -266,6 +273,7 @@ router.post(
  *  "clientId":"123-45-6789",
  *  "clientType": 1,
  *  "title": 0,
+ *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "John",
  *  "lastName": "Doe",
  *  "gender": 0,
@@ -301,6 +309,7 @@ router.post(
  * @apiSuccess {String} clientId Client ID.
  * @apiSuccess {Number} clientType Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST).
  * @apiSuccess {Number} title Title of the Client (0-NA, 1-MR, 2-MRS, 3-MS, 4-DR).
+ * @apiSuccess {Array} tags Tags of the Client.
  * @apiSuccess {String} firstName First Name of the Client.
  * @apiSuccess {String} lastName Last Name of the Client.
  * @apiSuccess {String} gender Gender of the Client (0-NA, 1-MALE, 2-FEMALE).
@@ -320,6 +329,7 @@ router.post(
  *  "clientId":"123-45-6789",
  *  "clientType": 1,
  *  "title": 0,
+ *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "John",
  *  "lastName": "Doe",
  *  "gender": 0,

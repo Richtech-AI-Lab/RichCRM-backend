@@ -5,7 +5,6 @@
  * 
  * @typedef {object} Contact
  * @property {string} ContactId - Contact ID
- * @property {contactType} ContactType - Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER)
  * @property {array} Tags - Tag Labels (foreign key to Tag)
  * @property {string} FirstName - Contact's first name
  * @property {string} LastName - Contact's last name
@@ -20,7 +19,6 @@
 
 
 const db = require('../dynamodb');
-const { contactType } = require('../types');
 
 class Contact {
     constructor() {
@@ -55,13 +53,12 @@ class Contact {
         return contacts;
     }
 
-
-    async getContactsByType(contactType) {
+    async getContactsByTag(label) {
         const params = {
             TableName: this.table,
-            FilterExpression: 'ContactType = :t',
+            FilterExpression: 'contains(Tags, :t)',
             ExpressionAttributeValues: {
-                ':t': contactType,
+                ':t': label,
             },
         };
         const data = await db.scan(params).promise();
@@ -107,24 +104,11 @@ class Contact {
         return data;
     }
 
-    async getContactsByTag(tagId) {
-        const params = {
-            TableName: this.table,
-            FilterExpression: 'contains(Tags, :t)',
-            ExpressionAttributeValues: {
-                ':t': tagId,
-            },
-        };
-        const data = await db.scan(params).promise();
-        return data;
-    }
-
     async createContact(contact) {
         const params = {
             TableName: this.table,
             Item: {
                 ContactId: contact.contactId,
-                ContactType: contact.contactType,
                 Tags: contact.tags,
                 FirstName: contact.firstName,
                 LastName: contact.lastName,

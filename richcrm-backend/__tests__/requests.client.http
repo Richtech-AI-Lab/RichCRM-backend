@@ -5,7 +5,6 @@ content-type: application/json
 {
     "clientId": "d5dbbca5-808c-4df8-b51b-b09b1cb595bd",
     "clientType": 0,
-    "tags": ["Tag1", "Tag3"],
     "firstName": "John",
     "lastName": "Doe",
     "cellNumber": "1234567891",
@@ -69,10 +68,19 @@ content-type: application/json
     "addressId": "New York NY 10012-1296"
 }
 
+### Update Client Temp
+POST http://localhost:3001/v1/client/update
+content-type: application/json
+
+{
+    "clientId": "b8a07cc3-715c-45dc-a900-77d18a108dd2",
+    "tags": ["Client"]
+}
+
 ### Delete Client
 POST https://api.richcrm.org/v1/client/delete
 content-type: application/json
 
 {
-    "clientId": "6993adc6-e29b-43fc-9c98-aebc191beffb"
+    "clientId": "43835007-8d98-46c5-aa5b-929b40a5de4d"
 }

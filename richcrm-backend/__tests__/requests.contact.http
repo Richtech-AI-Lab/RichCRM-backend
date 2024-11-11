@@ -3,8 +3,7 @@ POST http://localhost:3001/v1/contact/register
 content-type: application/json
 
 {
-    "contactType": 0,
-    "tags": ["Tag1", "Tag3"],
+    "tags": ["Broker", "Realtor"],
     "firstName": "Lawson",
     "lastName": "Wu",
     "company": "RichTech",
@@ -17,7 +16,7 @@ content-type: application/json
 
 
 ### Query contact by contactId
-GET http://localhost:3001/v1/contact/8d587c04-0d59-4b70-8264-922d26bf6f00
+GET http://localhost:3001/v1/contact/b6f6c07e-305d-4e91-8a2c-50c4369ba0d1
 
 
 ### Query all contacts
@@ -34,21 +33,21 @@ content-type: application/json
 
 
 ### Query contact by contactType
-POST http://localhost:3001/v1/contact/query/type
+POST http://localhost:3001/v1/contact/query/tag
 content-type: application/json
 
 {
-    "contactType": 0
+    "tag": "Client"
 }
 
 
 ### Query contact by case and contactType
-POST http://localhost:3001/v1/contact/query/caseandtype
+POST http://localhost:3001/v1/contact/query/caseandtag
 content-type: application/json
 
 {
-    "caseId": "c95501f1-4e0e-476a-bc69-938fbfbf3d1d",
-    "contactType": 0
+    "caseId": "7097fce5-cab3-4fb7-8280-bcd1aac67a40",
+    "tag": "Client"
 }
 
 
@@ -59,7 +58,7 @@ content-type: application/json
 {
     "contactId": "df171ae8-6c0d-48d3-8cde-d0e7c0d1a07e",
     "contactType": 0,
-    "tags": ["Tag2", "Tag3"],
+    "tags": ["Broker"],
     "firstName": "Larry",
     "lastName": "Woooo",
     "company": "RichTech",

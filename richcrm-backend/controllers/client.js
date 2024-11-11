@@ -80,7 +80,7 @@ class ClientController {
             }
 
             // Check if tags exist
-            const tagList = [];
+            const tagList = ["Client"];
             if (tags !== undefined && tags !== null) {
                 for (let i = 0; i < tags.length; i++) {
                     const label = tags[i];

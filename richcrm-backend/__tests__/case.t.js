@@ -5,6 +5,7 @@ import clientRouter from '../routes/v1/client';
 import contactRouter from '../routes/v1/contact';
 import organizationRouter from '../routes/v1/organization';
 import premisesRouter from '../routes/v1/premises';
+import tagRouter from '../routes/v1/tag';
 import bodyParser from 'body-parser';
 import { clientType } from '../db/types';
 
@@ -16,11 +17,20 @@ app.use('/v1/client', clientRouter);
 app.use('/v1/contact', contactRouter);
 app.use('/v1/organization', organizationRouter);
 app.use('/v1/premises', premisesRouter);
+app.use('/v1/tag', tagRouter);
 
 var testCaseId;
 
+const tagObj1 = {
+    label: "Other",
+    color1: "#000000",
+    color2: "#FFFFFF",
+    tagType: 0,
+}
+
 const clientObj1 = {
     clientType: 0,
+    tags: ["Other"],
     firstName: "Testy",
     lastName: "McTest",
     cellNumber: "8880909765",
@@ -28,6 +38,7 @@ const clientObj1 = {
 }
 const clientObj2 = {
     clientType: 0,
+    tags: ["Other"],
     firstName: "Testson",
     lastName: "McTestment",
     cellNumber: "6667539201",
@@ -35,7 +46,7 @@ const clientObj2 = {
 }
 
 const contactObj1 = {
-    contactType: 1,
+    tags: ["Other"],
     firstName: "TestContact",
     lastName: "McTestContact",
     company: "Test Inc.",
@@ -61,6 +72,15 @@ var caseObj = {
 }
 
 describe('Case Routes', function () {
+
+    test('/tag/create', async () => {
+        const res = await request(app).post('/v1/tag/create')
+            .send(tagObj1)
+            .set('Accept', 'application/json');
+        console.log(res.body);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.status).toEqual('success');
+    });
 
     test('/client/register', async () => {
         const res = await request(app).post('/v1/client/register')
@@ -230,6 +250,15 @@ describe('Case Routes', function () {
     test('/organization/delete', async () => {
         const res = await request(app).post('/v1/organization/delete')
             .send({organizationId: caseObj.additionalOrganizations[0]})
+            .set('Accept', 'application/json');
+        console.log(res.body);
+        expect(res.statusCode).toBe(200);
+        expect(res.body.status).toEqual('success');
+    });
+
+    test('/tag/delete', async () => {
+        const res = await request(app).post('/v1/tag/delete')
+            .send({label: tagObj1.label})
             .set('Accept', 'application/json');
         console.log(res.body);
         expect(res.statusCode).toBe(200);

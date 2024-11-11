@@ -12,7 +12,6 @@ const router = express.Router();
  * @apiGroup Contact
  * 
  * @apiSuccess {String} contactId Contact ID.
- * @apiSuccess {Number} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
  * @apiSuccess {Array} tags Tag Labels (foreign key to Tag).
  * @apiSuccess {String} firstName First Name of the Contact.
  * @apiSuccess {String} lastName Last Name of the Contact.
@@ -28,7 +27,6 @@ const router = express.Router();
  * @apiSuccessExample Success-Response:
  * [{
  * "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
- * "contactType": 0,
  * "tags": ["Tag1", "Tag2"],
  * "firstName": "Lawson",
  * "lastName": "Wu",
@@ -56,7 +54,6 @@ router.get(
  * @apiParam {String} contactId Contact ID.
  * 
  * @apiSuccess {String} contactId Contact ID.
- * @apiSuccess {Number} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
  * @apiSuccess {Array} tags Tag Labels (foreign key to Tag).
  * @apiSuccess {String} firstName First Name of the Contact.
  * @apiSuccess {String} lastName Last Name of the Contact.
@@ -72,7 +69,6 @@ router.get(
  * @apiSuccessExample Success-Response:
  * {
  *  "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
- *  "contactType": 0,
  *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "Lawson",
  *  "lastName": "Wu",
@@ -102,7 +98,6 @@ router.get(
  * @apiName RegisterContact
  * @apiGroup Contact
  * 
- * @apiBody {String} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
  * @apiBody {Array} tags [Optional] Tag Labels (foreign key to Tag).
  * @apiBody {String} firstName First Name of the Contact.
  * @apiBody {String} lastName [Optional] Last Name of the Contact.
@@ -115,7 +110,6 @@ router.get(
  * @apiBody {String} note [Optional] Note for this Contact.
  * 
  * @apiSuccess {String} contactId Contact ID.
- * @apiSuccess {Number} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
  * @apiSuccess {Array} tags Tag Labels (foreign key to Tag).
  * @apiSuccess {String} firstName First Name of the Contact.
  * @apiSuccess {String} lastName Last Name of the Contact.
@@ -131,7 +125,6 @@ router.get(
  * @apiSuccessExample Success-Response:
  * {
  *  "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
- *  "contactType": 0,
  *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "Lawson",
  *  "lastName": "Wu",
@@ -146,9 +139,6 @@ router.get(
  */
 router.post(
     "/register",
-    check("contactType")
-        .notEmpty()
-        .withMessage("Contact Type is required"),
     check("tags")
         .isArray()
         .optional()
@@ -185,7 +175,6 @@ router.post(
  * @apiBody {String} keyword Keyword to search for.
  * 
  * @apiSuccess {String} contactId Contact ID.
- * @apiSuccess {Number} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
  * @apiSuccess {Array} tags Tag Labels (foreign key to Tag).
  * @apiSuccess {String} firstName First Name of the Contact.
  * @apiSuccess {String} lastName Last Name of the Contact.
@@ -201,7 +190,6 @@ router.post(
  * @apiSuccessExample Success-Response:
  * [{
  *  "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
- *  "contactType": 0,
  *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "Lawson",
  *  "lastName": "Wu",
@@ -225,14 +213,13 @@ router.post(
 
 
 /**
- * @api {post} v1/contact/query/type Query contacts by type
- * @apiName QueryContactsByType
+ * @api {post} v1/contact/query/tag
+ * @apiName QueryContactsByTag
  * @apiGroup Contact
  * 
- * @apiBody {Number} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
+ * @apiBody {String} tag Tag label.
  * 
  * @apiSuccess {String} contactId Contact ID.
- * @apiSuccess {Number} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
  * @apiSuccess {Array} tags Tag Labels (foreign key to Tag).
  * @apiSuccess {String} firstName First Name of the Contact.
  * @apiSuccess {String} lastName Last Name of the Contact.
@@ -248,7 +235,6 @@ router.post(
  * @apiSuccessExample Success-Response:
  * [{
  *  "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
- *  "contactType": 0,
  *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "Lawson",
  *  "lastName": "Wu",
@@ -262,27 +248,26 @@ router.post(
  * }]
  */
 router.post(
-    "/query/type",
-    check("contactType")
+    "/query/tag",
+    check("tag")
         .notEmpty()
-        .withMessage("Contact Type is required"),
+        .withMessage("Tag is required"),
     validate,
-    ContactController.queryContactsByType
+    ContactController.queryContactsByTag
 )
 
 /**
- * @api {post} v1/contact/query/case Query contacts by case ID and contact type
- * @apiName QueryContactsByCaseAndType
+ * @api {post} v1/contact/query/caseandtag
+ * @apiName QueryContactsByCaseAndTag
  * @apiGroup Contact
  * 
  * @apiBody {String} caseId [REQUIRED] Case ID.
- * @apiBody {Number} contactType [REQUIRED] Contact Type (0-REALTOR, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
+ * @apiBody {String} tag [REQUIRED] Tag label.
  * 
  * @apiSuccessExample Success-Response:
  * [
  *  {
  *    "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
- *    "contactType": 0,
  *    "tags": ["Tag1", "Tag2"],
  *    "firstName": "Larry",
  *    "lastName": "Woooo",
@@ -297,17 +282,17 @@ router.post(
  * ]
  */
 router.post(
-    "/query/caseandtype",
+    "/query/caseandtag",
     check("caseId")
         .notEmpty()
         .isUUID()
         .withMessage("Case ID is required and should be an UUID"),
-    check("contactType")
+    check("tag")
         .notEmpty()
-        .isInt()
-        .withMessage("Contact Type is required"),
+        .isString()
+        .withMessage("Tag is required"),
     validate,
-    ContactController.queryContactsByCaseAndType
+    ContactController.queryContactsByCaseAndTag
 )
 
 
@@ -317,7 +302,6 @@ router.post(
  * @apiGroup Contact
  * 
  * @apiBody {String} contactId Contact ID.
- * @apiBody {String} contactType [Optional] Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
  * @apiBody {Array} tags [Optional] Tag Labels (foreign key to Tag).
  * @apiBody {String} firstName [Optional] First Name of the Contact.
  * @apiBody {String} lastName [Optional] Last Name of the Contact.
@@ -330,7 +314,6 @@ router.post(
  * @apiBody {String} note [Optional] Note for this Contact.
  * 
  * @apiSuccess {String} contactId Contact ID.
- * @apiSuccess {Number} contactType Contact Type (0-BROKER, 1-ATTORNEY, 2-TITLE, 3-LENDER, 4-CLIENT, 5-OTHER).
  * @apiSuccess {String} firstName First Name of the Contact.
  * @apiSuccess {String} lastName Last Name of the Contact.
  * @apiSuccess {String} company Company name.
@@ -344,7 +327,6 @@ router.post(
  * @apiSuccessExample Success-Response:
  * {
  *  "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
- *  "contactType": 0,
  *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "Lawson",
  *  "lastName": "Wu",
@@ -363,8 +345,6 @@ router.post(
     check("contactId")
         .notEmpty()
         .withMessage("Contact ID is required"),
-    check("contactType")
-        .optional(),
     check("tags")
         .isArray()
         .optional()
