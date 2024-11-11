@@ -4,7 +4,6 @@
  * Database Model of Tag
  * 
  * @typedef {object} Tag
- * @property {string} TagId - Tag's ID UUID
  * @property {string} Label - Tag's label
  * @property {string} Color1 - Tag's color1 in hex
  * @property {string} Color2 - Tag's color2 in hex
@@ -19,26 +18,14 @@ class Tag {
         this.table = 'Tag';
     }
 
-    async getTagById(tagId) {
-        const params = {
-            TableName: this.table,
-            Key: {
-                TagId: tagId,
-            },
-        };
-        const data = await db.get(params).promise();
-        return data;
-    }
-
     async getTagByLabel(label) {
         const params = {
             TableName: this.table,
-            FilterExpression: 'Label = :l',
-            ExpressionAttributeValues: {
-                ':l': label,
+            Key: {
+                Label: label,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.get(params).promise();
         return data;
     }
 
@@ -66,7 +53,6 @@ class Tag {
         const params = {
             TableName: this.table,
             Item: {
-                TagId: tag.tagId,
                 Label: tag.label,
                 Color1: tag.color1,
                 Color2: tag.color2,
@@ -81,7 +67,7 @@ class Tag {
         const params = {
             TableName: this.table,
             Key: {
-                TagId: tag.tagId,
+                Label: tag.label,
             },
             UpdateExpression: '',
             ExpressionAttributeValues: {},
@@ -91,11 +77,6 @@ class Tag {
         var updateExpressions = [];
         var expressionAttributeNames = {};
         // Optional fields
-        if (tag.label !== undefined) {
-            params.ExpressionAttributeValues[':l'] = tag.label;
-            expressionAttributeNames['#l'] = 'Label';
-            updateExpressions.push('#l = :l');
-        }
 
         if (tag.color1 !== undefined) {
             params.ExpressionAttributeValues[':c1'] = tag.color1;
@@ -126,11 +107,11 @@ class Tag {
         return data.Attributes;
     }
 
-    async deleteTag(tagId) {
+    async deleteTag(label) {
         const params = {
             TableName: this.table,
             Key: {
-                TagId: tagId,
+                Label: label,
             },
         };
         const data = await db.delete(params).promise();

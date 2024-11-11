@@ -1,21 +1,11 @@
 const Tag = require('./tag.db');
 
 class TagService {
-    async readTag(tagId) {
-        const data = await Tag.getTagById(tagId);
-
-        if (data.Item !== undefined) {
-            return data.Item;
-        }
-
-        return null;
-    }
-
     async readTagByLabel(label) {
         const data = await Tag.getTagByLabel(label);
 
-        if (data.Items !== undefined) {
-            return data.Items;
+        if (data.Item !== undefined) {
+            return data.Item;
         }
 
         return null;
@@ -42,8 +32,8 @@ class TagService {
     }
 
     async createTag(tag) {
-        if (tag.tagId === undefined) {
-            console.log("[TAG-Create] TagId is required");
+        if (tag.label === undefined) {
+            console.log("[TAG-Create] label is required");
             return null;
         }
         const data = await Tag.createTag(tag);
@@ -51,8 +41,8 @@ class TagService {
     }
 
     async updateTag(tag) {
-        if (tag.tagId === undefined) {
-            console.log("[TAG-Update] TagId is required");
+        if (tag.label === undefined) {
+            console.log("[TAG-Update] label is required");
             return null;
         }
         const data = await Tag.updateTag(tag);
@@ -60,12 +50,12 @@ class TagService {
         return data;
     }
 
-    async deleteTag(tagId) {
-        if (tagId === undefined) {
-            console.log("[TAG-Delete] TagId is required");
+    async deleteTag(label) {
+        if (label === undefined) {
+            console.log("[TAG-Delete] label is required");
             return null;
         }
-        const data = await Tag.deleteTag(tagId);
+        const data = await Tag.deleteTag(label);
 
         return data;
     }

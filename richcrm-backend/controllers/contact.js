@@ -1,6 +1,7 @@
 var ContactService = require("../db/contact/contact.service");
 var ClientService = require("../db/client/client.service");
 var CaseService = require("../db/case/case.service");
+var TagService = require("../db/tag/tag.service");
 var ClientController = require("./client");
 var AddressService = require("../db/address/address.service");
 const { v4: uuidv4 } = require('uuid');
@@ -83,7 +84,7 @@ class ContactController {
     }
 
     async registerContact(req, res) {
-        const { contactType, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
+        const { contactType, tags, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
 
         try {
             // Check if contactType is valid
@@ -93,6 +94,18 @@ class ContactController {
                     data: [],
                     message: '[ContactController][registerContact] Invalid contact type',
                 });
+            }
+
+            // Check if tags exist
+            const tagList = [];
+            if (tags !== undefined && tags !== null) {
+                for (let i = 0; i < tags.length; i++) {
+                    const label = tags[i];
+                    const tag = await TagService.readTagByLabel(label);
+                    if (tag !== null) {
+                        tagList.push(label);
+                    }
+                }
             }
 
             // Check if address exists
@@ -111,6 +124,7 @@ class ContactController {
             const contact = await ContactService.createContact({
                 contactId: uuidv4(),
                 contactType: contactType,
+                tags: tagList,
                 firstName: firstName,
                 lastName: lastName,
                 company: company,
@@ -276,7 +290,7 @@ class ContactController {
     }
 
     async updateContact(req, res) {
-        const { contactId, contactType, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
+        const { contactId, contactType, tags, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
         try {
             if (Types.castIntToEnum(Types.contactType, contactType) === "CLIENT") {
                 req.body.clientId = contactId;
@@ -302,6 +316,7 @@ class ContactController {
             var contactObj = {
                 contactId: contactId,
                 contactType: contact.ContactType,
+                tags: contact.Tags,
                 firstName: contact.FirstName,
                 lastName: contact.LastName,
                 company: contact.Company,
@@ -323,6 +338,19 @@ class ContactController {
                     });
                 }
                 contactObj.contactType = contactType;
+            }
+
+            // Check if tags exist
+            if (tags !== contactObj.tags && tags !== undefined && tags !== null) {
+                const tagList = [];
+                for (let i = 0; i < tags.length; i++) {
+                    const label = tags[i];
+                    const tag = await TagService.readTagByLabel(label);
+                    if (tag !== null) {
+                        tagList.push(label);
+                    }
+                }
+                contactObj.tags = tagList;
             }
             
 
@@ -444,6 +472,7 @@ class ContactController {
         return {
             contactId: contact.ContactId,
             contactType: contact.ContactType,
+            tags: contact.Tags,
             firstName: contact.FirstName,
             lastName: contact.LastName,
             company: contact.Company,

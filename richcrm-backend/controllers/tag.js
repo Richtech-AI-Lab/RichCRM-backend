@@ -5,20 +5,19 @@ const { v4: uuidv4 } = require('uuid');
 class TagController {
 
     constructor() {
-        this.readTag = this.readTag.bind(this);
+        this.readTagByLabel = this.readTagByLabel.bind(this);
         this.createTag = this.createTag.bind(this);
         this.readAllTags = this.readAllTags.bind(this);
-        this.readTagsByLabel = this.readTagsByLabel.bind(this);
         this.readTagsByType = this.readTagsByType.bind(this);
         this.updateTag = this.updateTag.bind(this);
         this.deleteTag = this.deleteTag.bind(this);
         this.procTags = this.procTags.bind(this);
     }
 
-    async readTag(req, res) {
-        const {tagId} = req.params;
+    async readTagByLabel(req, res) {
+        const {label} = req.body;
         try {
-            const tag = await TagService.readTag(tagId);
+            const tag = await TagService.readTagByLabel(label);
             if (tag !== null) {
                 const tagObj = this.procTag(tag);
                 res.status(200).json({
@@ -70,34 +69,6 @@ class TagController {
         }
     }
 
-    async readTagsByLabel(req, res) {
-        const {label} = req.body;
-        try {
-            const tags = await TagService.readTagByLabel(label);
-            if (tags !== null) {
-                const tagList = this.procTags(tags);
-                res.status(200).json({
-                    status: "success",
-                    data: tagList,
-                    message: "[TagController][readTagsByLabel]: Tag retrieved successfully"
-                });
-            } else {
-                res.status(400).json({
-                    status: "failed",
-                    data: [],
-                    message: "[TagController][readTagsByLabel]: Tag not found"
-                });
-            }
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({
-                status: "failed",
-                data: [],
-                message: `[TagController][readTagsByLabel] Internal server error: ${error}`
-            });
-        }
-    }
-
     async readTagsByType(req, res) {
         const {tagType} = req.body;
         
@@ -140,6 +111,15 @@ class TagController {
     async createTag(req, res) {
         const {label, color1, color2, tagType} = req.body;
         try {
+            const existingTag = await TagService.readTagByLabel(label);
+            if (existingTag !== null) {
+                const tagObj = this.procTag(existingTag);
+                res.status(400).json({
+                    status: "success",
+                    data: [tagObj],
+                    message: "[TagController][createTag]: Tag already exists"
+                });
+            }
             if (color1 === undefined) {
                 res.status(400).json({
                     status: "failed",
@@ -147,9 +127,8 @@ class TagController {
                     message: "[TagController][createTag]: Color1 is required"
                 });
             }
-            const tagId = uuidv4();
+
             const tagObj = {
-                tagId: tagId,
                 label: label,
                 tagType: tagType
             };
@@ -213,9 +192,9 @@ class TagController {
     }
 
     async updateTag(req, res) {
-        const {tagId, label, color1, color2, tagType} = req.body;
+        const {label, color1, color2, tagType} = req.body;
         try {
-            const tag = await TagService.readTag(tagId);
+            const tag = await TagService.readTagByLabel(label);
             if (tag === null) {
                 res.status(400).json({
                     status: "failed",
@@ -290,9 +269,9 @@ class TagController {
     }
 
     async deleteTag(req, res) {
-        const {tagId} = req.body;
+        const {label} = req.body;
         try {
-            const tag = await TagService.readTag(tagId);
+            const tag = await TagService.readTagByLabel(label);
             if (tag === null) {
                 res.status(400).json({
                     status: "failed",
@@ -302,7 +281,7 @@ class TagController {
             }
 
             const tagObj = this.procTag(tag);
-            const data = await TagService.deleteTag(tagObj.tagId);
+            const data = await TagService.deleteTag(tagObj.label);
             if (data !== null) {
                 res.status(200).json({
                     status: "success",
@@ -330,7 +309,6 @@ class TagController {
     // Static functions
     procTag(tag) {
         return {
-            "tagId": tag.TagId,
             "label": tag.Label,
             "color1": tag.Color1,
             "color2": tag.Color2,

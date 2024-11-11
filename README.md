@@ -194,8 +194,8 @@ aws dynamodb create-table \
 aws dynamodb create-table \
     --table-name Tag \
     --attribute-definitions \
-        AttributeName=TagId,AttributeType=S \
-    --key-schema AttributeName=TagId,KeyType=HASH \
+        AttributeName=Label,AttributeType=S \
+    --key-schema AttributeName=Label,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
     --table-class STANDARD
 

@@ -65,6 +65,16 @@ class ContactService {
         return null;
     }
 
+    async readContactsByTag(tagId) {
+        const data = await Contact.getContactsByTag(tagId);
+
+        if (data.Items !== undefined) {
+            return data.Items;
+        }
+
+        return null;
+    }
+
     async createContact(contact) {
         // Check if the contact object is valid
         if (contact.contactId === undefined ||
