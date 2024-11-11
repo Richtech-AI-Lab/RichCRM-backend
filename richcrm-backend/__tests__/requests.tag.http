@@ -1,0 +1,53 @@
+
+### Create Tag
+POST http://localhost:3001/v1/tag/create
+Content-Type: application/json
+
+{
+    "label": "Tag 1",
+    "color1": "#FF0000",
+    "tagType": 0
+}
+
+### Get Tag By Id
+GET http://localhost:3001/v1/tag/1be90321-4aaa-4573-be7d-7429da6707aa
+
+### Get Tags
+POST http://localhost:3001/v1/tag/all
+
+### Get Tags By Type
+POST http://localhost:3001/v1/tag/type
+Content-Type: application/json
+
+{
+    "tagType": 0
+}
+
+### Get Tags By Label
+POST http://localhost:3001/v1/tag/label
+Content-Type: application/json
+
+{
+    "label": "Tag 1"
+}
+
+
+### Update Tag
+POST http://localhost:3001/v1/tag/update
+Content-Type: application/json
+
+{
+    "tagId": "1be90321-4aaa-4573-be7d-7429da6707aa",
+    "label": "Tag 1",
+    "color1": "#FF0001",
+    "color2": "#FF0002",
+    "tagType": 1
+}
+
+### Delete Tag
+POST http://localhost:3001/v1/tag/delete
+Content-Type: application/json
+
+{
+    "tagId": "1be90321-4aaa-4573-be7d-7429da6707aa"
+}

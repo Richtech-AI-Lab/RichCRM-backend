@@ -181,11 +181,21 @@ aws dynamodb create-table \
     --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
     --table-class STANDARD
 
+# Organization
 aws dynamodb create-table \
     --table-name Organization \
     --attribute-definitions \
         AttributeName=OrganizationId,AttributeType=S \
     --key-schema AttributeName=OrganizationId,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
+    --table-class STANDARD
+
+# Tag
+aws dynamodb create-table \
+    --table-name Tag \
+    --attribute-definitions \
+        AttributeName=TagId,AttributeType=S \
+    --key-schema AttributeName=TagId,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
     --table-class STANDARD
 

@@ -54,7 +54,7 @@ class CaseController {
             res.status(500).json({
                 status: "failed",
                 data: [],
-                message: '[CaseController][readCase] Internal server error'
+                message: `[CaseController][readCase] Internal server error: ${error}`
             });
         }
     }
