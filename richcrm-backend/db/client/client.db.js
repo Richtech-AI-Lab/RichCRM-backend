@@ -6,6 +6,7 @@
  * @typedef {object} Client
  * @property {string} ClientId - Client ID
  * @property {clientType} ClientType - Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST)
+ * @property {array} Tags - Tag Labels (foreign key to Tag)
  * @property {title} Title - Client's title
  * @property {string} FirstName - Client's first name
  * @property {string} LastName - Client's last name
@@ -44,6 +45,18 @@ class Client {
     async getAllClients() {
         const params = {
             TableName: this.table,
+        };
+        const data = await db.scan(params).promise();
+        return data;
+    }
+
+    async getClientsByTag(label) {
+        const params = {
+            TableName: this.table,
+            FilterExpression: 'contains(Tags, :t)',
+            ExpressionAttributeValues: {
+                ':t': label,
+            },
         };
         const data = await db.scan(params).promise();
         return data;
@@ -105,6 +118,7 @@ class Client {
                 ClientId: client.clientId,
                 ClientType: client.clientType,
                 Title: client.title,
+                Tags: client.tags,
                 FirstName: client.firstName,
                 LastName: client.lastName,
                 Gender: client.gender,
@@ -137,9 +151,15 @@ class Client {
         };
 
         // Optional fields
+        const expressionAttributeNames = {};
         if (client.title !== undefined) {
             params.ExpressionAttributeValues[':t'] = client.title;
             params.UpdateExpression += ', Title = :t';
+        }
+        if (client.tags !== undefined) {
+            params.ExpressionAttributeValues[':ts'] = client.tags;
+            params.UpdateExpression += ', #ts = :ts';
+            expressionAttributeNames['#ts'] = 'Tags';
         }
         if (client.firstName !== undefined) {
             params.ExpressionAttributeValues[':f'] = client.firstName;
@@ -192,6 +212,10 @@ class Client {
         if (client.organizationId !== undefined) {
             params.ExpressionAttributeValues[':o'] = client.organizationId;
             params.UpdateExpression += ', OrganizationId = :o';
+        }
+
+        if (Object.keys(expressionAttributeNames).length > 0) {
+            params.ExpressionAttributeNames = expressionAttributeNames;
         }
 
         const data = await db.update(params).promise();

@@ -52,6 +52,10 @@ router.post(
     check("clientType")
         .notEmpty()
         .withMessage("Client Type is required"),
+    check("tags")
+        .optional()
+        .isArray()
+        .withMessage("Tags should be an array"),
     check("firstName")
         .notEmpty()
         .withMessage("First Name is required"),
@@ -101,6 +105,7 @@ router.post(
  *  "clientId":"123-45-6789",
  *  "clientType": 1,
  *  "title": 0,
+ *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "John",
  *  "lastName": "Doe",
  *  "gender": 0,
@@ -151,6 +156,7 @@ router.get(
  *  "clientId":"123-45-6789",
  *  "clientType": 1,
  *  "title": 0,
+ *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "John",
  *  "lastName": "Doe",
  *  "gender": 0,
@@ -348,6 +354,7 @@ router.get(
  * @apiBody {String} clientId Client ID.
  * @apiBody {Number} clientType Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST).
  * @apiBody {Number} title Title of the Client (0-NA, 1-MR, 2-MRS, 3-MS, 4-DR).
+ * @apiBody {Array} tags Tags of the Client.
  * @apiBody {String} firstName First Name of the Client.
  * @apiBody {String} lastName Last Name of the Client.
  * @apiBody {String} gender Gender of the Client (0-NA, 1-MALE, 2-FEMALE).
@@ -365,6 +372,7 @@ router.get(
  * @apiSuccess {String} clientId Client ID.
  * @apiSuccess {Number} clientType Client Type (0-INDIVIDUAL, 1-COMPANY, 2-TRUST).
  * @apiSuccess {Number} title Title of the Client (0-NA, 1-MR, 2-MRS, 3-MS, 4-DR).
+ * @apiSuccess {Array} tags Tags of the Client.
  * @apiSuccess {String} firstName First Name of the Client.
  * @apiSuccess {String} lastName Last Name of the Client.
  * @apiSuccess {Number} gender Gender of the Client (0-NA, 1-MALE, 2-FEMALE).
@@ -383,6 +391,7 @@ router.get(
  * {
  *  "clientType": 2,
  *  "title": 0,
+ *  "tags": ["Tag1", "Tag2"],
  *  "firstName": "John",
  *  "lastName": "Doe",
  *  "gender": 0,
@@ -403,6 +412,10 @@ router.post(
     check("clientId")
         .notEmpty()
         .withMessage("ClientId is required"),
+    check("tags")
+        .optional()
+        .isArray()
+        .withMessage("Tags should be an array"),
     check("organizationId")
         .optional()
         .isUUID()

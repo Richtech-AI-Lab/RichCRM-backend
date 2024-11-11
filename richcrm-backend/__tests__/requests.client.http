@@ -5,6 +5,7 @@ content-type: application/json
 {
     "clientId": "d5dbbca5-808c-4df8-b51b-b09b1cb595bd",
     "clientType": 0,
+    "tags": ["Tag1", "Tag3"],
     "firstName": "John",
     "lastName": "Doe",
     "cellNumber": "1234567891",
@@ -19,7 +20,7 @@ POST http://localhost:3001/v1/client/query
 content-type: application/json
 
 {
-    "keyword": "john.doe"
+    "keyword": "john"
 }
 
 
@@ -50,9 +51,10 @@ POST http://localhost:3001/v1/client/update
 content-type: application/json
 
 {
-    "clientId": "738ffc97-299b-423a-b759-2116a402b18d",
-    "clientType": 3,
+    "clientId": "7b2f1361-26b4-4f5d-ba62-5e516ad974a7",
+    "clientType": 0,
     "title": 1,
+    "tags": ["Tag1", "Tag3"],
     "firstName": "Jean",
     "lastName": "Dean",
     "gender": 1,
@@ -72,5 +74,5 @@ POST https://api.richcrm.org/v1/client/delete
 content-type: application/json
 
 {
-    "clientId": "0b16bd21-a690-44dc-8dfb-fe5442474db9"
+    "clientId": "6993adc6-e29b-43fc-9c98-aebc191beffb"
 }
