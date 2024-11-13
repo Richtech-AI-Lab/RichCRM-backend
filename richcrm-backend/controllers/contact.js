@@ -284,7 +284,7 @@ class ContactController {
         const { contactId, tags, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
         try {
             // Check if Id is clientId
-            const client = ClientService.readClient(contactId);
+            const client = await ClientService.readClient(contactId);
             if (client !== null) {
                 req.body.clientId = contactId;
                 req.body.tags = tags;
