@@ -1,5 +1,6 @@
 var ClientService = require("../db/client/client.service");
 var AddressService = require("../db/address/address.service");
+var TagService = require("../db/tag/tag.service");
 var OrganizationService = require("../db/organization/organization.service");
 const { v4: uuidv4 } = require('uuid');
 const Types = require("../db/types");
@@ -9,36 +10,26 @@ class ClientController {
         this.registerClient = this.registerClient.bind(this);
         this.updateClient = this.updateClient.bind(this);
         this.deleteClient = this.deleteClient.bind(this);
+        this.getClient = this.getClient.bind(this);
+        this.getAllClients = this.getAllClients.bind(this);
+        this.queryClients = this.queryClients.bind(this);
+        this.queryClientsByType = this.queryClientsByType.bind(this);
+        this.queryClientsByTag = this.queryClientsByTag.bind(this);
+        this.procClients = this.procClients.bind(this);
     }
 
     async registerClient(req, res) {
-        const { clientId, clientType, title, firstName, lastName, gender, cellNumber, email, ssn, addressId, organizationId } = req.body;
+        const { clientId, clientType, title, tags, firstName, lastName, gender, cellNumber, email, ssn, addressId, organizationId } = req.body;
 
         try {
             // Check if client ID exists
             if (clientId !== undefined) {
                 const existingClient = await ClientService.readClient(clientId);
                 if (existingClient !== null) {
+                    const clientObj = this.procClient(existingClient);
                     return res.status(200).json({
                         status: "success",
-                        data: [{
-                            clientId: existingClient.ClientId,
-                            clientType: existingClient.ClientType,
-                            title: existingClient.Title,
-                            firstName: existingClient.FirstName,
-                            lastName: existingClient.LastName,
-                            gender: existingClient.Gender,
-                            cellNumber: existingClient.CellNumber,
-                            workNumber: existingClient.WorkNumber,
-                            email: existingClient.Email,
-                            wechatAccount: existingClient.WechatAccount,
-                            ssn: existingClient.SSN,
-                            dob: existingClient.DOB,
-                            addressId: existingClient.AddressId,
-                            attorneyId: existingClient.AttorneyId,
-                            bankAttorneyId: existingClient.BankAttorneyId,
-                            organizationId: existingClient.OrganizationId,
-                        }],
+                        data: [clientObj],
                         message: '[ClientController][registerClient] Client already exists'
                     });
                 }
@@ -88,6 +79,18 @@ class ClientController {
                 }
             }
 
+            // Check if tags exist
+            const tagList = ["Client"];
+            if (tags !== undefined && tags !== null) {
+                for (let i = 0; i < tags.length; i++) {
+                    const label = tags[i];
+                    const tag = await TagService.readTagByLabel(label);
+                    if (tag !== null) {
+                        tagList.push(label);
+                    }
+                }
+            }
+
             // Check if title is valid
             var titleParsed = title;
             if (Types.castIntToEnum(Types.title, title) === undefined) {
@@ -116,6 +119,7 @@ class ClientController {
                 clientId: uuidv4(),
                 clientType: clientType,
                 title: titleParsed,
+                tags: tagList,
                 firstName: firstName,
                 lastName: lastName,
                 gender: genderParsed,
@@ -126,26 +130,10 @@ class ClientController {
                 organizationId: organizationId,
             });
             if (client !== null) {
+                const clientObj = this.procClient(client);
                 res.status(200).json({
                     status: "success",
-                    data: [{
-                        clientId: client.ClientId,
-                        clientType: client.ClientType,
-                        title: client.Title,
-                        firstName: client.FirstName,
-                        lastName: client.LastName,
-                        gender: client.Gender,
-                        cellNumber: client.CellNumber,
-                        workNumber: client.WorkNumber,
-                        email: client.Email,
-                        wechatAccount: client.WechatAccount,
-                        ssn: client.SSN,
-                        dob: client.DOB,
-                        addressId: client.AddressId,
-                        attorneyId: client.AttorneyId,
-                        bankAttorneyId: client.BankAttorneyId,
-                        organizationId: client.OrganizationId,
-                    }],
+                    data: [clientObj],
                     message: '[ClientController][registerClient] Client created successfully'
                 });
             } else {
@@ -170,26 +158,7 @@ class ClientController {
         try {
             const clients = await ClientService.readAllClients();
             if (clients !== null) {
-                clients.forEach(client => {
-                    clientList.push({
-                        clientId: client.ClientId,
-                        clientType: client.ClientType,
-                        title: client.Title,
-                        firstName: client.FirstName,
-                        lastName: client.LastName,
-                        gender: client.Gender,
-                        cellNumber: client.CellNumber,
-                        workNumber: client.WorkNumber,
-                        email: client.Email,
-                        wechatAccount: client.WechatAccount,
-                        ssn: client.SSN,
-                        dob: client.DOB,
-                        addressId: client.AddressId,
-                        attorneyId: client.AttorneyId,
-                        bankAttorneyId: client.BankAttorneyId,
-                        organizationId: client.OrganizationId,
-                    });
-                });
+                clientList = this.procClients(clients);
             }
             res.status(200).json({
                 status: "success",
@@ -213,26 +182,7 @@ class ClientController {
         try {
             const clients = await ClientService.readClientByKeyWord(keyword);
             if (clients !== null) {
-                clients.forEach(client => {
-                    clientList.push({
-                        clientId: client.ClientId,
-                        clientType: client.ClientType,
-                        title: client.Title,
-                        firstName: client.FirstName,
-                        lastName: client.LastName,
-                        gender: client.Gender,
-                        cellNumber: client.CellNumber,
-                        workNumber: client.WorkNumber,
-                        email: client.Email,
-                        wechatAccount: client.WechatAccount,
-                        ssn: client.SSN,
-                        dob: client.DOB,
-                        addressId: client.AddressId,
-                        attorneyId: client.AttorneyId,
-                        bankAttorneyId: client.BankAttorneyId,
-                        organizationId: client.OrganizationId,
-                    });
-                });
+                clientList = this.procClients(clients);
             }
             res.status(200).json({
                 status: "success",
@@ -256,26 +206,7 @@ class ClientController {
         try {
             const clients = await ClientService.readClientsByType(clientType);
             if (clients !== null) {
-                clients.forEach(client => {
-                    clientList.push({
-                        clientId: client.ClientId,
-                        clientType: client.ClientType,
-                        title: client.Title,
-                        firstName: client.FirstName,
-                        lastName: client.LastName,
-                        gender: client.Gender,
-                        cellNumber: client.CellNumber,
-                        workNumber: client.WorkNumber,
-                        email: client.Email,
-                        wechatAccount: client.WechatAccount,
-                        ssn: client.SSN,
-                        dob: client.DOB,
-                        addressId: client.AddressId,
-                        attorneyId: client.AttorneyId,
-                        bankAttorneyId: client.BankAttorneyId,
-                        organizationId: client.OrganizationId,
-                    });
-                });
+                clientList = this.procClients(clients);
             }
             res.status(200).json({
                 status: "success",
@@ -292,6 +223,29 @@ class ClientController {
         }
     }
 
+    async queryClientsByTag(req, res) {
+        const { tag } = req.body;
+        var clientList = [];
+        try {
+            const clients = await ClientService.readClientsByTag(tag);
+            if (clients !== null) {
+                clientList = this.procClients(clients);
+            }
+            res.status(200).json({
+                status: "success",
+                data: clientList,
+                message: '[ClientController][queryClient] Clients retrieved successfully'
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: `[ClientController][queryClient] Internal server error ${error}`
+            });
+        }
+    }
+                        
 
     async getClient(req, res) {
         var clientId;
@@ -305,26 +259,10 @@ class ClientController {
             const client = await ClientService.readClient(clientId);
 
             if (client !== null) {
+                const clientObj = this.procClient(client);
                 res.status(200).json({
                     status: "success",
-                    data: [{
-                        clientId: client.ClientId,
-                        clientType: client.ClientType,
-                        title: client.Title,
-                        firstName: client.FirstName,
-                        lastName: client.LastName,
-                        gender: client.Gender,
-                        cellNumber: client.CellNumber,
-                        workNumber: client.WorkNumber,
-                        email: client.Email,
-                        wechatAccount: client.WechatAccount,
-                        ssn: client.SSN,
-                        dob: client.DOB,
-                        addressId: client.AddressId,
-                        attorneyId: client.AttorneyId,
-                        bankAttorneyId: client.BankAttorneyId,
-                        organizationId: client.OrganizationId,
-                    }],
+                    data: [clientObj],
                     message: '[ClientController][getClient] Client found'
                 });
             } else {
@@ -345,7 +283,7 @@ class ClientController {
     }
 
     async updateClient(req, res) {
-        const { clientId, clientType, title, firstName, lastName, gender, cellNumber, workNumber, email, wechatAccount, ssn, dob, attorneyId, bankAttorneyId, addressId, organizationId } = req.body;
+        const { clientId, clientType, title, tags, firstName, lastName, gender, cellNumber, workNumber, email, wechatAccount, ssn, dob, attorneyId, bankAttorneyId, addressId, organizationId } = req.body;
 
         try {
             // Check if client exists
@@ -357,24 +295,8 @@ class ClientController {
                     message: '[ClientController][updateClient] Client does not exist'
                 });
             }
-            var clientObj = {
-                clientId: clientId,
-                clientType: existingClient.ClientType,
-                title: existingClient.Title,
-                firstName: existingClient.FirstName,
-                lastName: existingClient.LastName,
-                gender: existingClient.Gender,
-                cellNumber: existingClient.CellNumber,
-                workNumber: existingClient.WorkNumber,
-                email: existingClient.Email,
-                wechatAccount: existingClient.WechatAccount,
-                ssn: existingClient.SSN,
-                dob: existingClient.DOB,
-                attorneyId: existingClient.AttorneyId,
-                bankAttorneyId: existingClient.BankAttorneyId,
-                addressId: existingClient.AddressId,
-                organizationId: existingClient.OrganizationId,
-            };
+            var clientObj = this.procClient(existingClient);
+
             // Check if client type is valid
             if (Types.castIntToEnum(Types.clientType, clientType) !== undefined) {
                 clientObj.clientType = clientType;
@@ -393,6 +315,18 @@ class ClientController {
                 clientObj.addressId = addressId;
             }
 
+            // Check if tags exist
+            const tagList = [];
+            if (tags !== undefined && tags !== null) {
+                for (let i = 0; i < tags.length; i++) {
+                    const label = tags[i];
+                    const tag = await TagService.readTagByLabel(label);
+                    if (tag !== null) {
+                        tagList.push(label);
+                    }
+                }
+                clientObj.tags = tagList;
+            }
 
             // Check if title is valid
             if (Types.castIntToEnum(Types.title, title) !== undefined) {
@@ -533,6 +467,42 @@ class ClientController {
             });
         }
     }
+
+    // static functions
+    procClient(client) {
+        return {
+            clientId: client.ClientId,
+            clientType: client.ClientType,
+            title: client.Title,
+            tags: client.Tags,
+            firstName: client.FirstName,
+            lastName: client.LastName,
+            gender: client.Gender,
+            cellNumber: client.CellNumber,
+            workNumber: client.WorkNumber,
+            email: client.Email,
+            wechatAccount: client.WechatAccount,
+            ssn: client.SSN,
+            dob: client.DOB,
+            addressId: client.AddressId,
+            attorneyId: client.AttorneyId,
+            bankAttorneyId: client.BankAttorneyId,
+            organizationId: client.OrganizationId,
+        };
+    }
+
+    procClients(clients) {
+        var clientList = [];
+        if (clients !== null) {
+            for (let i = 0; i < clients.length; i++) {
+                const c = clients[i];
+                clientList.push(this.procClient(c));
+            }
+        }
+        return clientList;
+    }
+
+
 }
 
 module.exports = new ClientController();

@@ -45,6 +45,20 @@ class ClientService {
         return null;
     }
 
+    async readClientsByTag(tag) {
+        if (tag === undefined || tag === "") {
+            console.log("[ClientService][readClientsByTag] Invalid tag");
+            return null;
+        }
+        const data = await Client.getClientsByTag(tag);
+
+        if (data.Items !== undefined) {
+            return data.Items;
+        }
+
+        return null;
+    }
+
     async readClientByPhoneNumber(phoneNumber) {
         const data = await Client.getClientByPhoneNumber(phoneNumber);
 

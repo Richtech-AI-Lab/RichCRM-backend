@@ -19,7 +19,7 @@ POST http://localhost:3001/v1/client/query
 content-type: application/json
 
 {
-    "keyword": "john.doe"
+    "keyword": "john"
 }
 
 
@@ -50,9 +50,10 @@ POST http://localhost:3001/v1/client/update
 content-type: application/json
 
 {
-    "clientId": "738ffc97-299b-423a-b759-2116a402b18d",
-    "clientType": 3,
+    "clientId": "7b2f1361-26b4-4f5d-ba62-5e516ad974a7",
+    "clientType": 0,
     "title": 1,
+    "tags": ["Tag1", "Tag3"],
     "firstName": "Jean",
     "lastName": "Dean",
     "gender": 1,
@@ -67,10 +68,19 @@ content-type: application/json
     "addressId": "New York NY 10012-1296"
 }
 
+### Update Client Temp
+POST http://localhost:3001/v1/client/update
+content-type: application/json
+
+{
+    "clientId": "b8a07cc3-715c-45dc-a900-77d18a108dd2",
+    "tags": ["Client"]
+}
+
 ### Delete Client
 POST https://api.richcrm.org/v1/client/delete
 content-type: application/json
 
 {
-    "clientId": "0b16bd21-a690-44dc-8dfb-fe5442474db9"
+    "clientId": "43835007-8d98-46c5-aa5b-929b40a5de4d"
 }

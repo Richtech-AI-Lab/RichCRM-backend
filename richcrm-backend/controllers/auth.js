@@ -21,7 +21,7 @@ class AuthController {
                         emailAddress: user.EmailAddress,
                         password: user.Password,
                         userName: user.UserName,
-                        role: user.Role
+                        role: user.Role,
                     }],
                     message: 'User created successfully'
                 });
@@ -67,7 +67,8 @@ class AuthController {
                     emailAddress: user.EmailAddress,
                     password: user.Password,
                     userName: user.UserName,
-                    role: user.Role
+                    role: user.Role,
+                    uploadFolderName: user.UploadFolderName,
                 }],
                 message: '[AuthController][loginUser] User logged in successfully'
             });

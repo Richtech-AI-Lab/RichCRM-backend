@@ -4,19 +4,19 @@ content-type: application/json
 
 {
     "premisesId": "cbf8e709-7af2-4433-9276-7d5ba9113950",
-    "creatorId": "eden.wu@richtechailab.com",
+    "creatorId": "test1@gmail.com",
     "stage": 0,
     "caseType": 1,
-    "clientType": 2,
-    "organizationId": "449a5faa-6377-4604-9361-fbd3e412c299",
+    "clientType": 0,
+    "clientId": "b8a07cc3-715c-45dc-a900-77d18a108dd2",
     "additionalClients": ["738ffc97-299b-423a-b759-2116a402b18d", "86a6d1d3-9644-40cc-bec5-e2710567d882"],
-    "contacts": ["8d587c04-0d59-4b70-8264-922d26bf6f00", "8c2bfe8d-0e87-4e19-8b32-d372188c56b2"],
+    "contacts": ["b6f6c07e-305d-4e91-8a2c-50c4369ba0d1"],
     "additionalOrganizations": ["449a5faa-6377-4604-9361-fbd3e412c299"]
 }
 
 
 ### Read Case
-GET http://localhost:3001/v1/case/15754707-1a8f-4a7b-b583-50dc66bd6765
+GET http://localhost:3001/v1/case/7097fce5-cab3-4fb7-8280-bcd1aac67a40
 
 
 ### Read All Cases by Creator
@@ -34,7 +34,7 @@ POST http://localhost:3001/v1/case/query/client
 content-type: application/json
 
 {
-    "clientId": "122aec8a-2a77-418a-840d-ec472d38b63b"
+    "clientId": "449a5faa-6377-4604-9361-fbd3e412c299"
 }
 
 
@@ -97,7 +97,7 @@ POST http://localhost:3001/v1/case/delete
 content-type: application/json
 
 {
-    "caseId": "15754707-1a8f-4a7b-b583-50dc66bd6765"
+    "caseId": "f51e1859-f7ae-4bcb-8431-c42c68627056"
 }
 
 
@@ -106,5 +106,5 @@ POST http://localhost:3001/v1/case/delete/all
 content-type: application/json
 
 {
-    "creatorId": "eden.wu@richtechailab.com"
+    "creatorId": "test1@gmail.com"
 }

@@ -278,14 +278,6 @@ module.exports = {
     },
 
     // [DB] CONTACT
-    contactType: {
-        BROKER: 0,
-        ATTORNEY: 1,
-        TITLE: 2,
-        LENDER: 3,
-        CLIENT: 4,
-        OTHER: 5,
-    },
 
     // [DB] ORGANIZATION
     organizationType: {

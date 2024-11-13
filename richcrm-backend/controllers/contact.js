@@ -13,8 +13,8 @@ class ContactController {
         this.getAllContacts = this.getAllContacts.bind(this);
         this.registerContact = this.registerContact.bind(this);
         this.queryContacts = this.queryContacts.bind(this);
-        this.queryContactsByType = this.queryContactsByType.bind(this);
-        this.queryContactsByCaseAndType = this.queryContactsByCaseAndType.bind(this);
+        this.queryContactsByTag = this.queryContactsByTag.bind(this);
+        this.queryContactsByCaseAndTag = this.queryContactsByCaseAndTag.bind(this);
         this.updateContact = this.updateContact.bind(this);
         this.deleteContact = this.deleteContact.bind(this);
         this.procContacts = this.procContacts.bind(this);
@@ -57,7 +57,7 @@ class ContactController {
                 clients.forEach(client => {
                     contactList.push({
                         contactId: client.ClientId,
-                        contactType: Types.contactType.CLIENT,
+                        tags: client.Tags,
                         firstName: client.FirstName,
                         lastName: client.LastName,
                         cellNumber: client.CellNumber,
@@ -84,17 +84,9 @@ class ContactController {
     }
 
     async registerContact(req, res) {
-        const { contactType, tags, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
+        const { tags, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
 
         try {
-            // Check if contactType is valid
-            if (Types.castIntToEnum(Types.contactType, contactType) === undefined) {
-                return res.status(400).json({
-                    status: "failed",
-                    data: [],
-                    message: '[ContactController][registerContact] Invalid contact type',
-                });
-            }
 
             // Check if tags exist
             const tagList = [];
@@ -123,7 +115,6 @@ class ContactController {
             // Create contact object
             const contact = await ContactService.createContact({
                 contactId: uuidv4(),
-                contactType: contactType,
                 tags: tagList,
                 firstName: firstName,
                 lastName: lastName,
@@ -172,7 +163,7 @@ class ContactController {
                 clients.forEach(client => {
                     contactList.push({
                         contactId: client.ClientId,
-                        contactType: Types.contactType.CLIENT,
+                        tags: client.Tags,
                         firstName: client.FirstName,
                         lastName: client.LastName,
                         cellNumber: client.CellNumber,
@@ -198,66 +189,66 @@ class ContactController {
         }
     }
 
-    async queryContactsByType(req, res) {
-        const { contactType } = req.body;
+    async queryContactsByTag(req, res) {
+        const { tag } = req.body;
         var contactList = [];
         try {
-            if (Types.castIntToEnum(Types.contactType, contactType) === "CLIENT") {
-                const clients = await ClientService.readAllClients();
-                if (clients !== null) {
-                    clients.forEach(client => {
-                        contactList.push({
-                            contactId: client.ClientId,
-                            contactType: Types.contactType.CLIENT,
-                            firstName: client.FirstName,
-                            lastName: client.LastName,
-                            cellNumber: client.CellNumber,
-                            workNumber: client.WorkNumber,
-                            email: client.Email,
-                            mailingAddress: client.AddressId,
-                            wechatAccount: client.WechatAccount,
-                        });
-                    });
-                }
-                return res.status(200).json({
-                    status: "success",
-                    data: contactList,
-                    message: '[ContactController][queryContactsByType] Contacts queried successfully',
-                });
-            } else {
-                const contacts = await ContactService.readContactsByType(contactType);
-                if (contacts !== null) {
-                    contactList = this.procContacts(contacts);
-                }
-                return res.status(200).json({
-                    status: "success",
-                    data: contactList,
-                    message: '[ContactController][queryContactsByType] Contacts queried successfully',
+            const tagObj = await TagService.readTagByLabel(tag);
+            if (tagObj === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[ContactController][queryContactsByTag] Tag does not exist',
                 });
             }
-            
-            
+
+            const contacts = await ContactService.readContactsByTag(tag);
+            if (contacts !== null) {
+                contactList = this.procContacts(contacts);
+            }
+            const clients = await ClientService.readClientsByTag(tag);
+            if (clients !== null) {
+                clients.forEach(client => {
+                    contactList.push({
+                        contactId: client.ClientId,
+                        tags: client.Tags,
+                        firstName: client.FirstName,
+                        lastName: client.LastName,
+                        cellNumber: client.CellNumber,
+                        workNumber: client.WorkNumber,
+                        email: client.Email,
+                        mailingAddress: client.AddressId,
+                        wechatAccount: client.WechatAccount,
+                    });
+                });
+            }
+            return res.status(200).json({
+                status: "success",
+                data: contactList,
+                message: '[ContactController][queryContactsByTag] Contacts queried successfully',
+            });
         } catch (error) {
             console.error(error);
             res.status(500).json({
                 status: "failed",
                 data: [],
-                message: `[ContactController][queryContactsByType] Internal server error: ${error}`,
+                message: `[ContactController][queryContactsByTag] Internal server error: ${error}`,
             });
         }
     }
 
-    async queryContactsByCaseAndType(req, res) {
-        const { caseId, contactType } = req.body;
+    async queryContactsByCaseAndTag(req, res) {
+        const { caseId, tag } = req.body;
         var contactList = [];
         try {
-            if (Types.castIntToEnum(Types.contactType, contactType) !== undefined) {
+            const tagObj = await TagService.readTagByLabel(tag);
+            if (tagObj !== null) {
                 const caseObj = await CaseService.readCase(caseId);
                 if (caseObj === null) {
                     return res.status(400).json({
                         status: "failed",
                         data: [],
-                        message: '[ContactController][queryContactsByCaseAndType] Case does not exist',
+                        message: '[ContactController][queryContactsByCaseAndTag] Case does not exist',
                     });
                 }
                 const contactIds = caseObj.Contacts;
@@ -267,7 +258,7 @@ class ContactController {
                         const contact = await ContactService.readContact(contactId);
                         if (contact !== null) {
                             const contactObj = this.procContact(contact);
-                            if (contactObj.contactType === contactType) {
+                            if (contactObj.tags.includes(tag)) {
                                 contactList.push(contactObj);
                             }
                         }
@@ -277,23 +268,26 @@ class ContactController {
             return res.status(200).json({
                 status: "success",
                 data: contactList,
-                message: '[ContactController][queryContactsByCaseAndType] Contacts queried successfully',
+                message: '[ContactController][queryContactsByCaseAndTag] Contacts queried successfully',
             });
         } catch (error) {
             console.error(error);
             res.status(500).json({
                 status: "failed",
                 data: [],
-                message: `[ContactController][queryContactsByCaseAndType] Internal server error: ${error}`,
+                message: `[ContactController][queryContactsByCaseAndTag] Internal server error: ${error}`,
             });
         }
     }
 
     async updateContact(req, res) {
-        const { contactId, contactType, tags, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
+        const { contactId, tags, firstName, lastName, company, position, cellNumber, email, mailingAddress, wechatAccount, note } = req.body;
         try {
-            if (Types.castIntToEnum(Types.contactType, contactType) === "CLIENT") {
+            // Check if Id is clientId
+            const client = await ClientService.readClient(contactId);
+            if (client !== null) {
                 req.body.clientId = contactId;
+                req.body.tags = tags;
                 req.body.firstName = firstName;
                 req.body.lastName = lastName;
                 req.body.cellNumber = cellNumber;
@@ -315,7 +309,6 @@ class ContactController {
 
             var contactObj = {
                 contactId: contactId,
-                contactType: contact.ContactType,
                 tags: contact.Tags,
                 firstName: contact.FirstName,
                 lastName: contact.LastName,
@@ -326,18 +319,6 @@ class ContactController {
                 mailingAddress: contact.MailingAddress,
                 wechatAccount: contact.WechatAccount,
                 note: contact.Note,
-            }
-
-            // Check if contactType is valid
-            if (contactType !== contactObj.contactType) {
-                if (Types.castIntToEnum(Types.contactType, contactType) === undefined) {
-                    return res.status(400).json({
-                        status: "failed",
-                        data: [],
-                        message: '[ContactController][updateContact] Invalid contact type',
-                    });
-                }
-                contactObj.contactType = contactType;
             }
 
             // Check if tags exist
@@ -471,7 +452,6 @@ class ContactController {
     procContact(contact) {
         return {
             contactId: contact.ContactId,
-            contactType: contact.ContactType,
             tags: contact.Tags,
             firstName: contact.FirstName,
             lastName: contact.LastName,

@@ -21,16 +21,6 @@ class ContactService {
         return null;
     }
 
-    async readContactsByType(contactType) {
-        const data = await Contact.getContactsByType(contactType);
-
-        if (data.Items !== undefined) {
-            return data.Items;
-        }
-
-        return null;
-    }
-
     async readContactByKeyWord(keyword) {
         if (keyword === undefined || keyword === "") {
             console.log("[ContactService][readContactByKeyWord] Invalid keyword");
@@ -78,7 +68,6 @@ class ContactService {
     async createContact(contact) {
         // Check if the contact object is valid
         if (contact.contactId === undefined ||
-            contact.contactType === undefined ||
             contact.firstName === undefined) {
             console.log("[ContactService][createContact] Invalid contact object");
             return null;

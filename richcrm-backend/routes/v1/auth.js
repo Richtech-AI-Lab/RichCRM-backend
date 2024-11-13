@@ -61,13 +61,15 @@ router.post(
  * @apiSuccess {String} password Password of the User.
  * @apiSuccess {String} userName User name of the User.
  * @apiSuccess {Number} role Role of the User (0-Admin, 1-Attorney).
+ * @apiSuccess {String} uploadFolderName Folder name for user uploads.
  * 
  * @apiSuccessExample Example data on success:
  * {
  *  "emailAddress": "test@test.com",
  *  "password": "password",
  *  "userName": "Test User",
- *  "role": 0
+ *  "role": 0,
+ *  "uploadFolderName": "MG",
  * }
  */
 router.post(
