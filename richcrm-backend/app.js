@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var bodyParser = require('body-parser');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -20,6 +21,9 @@ var v1OrganizationRouter = require('./routes/v1/organization');
 var v1TagRouter = require('./routes/v1/tag');
 
 var app = express();
+
+// BodyParsor
+app.use(bodyParser.json({limit: '40mb'}));
 
 // Middleware
 const crmLogger = require('./middlewares/logging');

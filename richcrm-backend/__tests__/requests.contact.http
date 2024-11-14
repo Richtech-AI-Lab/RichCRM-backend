@@ -70,6 +70,19 @@ content-type: application/json
     "note": "This is a test contact."
 }
 
+
+### Update
+POST https://api.richcrm.org/v1/contact/update
+content-type: application/json
+
+{
+    "contactId": "0d97f516-4b61-414f-92c3-16b76b22c059",
+    "firstName": "Lawson",
+    "lastName": "Wu",
+    "tags": ["Attorney"]
+}
+
+
 ### Delete a contact
 POST http://localhost:3001/v1/contact/delete
 content-type: application/json

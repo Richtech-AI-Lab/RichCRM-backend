@@ -3,6 +3,7 @@ var TemplateService = require('../db/template/template.service');
 var TaskService = require('../db/task/task.service');
 var { standardizeAddress } = require('../middlewares/utils');
 var ses = require('../services/ses');
+var resend = require('../services/resend');
 
 
 class UtilsController {
@@ -196,6 +197,51 @@ class UtilsController {
                 templateTitle: templateTitle,
                 templateContent: templateContent
             });
+            if (data !== null) {
+                res.status(200).json({
+                    status: "success",
+                    data: [data],
+                    message: 'Email sent successfully'
+                });
+            } else {
+                res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'Email sending failed'
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: 'Internal server error'
+            });
+        }
+        res.end();
+    }
+
+    // Email send Resend
+    async sendEmailResend(req, res) {
+        const { toAddresses, ccAddresses, templateTitle, templateContent, attachments } = req.body;
+        try {
+            const emailObj = {
+                toAddresses: toAddresses,
+                ccAddresses: ccAddresses,
+                templateTitle: templateTitle,
+                templateContent: templateContent
+            }
+            if (attachments !== undefined && attachments.length > 0) {
+                const attachmentsResend = attachments.map(attachment => {
+                    return {
+                        filename: attachment.fileName,
+                        content: attachment.fileContent
+                    }
+                });
+                emailObj.attachments = attachmentsResend;
+            }
+            console.log(emailObj);
+            const data = await resend.sendEmail(emailObj);
             if (data !== null) {
                 res.status(200).json({
                     status: "success",
