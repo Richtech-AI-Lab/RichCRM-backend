@@ -82,5 +82,5 @@ POST https://api.richcrm.org/v1/client/delete
 content-type: application/json
 
 {
-    "clientId": "43835007-8d98-46c5-aa5b-929b40a5de4d"
+    "clientId": "1025e7f1-782b-4ba0-855e-4e7a32d232e1"
 }

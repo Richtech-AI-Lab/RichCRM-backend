@@ -45,14 +45,14 @@ content-type: application/json
 
 
 ### Send Email via SES
-POST https://api.richcrm.org/v1/utils/email/send
+POST http://localhost:3001/v1/utils/email/send
 content-type: application/json
 
 {
     "toAddresses": ["verkho404@gmail.com"],
     "ccAddresses": [],
     "templateTitle": "[IMPORTANT] Closing Confirmation send to all parties",
-    "templateContent": "Hi All, \n\n\nThis is to confirm closing for the above-referenced matter for **2024-07-20T20:24:24.740Z**. Closing will be held at our office, 37-01 Main Street, #309, Flushing, NY \n\n\nXXX, please forward adjustments, checklist, and payoff. \n\n\nXXX, please forward the final title bill. \n\n\nXXX please forward the net and when it becomes available. \n\n\nXXX/XXX, please forward your commission bill. \n\n\nThank you all!\n\nSincerely,\n\nMG Law Group"
+    "templateContent": "<p>Dear Consil,</p><p>Enclosed please find the proposed contract of sale and rider regarding the above-referenced transaction. Please kindly review and if it is acceptable to you and your clients, please have your client sign one (1) original and return it to our office together with the downpayment check in the amount of <strong>$xx,000.00</strong> made payable to <strong>\"MG LAW GROUP PLLC, as attorney\"</strong>.</p><p>Please be advised that nothing is binding on our client until approved and signed by our client. Should you have any questions regarding this matter, you may call our office.</p><p>Thank you!</p><p>Sincerely,<br>MG Law Group</p>"
 }
 
 

@@ -155,6 +155,7 @@ router.post(
  * @apiBody {Array} ccAddresses Array of email addresses.
  * @apiBody {String} templateTitle Email title.
  * @apiBody {String} templateContent Email content.
+ * @apiBody {Array} attachments Array of attachments.
  * 
  * @apiSuccessExample Example data on success:
  * {
@@ -186,8 +187,11 @@ router.post(
     check("templateContent")
         .notEmpty()
         .withMessage("Email Content is required"),
+    check("attachments")
+        .optional()
+        .isArray(),
     validate,
-    UtilsController.sendEmail
+    UtilsController.sendEmailResend
 )
 
 module.exports = router;
