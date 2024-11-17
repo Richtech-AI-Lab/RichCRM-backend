@@ -97,7 +97,7 @@ POST http://localhost:3001/v1/case/delete
 content-type: application/json
 
 {
-    "caseId": "f51e1859-f7ae-4bcb-8431-c42c68627056"
+    "caseId": "7097fce5-cab3-4fb7-8280-bcd1aac67a40"
 }
 
 

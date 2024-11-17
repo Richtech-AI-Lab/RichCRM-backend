@@ -1,0 +1,41 @@
+### Create Task Template
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Confirm case details",
+    "taskType": 1,
+    "templates": ["[IMPORTANT] FEK Notice to Purchaser"]
+}
+
+### Create Task Template With Template Objects
+POST http://localhost:3001/v1/task-template/create/template
+content-type: application/json
+
+{
+    "taskName": "Confirm case details",
+    "taskType": 1,
+    "templateObjs": [
+        {
+            "templateTitle": "[IMPORTANT] FEK Notice to Purchaser",
+            "templateContent": "Dear {{customerName}},\n\nWe are writing to inform you that your order has been confirmed. Please find the details below:\n\nOrder ID: {{orderId}}\nOrder Date: {{orderDate}}\n\nThank you for shopping with us.\n\nSincerely,\n{{companyName}}"
+        }
+    ]
+}
+
+### Get Task Templates
+POST http://localhost:3001/v1/task-template/read
+content-type: application/json
+
+{
+    "taskName": "Confirm case details"
+}
+
+
+### Delete Task Template
+POST http://localhost:3001/v1/task-template/delete
+content-type: application/json
+
+{
+    "taskName": "Confirm case details"
+}

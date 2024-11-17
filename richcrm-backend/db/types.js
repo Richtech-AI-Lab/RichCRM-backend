@@ -92,10 +92,7 @@ module.exports = {
                 taskType: 1,
                 name: "Confirm case details",
                 status: 0,
-                templates: [
-                    {templateTitle: "[IMPORTANT] FEK Notice to Purchaser"},
-                    {templateTitle: "Default Template"},
-                ]
+                templates: ["[IMPORTANT] FEK Notice to Purchaser", "Default Template"]
             },
         ],
         CONTRACT_PREPARING: [
@@ -109,7 +106,7 @@ module.exports = {
                 name: "Schedule contract review with client",
                 status: 0,
                 templates: [
-                    {templateTitle: "Default Template"},
+                    "Default Template",
                 ]
             },
             {
@@ -122,7 +119,7 @@ module.exports = {
                 name: "Collect signed contract and deposit from client",
                 status: 0,
                 templates: [
-                    {templateTitle: "Default Template"},
+                    "Default Template",
                 ]
             },
             {
@@ -152,7 +149,7 @@ module.exports = {
                 name: "Inform the seller about the sending, and request the fully signed contract",
                 status: 0,
                 templates: [
-                    {templateTitle: "[IMPORTANT] FEK Notice to Purchaser's Attorney as Seller"},
+                    "[IMPORTANT] FEK Notice to Purchaser's Attorney as Seller",
                 ]
             },
             {
@@ -173,7 +170,7 @@ module.exports = {
                 name: "Inform the client about the upcoming timeline",
                 status: 0,
                 templates: [
-                    {templateTitle: "[IMPORTANT] FEK Notice to Purchaser"},
+                    "[IMPORTANT] FEK Notice to Purchaser",
                 ]
             },
             {
@@ -186,7 +183,7 @@ module.exports = {
                 name: "Send the commitment to title company and seller",
                 status: 0,
                 templates: [
-                    {templateTitle: "[IMPORTANT] FEK Notice to Purchaser's Attorney as Seller"},
+                    "[IMPORTANT] FEK Notice to Purchaser's Attorney as Seller"
                 ]
             },
             {
@@ -210,7 +207,7 @@ module.exports = {
                 name: "Confirm the title with client",
                 status: 0,
                 templates: [
-                    {templateTitle: "Default Template"},
+                    "Default Template"
                 ]
             },
             {
@@ -230,7 +227,7 @@ module.exports = {
                 name: "Inform closing information to everyone engaged",
                 status: 0,
                 templates: [
-                    {templateTitle: "[IMPORTANT] Closing Confirmation send to all parties"},
+                    "[IMPORTANT] Closing Confirmation send to all parties"
                 ]
             },
             {
@@ -238,7 +235,7 @@ module.exports = {
                 name: "Calculate the checks needed and inform the client",
                 status: 0,
                 templates: [
-                    {templateTitle: "[IMPORTANT] Proposed Contract of Sale and Rider for Review and Signature"},
+                    "[IMPORTANT] Proposed Contract of Sale and Rider for Review and Signature"
                 ]
             },
             {
@@ -256,7 +253,7 @@ module.exports = {
                 name: "Collect feedbacks from the client",
                 status: 0,
                 templates: [
-                    {templateTitle: "Default Template"},
+                    "Default Template"
                 ]
             },
         ]

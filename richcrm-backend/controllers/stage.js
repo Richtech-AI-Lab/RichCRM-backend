@@ -1,6 +1,7 @@
 const StageService = require('../db/stage/stage.service');
 const CaseService = require('../db/case/case.service');
 const TaskService = require('../db/task/task.service');
+const TaskTemplateService = require('../db/task-template/task-template.service');
 const TemplateController = require('./template');
 
 const Types = require('../db/types');
@@ -127,7 +128,15 @@ class StageController {
             const taskConfigs = Types.stageDefaultTaskList[stageTypeEnum]
             for (let i = 0; i < taskConfigs.length; i++) {
                 const taskId = uuidv4();
+
+                // Check TaskTemplate exist
                 const taskConfig = taskConfigs[i];
+                const taskTemplate = await TaskTemplateService.readTaskTemplateByName(taskConfigs[i].name);
+                if (taskTemplate !== null) {
+                    console.log(`[StageController][createStage] TaskTemplate found: ${taskTemplate.TaskName}`);
+                    taskConfig.templates = taskTemplate.Templates;
+                }
+
                 // Check if the templates exists
                 const templateTitles = await TemplateController.validateTemplates(taskConfig.templates);
 

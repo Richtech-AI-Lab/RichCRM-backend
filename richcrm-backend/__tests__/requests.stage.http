@@ -3,8 +3,8 @@ POST http://localhost:3001/v1/stage/create
 Content-Type: application/json
 
 {
-    "stageType": 2,
-    "caseId": "5debf678-7b96-49ff-a700-f8f8d6b9edec"
+    "stageType": 0,
+    "caseId": "a78a707e-02b8-4580-954f-0dfb502e8c82"
 }
 
 ### Get Stage by Stage ID

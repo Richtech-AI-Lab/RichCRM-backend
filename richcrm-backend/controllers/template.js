@@ -143,7 +143,7 @@ class TemplateController {
         var templateTitles = [];
         if (templates !== undefined && templates.length > 0) {
             for (let i = 0; i < templates.length; i++) {
-                const templateTitle = templates[i].templateTitle;
+                const templateTitle = templates[i];
                     
                 const template = await TemplateService.getTemplateByTitle(templateTitle);
                 if (template !== null) {

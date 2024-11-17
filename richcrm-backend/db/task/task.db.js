@@ -9,7 +9,7 @@
  * @property {taskType} TaskType - Type of task (0-ACTION, 1-CONTACT, 2-UPLOAD)
  * @property {string} Name - Task name
  * @property {status} Status - Status of task (0-NOT_STARTED, 1-PENDING, 2-FINISHED, 3-OVERDUE)
- * @property {[UUID]} Templates - Foreign key to Email Template
+ * @property {[string]} Templates - Foreign key to Email Template
  * @property {string} FileURL - URL of the uploaded file
  */
 
