@@ -15,7 +15,7 @@ const resend = {
         try {
             const response = await client.emails.send({
                 from: process.env.SES_SOURCE_EMAIL,
-                replyTo: process.env.SES_REPLY_EMAIL,
+                replyTo: data.replyAddress ?? process.env.SES_REPLY_EMAIL,
                 to: data.toAddresses,
                 cc: data.ccAddresses,
                 subject: data.templateTitle,

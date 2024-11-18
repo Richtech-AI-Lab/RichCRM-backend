@@ -199,6 +199,15 @@ aws dynamodb create-table \
     --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
     --table-class STANDARD
 
+# TaskTemplate
+aws dynamodb create-table \
+    --table-name TaskTemplate \
+    --attribute-definitions \
+        AttributeName=TaskName,AttributeType=S \
+    --key-schema AttributeName=TaskName,KeyType=HASH \
+    --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
+    --table-class STANDARD
+
 ```
 ### 2. Delete table
 ```bash

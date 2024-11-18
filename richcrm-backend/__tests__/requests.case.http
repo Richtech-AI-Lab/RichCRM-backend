@@ -48,11 +48,11 @@ content-type: application/json
 }
 
 ### Read All Cases by Keyword
-POST https://api.richcrm.org/v1/case/query/keyword
+POST http://localhost:3001/v1/case/query/keyword
 content-type: application/json
 
 {
-    "keyword": "Eden",
+    "keyword": "an",
     "closed": false
 }
 

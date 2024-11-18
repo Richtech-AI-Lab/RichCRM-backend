@@ -153,6 +153,7 @@ router.post(
  * 
  * @apiBody {Array} toAddresses Array of email addresses.
  * @apiBody {Array} ccAddresses Array of email addresses.
+ * @apiBody {String} replyAddress Reply email address.
  * @apiBody {String} templateTitle Email title.
  * @apiBody {String} templateContent Email content.
  * @apiBody {Array} attachments Array of attachments.
@@ -181,6 +182,10 @@ router.post(
         .optional()
         .isArray()
         .withMessage("CC Addresses are required"),
+    check("replyAddress")
+        .optional()
+        .isEmail()
+        .withMessage("Reply Address is required"),
     check("templateTitle")
         .notEmpty()
         .withMessage("Email Title is required"),

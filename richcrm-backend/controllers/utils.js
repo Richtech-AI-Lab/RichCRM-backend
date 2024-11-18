@@ -223,11 +223,12 @@ class UtilsController {
 
     // Email send Resend
     async sendEmailResend(req, res) {
-        const { toAddresses, ccAddresses, templateTitle, templateContent, attachments } = req.body;
+        const { toAddresses, ccAddresses, replyAddress, templateTitle, templateContent, attachments } = req.body;
         try {
             const emailObj = {
                 toAddresses: toAddresses,
                 ccAddresses: ccAddresses,
+                replyAddress: replyAddress,
                 templateTitle: templateTitle,
                 templateContent: templateContent
             }
