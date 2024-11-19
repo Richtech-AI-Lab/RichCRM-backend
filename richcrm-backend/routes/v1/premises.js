@@ -73,6 +73,7 @@ router.post(
  * @apiSuccess {Date} inspectionDate Inspection Date.
  * @apiSuccess {Date} receivedDate Inspection Received Date.
  * @apiSuccess {Boolean} needTermitesInspection Need Termites Inspection.
+ * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * 
  * 
  * @apiSuccessExample Example data on success:
@@ -100,7 +101,8 @@ router.post(
  *  "needInspection": true,
  *  "inspectionDate": "2024-07-20T20:24:24.740Z",
  *  "receivedDate": "2024-07-20T20:24:24.740Z",
- *  "needTermitesInspection": true
+ *  "needTermitesInspection": true,
+ *  "annualPropertyTax": 10000
  * }
  * 
  */
@@ -143,6 +145,7 @@ router.post(
  * @apiSuccess {Date} inspectionDate Inspection Date.
  * @apiSuccess {Date} receivedDate Inspection Received Date.
  * @apiSuccess {Boolean} needTermitesInspection Need Termites Inspection.
+ * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * 
  * @apiSuccessExample Example data on success:
  * {
@@ -169,7 +172,8 @@ router.post(
  *  "needInspection": true,
  *  "inspectionDate": "2024-07-20T20:24:24.740Z",
  *  "receivedDate": "2024-07-20T20:24:24.740Z",
- *  "needTermitesInspection": true
+ *  "needTermitesInspection": true,
+ *  "annualPropertyTax": 10000
  * }
  * 
  */
@@ -214,6 +218,7 @@ router.get(
  * @apiSuccess {Date} inspectionDate Inspection Date.
  * @apiSuccess {Date} receivedDate Inspection Received Date.
  * @apiSuccess {Boolean} needTermitesInspection Need Termites Inspection.
+ * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * 
  * @apiSuccessExample Example data on success:
  * {
@@ -240,7 +245,8 @@ router.get(
  *  "needInspection": true,
  *  "inspectionDate": "2024-07-20T20:24:24.740Z",
  *  "receivedDate": "2024-07-20T20:24:24.740Z",
- *  "needTermitesInspection": true
+ *  "needTermitesInspection": true,
+ *  "annualPropertyTax": 10000
  * }
  * 
  */
@@ -282,6 +288,7 @@ router.post(
  * @apiBody {Date} inspectionDate Inspection Date.
  * @apiBody {Date} receivedDate Inspection Received Date.
  * @apiBody {Boolean} needTermitesInspection Need Termites Inspection.
+ * @apiBody {Number} annualPropertyTax Annual property tax.
  * 
  * 
  * @apiSuccess {String} premisesId Premises ID.
@@ -307,6 +314,7 @@ router.post(
  * @apiSuccess {Date} inspectionDate Inspection Date.
  * @apiSuccess {Date} receivedDate Inspection Received Date.
  * @apiSuccess {Boolean} needTermitesInspection Need Termites Inspection.
+ * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * 
  * @apiSuccessExample Example data on success:
  * {
@@ -333,7 +341,8 @@ router.post(
  *  "needInspection": true,
  *  "inspectionDate": "2024-07-20T20:24:24.740Z",
  *  "receivedDate": "2024-07-20T20:24:24.740Z",
- *  "needTermitesInspection": true
+ *  "needTermitesInspection": true,
+ *  "annualPropertyTax": 10000
  * }
  */
 router.post(
@@ -396,6 +405,10 @@ router.post(
         .optional()
         .isBoolean()
         .withMessage("Need Termites Inspection must be a boolean"),
+    check("annualPropertyTax")
+        .optional()
+        .isNumeric()
+        .withMessage("Annual Property Tax must be an integer"),
     validate,
     PremisesController.updatePremises
 )

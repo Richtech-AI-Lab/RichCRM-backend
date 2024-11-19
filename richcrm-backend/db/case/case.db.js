@@ -24,7 +24,6 @@
  * @property {float} PurchaserPrice - Purchaser's price
  * @property {float} DownPayment - Down payment
  * @property {float} MortgageAmount - Mortgage amount
- * @property {float} AnnualPropertyTax - Annual property tax
  * @property {float} SellersConcession - Seller's concession
  * @property {string} Referral - Referral in this case
  * @property {string} Bank - Bank in this case
@@ -279,11 +278,6 @@ class Case {
         if (c.mortgageAmount !== undefined) {
             params.ExpressionAttributeValues[':ma'] = c.mortgageAmount;
             updateExpressions.push('MortgageAmount = :ma');
-        }
-
-        if (c.annualPropertyTax !== undefined) {
-            params.ExpressionAttributeValues[':apt'] = c.annualPropertyTax;
-            updateExpressions.push('AnnualPropertyTax = :apt');
         }
 
         if (c.sellersConcession !== undefined) {

@@ -402,7 +402,6 @@ class CaseController {
             purchaserPrice,
             downPayment,
             mortgageAmount,
-            annualPropertyTax,
             sellersConcession,
             referral,
             bank,
@@ -459,7 +458,6 @@ class CaseController {
                 purchaserPrice: existingCase.PurchaserPrice,
                 downPayment: existingCase.DownPayment,
                 mortgageAmount: existingCase.MortgageAmount,
-                annualPropertyTax: existingCase.AnnualPropertyTax,
                 sellersConcession: existingCase.SellersConcession,
                 referral: existingCase.Referral,
                 bank: existingCase.Bank,
@@ -574,11 +572,6 @@ class CaseController {
                 caseObj.mortgageAmount = mortgageAmount;
             }
 
-            // Update annual property tax
-            if (annualPropertyTax !== undefined && annualPropertyTax !== "" && annualPropertyTax > 0) {
-                caseObj.annualPropertyTax = annualPropertyTax;
-            }
-
             // Update sellers concession
             if (sellersConcession !== undefined && sellersConcession !== "" && sellersConcession > 0) {
                 caseObj.sellersConcession = sellersConcession;
@@ -669,7 +662,6 @@ class CaseController {
                         "purchaserPrice": existingCase.PurchaserPrice,
                         "downPayment": existingCase.DownPayment,
                         "mortgageAmount": existingCase.MortgageAmount,
-                        "annualPropertyTax": existingCase.AnnualPropertyTax,
                         "sellersConcession": existingCase.SellersConcession,
                         "referral": existingCase.Referral,
                         "bank": existingCase.Bank,
@@ -844,7 +836,6 @@ class CaseController {
             "purchaserPrice": c.PurchaserPrice,
             "downPayment": c.DownPayment,
             "mortgageAmount": c.MortgageAmount,
-            "annualPropertyTax": c.AnnualPropertyTax,
             "sellersConcession": c.SellersConcession,
             "referral": c.Referral,
             "bank": c.Bank,

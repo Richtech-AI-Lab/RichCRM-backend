@@ -75,7 +75,6 @@ content-type: application/json
     "purchaserPrice": 1000000,
     "downPayment": 200000,
     "mortgageAmount": 800000,
-    "annualPropertyTax": 10000,
     "sellersConcession": 10000,
     "referral": "Jack",
     "bank": "Chase",

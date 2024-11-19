@@ -165,6 +165,7 @@ class PremisesController {
             inspectionDate,
             receivedDate,
             needTermitesInspection,
+            annualPropertyTax,
         } = req.body;
 
         try {
@@ -199,6 +200,7 @@ class PremisesController {
                 isTwoFamily: premises.IsTwoFamily,
                 twoFamilyFirstFloorTenantId: premises.TwoFamilyFirstFloorTenantId,
                 twoFamilySecondFloorTenantId: premises.TwoFamilySecondFloorTenantId,
+                annualPropertyTax: premises.AnnualPropertyTax,
             };
 
             console.log(premisesObj);
@@ -383,6 +385,12 @@ class PremisesController {
                 premisesObj.needTermitesInspection = needTermitesInspection;
             }
 
+            // Update annualPropertyTax
+            // Update annual property tax
+            if (annualPropertyTax !== undefined && annualPropertyTax !== "" && annualPropertyTax > 0) {
+                premisesObj.annualPropertyTax = annualPropertyTax;
+            }
+
             const p = await PremisesService.updatePremises(premisesObj);
             if (p !== null) {
                 res.status(200).json({
@@ -469,6 +477,7 @@ class PremisesController {
             inspectionDate: p.InspectionDate,
             receivedDate: p.ReceivedDate,
             needTermitesInspection: p.NeedTermitesInspection,
+            annualPropertyTax: p.AnnualPropertyTax,
         };
     }
 

@@ -27,6 +27,7 @@
  * @property {Date} InspectionDate - When should the inspection be done?
  * @property {Date} ReceivedDate - When the inspection report was received
  * @property {boolean} NeedTermitesInspection - Does this premises need termites inspection?
+ * @property {float} AnnualPropertyTax - Annual property tax
  */
 
 const db = require('../dynamodb');
@@ -195,6 +196,10 @@ class Premises {
         if (premises.needTermitesInspection !== undefined)  {
             params.ExpressionAttributeValues[':nti'] = premises.needTermitesInspection;
             params.UpdateExpression  += ", NeedTermitesInspection = :nti";
+        }
+        if (premises.annualPropertyTax !== undefined) {
+            params.ExpressionAttributeValues[':apt'] = premises.annualPropertyTax;
+            params.UpdateExpression += ", AnnualPropertyTax = :apt";
         }
 
         const data = await db.update(params).promise();

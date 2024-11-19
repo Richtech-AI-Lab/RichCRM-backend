@@ -33,7 +33,6 @@ const router = express.Router();
  * @apiSuccess {Number} purchaserPrice Purchaser price.
  * @apiSuccess {Number} downPayment Down payment.
  * @apiSuccess {Number} mortgageAmount Mortgage amount.
- * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * @apiSuccess {Number} sellersConcession Seller's concession.
  * @apiSuccess {String} referral Referral.
  * @apiSuccess {String} bank Bank.
@@ -71,7 +70,6 @@ const router = express.Router();
  *   "purchaserPrice": 1000000,
  *   "downPayment": 200000,
  *   "mortgageAmount": 800000,
- *   "annualPropertyTax": 10000,
  *   "sellersConcession": 10000,
  *   "referral": "Jack",
  *   "bank": "Chase",
@@ -117,7 +115,6 @@ router.get(
  * @apiSuccess {Number} purchaserPrice Purchaser price.
  * @apiSuccess {Number} downPayment Down payment.
  * @apiSuccess {Number} mortgageAmount Mortgage amount.
- * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * @apiSuccess {Number} sellersConcession Seller's concession.
  * @apiSuccess {String} referral Referral.
  * @apiSuccess {String} bank Bank.
@@ -157,7 +154,6 @@ router.get(
  *   "purchaserPrice": 1000000,
  *   "downPayment": 200000,
  *   "mortgageAmount": 800000,
- *   "annualPropertyTax": 10000,
  *   "sellersConcession": 10000,
  *   "referral": "Jack",
  *   "bank": "Chase",
@@ -207,7 +203,6 @@ router.post(
  * @apiSuccess {Number} purchaserPrice Purchaser price.
  * @apiSuccess {Number} downPayment Down payment.
  * @apiSuccess {Number} mortgageAmount Mortgage amount.
- * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * @apiSuccess {Number} sellersConcession Seller's concession.
  * @apiSuccess {String} referral Referral.
  * @apiSuccess {String} bank Bank.
@@ -247,7 +242,6 @@ router.post(
  *   "purchaserPrice": 1000000,
  *   "downPayment": 200000,
  *   "mortgageAmount": 800000,
- *   "annualPropertyTax": 10000,
  *   "sellersConcession": 10000,
  *   "referral": "Jack",
  *   "bank": "Chase",
@@ -298,7 +292,6 @@ router.post(
  * @apiSuccess {Number} purchaserPrice Purchaser price.
  * @apiSuccess {Number} downPayment Down payment.
  * @apiSuccess {Number} mortgageAmount Mortgage amount.
- * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * @apiSuccess {Number} sellersConcession Seller's concession.
  * @apiSuccess {String} referral Referral.
  * @apiSuccess {String} bank Bank.
@@ -338,7 +331,6 @@ router.post(
  *   "purchaserPrice": 1000000,
  *   "downPayment": 200000,
  *   "mortgageAmount": 800000,
- *   "annualPropertyTax": 10000,
  *   "sellersConcession": 10000,
  *   "referral": "Jack",
  *   "bank": "Chase",
@@ -389,7 +381,6 @@ router.post(
  * @apiSuccess {Number} purchaserPrice Purchaser price.
  * @apiSuccess {Number} downPayment Down payment.
  * @apiSuccess {Number} mortgageAmount Mortgage amount.
- * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * @apiSuccess {Number} sellersConcession Seller's concession.
  * @apiSuccess {String} referral Referral.
  * @apiSuccess {String} bank Bank.
@@ -429,7 +420,6 @@ router.post(
  *   "purchaserPrice": 1000000,
  *   "downPayment": 200000,
  *   "mortgageAmount": 800000,
- *   "annualPropertyTax": 10000,
  *   "sellersConcession": 10000,
  *   "referral": "Jack",
  *   "bank": "Chase",
@@ -572,7 +562,6 @@ router.post(
  * @apiBody {Number} purchaserPrice Purchaser price.
  * @apiBody {Number} downPayment Down payment.
  * @apiBody {Number} mortgageAmount Mortgage amount.
- * @apiBody {Number} annualPropertyTax Annual property tax.
  * @apiBody {Number} sellersConcession Seller's concession.
  * @apiBody {String} referral Referral.
  * @apiBody {String} bank Bank.
@@ -595,7 +584,6 @@ router.post(
  * @apiSuccess {Number} purchaserPrice Purchaser price.
  * @apiSuccess {Number} downPayment Down payment.
  * @apiSuccess {Number} mortgageAmount Mortgage amount.
- * @apiSuccess {Number} annualPropertyTax Annual property tax.
  * @apiSuccess {Number} sellersConcession Seller's concession.
  * @apiSuccess {String} referral Referral.
  * @apiSuccess {String} bank Bank.
@@ -631,7 +619,6 @@ router.post(
  *   "purchaserPrice": 1000000,
  *   "downPayment": 200000,
  *   "mortgageAmount": 800000,
- *   "annualPropertyTax": 10000,
  *   "sellersConcession": 10000,
  *   "referral": "Jack",
  *   "bank": "Chase",
@@ -671,10 +658,6 @@ router.post(
         .optional()
         .isNumeric()
         .withMessage("Mortgage Amount should be a number"),
-    check("annualPropertyTax")
-        .optional()
-        .isNumeric()
-        .withMessage("Annual Property Tax should be a number"),
     check("sellersConcession")
         .optional()
         .isNumeric()
@@ -723,7 +706,6 @@ router.post(
  *   "purchaserPrice": 1000000,
  *   "downPayment": 200000,
  *   "mortgageAmount": 800000,
- *   "annualPropertyTax": 10000,
  *   "sellersConcession": 10000,
  *   "referral": "Jack",
  *   "bank": "Chase",

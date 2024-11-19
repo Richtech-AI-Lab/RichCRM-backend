@@ -56,7 +56,8 @@ content-type: application/json
     "needInspection": true,
     "inspectionDate": "2024-07-20T20:24:24.740Z",
     "receivedDate": "2024-08-20T20:24:24.740Z",
-    "needTermitesInspection": true
+    "needTermitesInspection": true,
+    "annualPropertyTax": 10000
 }
 
 
