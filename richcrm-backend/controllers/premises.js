@@ -371,13 +371,17 @@ class PremisesController {
             }
 
             // Update inspectionDate
-            if (inspectionDate !== undefined && inspectionDate !== "") {
+            if (inspectionDate !== undefined && inspectionDate !== "" && inspectionDate !== null) {
                 premisesObj.inspectionDate = new Date(inspectionDate).toISOString();
+            } else if (inspectionDate === null) {
+                premisesObj.inspectionDate = null;
             }
 
             // Update receivedDate
-            if (receivedDate !== undefined && receivedDate !== "") {
+            if (receivedDate !== undefined && receivedDate !== "" && receivedDate !== null) {
                 premisesObj.receivedDate = new Date(receivedDate).toISOString();
+            } else if (receivedDate === null) {
+                premisesObj.receivedDate = null;
             }
 
             // Update needTermitesInspection

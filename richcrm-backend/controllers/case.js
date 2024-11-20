@@ -464,8 +464,6 @@ class CaseController {
                 personalNote: existingCase.PersonalNote,
             }
 
-            console.log(caseObj);
-
             // Check if the stage is valid
             var stageObj;
             if (stage !== undefined) {
@@ -528,18 +526,24 @@ class CaseController {
             }
 
             // Check if the closing date is valid
-            if (closingDate !== undefined && closingDate !== "") {
+            if (closingDate !== undefined && closingDate !== "" && closingDate !== null) {
                 caseObj.closingDate = new Date(closingDate).toISOString();
+            } else if (closingDate === null) {
+                caseObj.closingDate = null;
             }
 
             // Check if the close at date is valid
-            if (closeAt !== undefined && closeAt !== "") {
+            if (closeAt !== undefined && closeAt !== "" && closeAt !== null) {
                 caseObj.closeAt = new Date(closeAt).toISOString();
+            } else if (closeAt === null) {
+                caseObj.closeAt = null;
             }
 
             // Check if the mortgage contingency date is valid
-            if (mortgageContingencyDate !== undefined && mortgageContingencyDate !== "") {
+            if (mortgageContingencyDate !== undefined && mortgageContingencyDate !== "" && mortgageContingencyDate !== null) {
                 caseObj.mortgageContingencyDate = new Date(mortgageContingencyDate).toISOString();
+            } else if (mortgageContingencyDate === null) {
+                caseObj.mortgageContingencyDate = null;
             }
 
             // Update additional clients list 

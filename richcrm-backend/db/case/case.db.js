@@ -306,7 +306,6 @@ class Case {
         } else {
             return null;
         }
-        console.log(params);
         const data = await db.update(params).promise();
         return data.Attributes;
     }

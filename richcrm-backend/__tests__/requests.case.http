@@ -62,12 +62,12 @@ POST http://localhost:3001/v1/case/update
 content-type: application/json
 
 {
-    "caseId": "497592f5-d19a-4d42-9cdd-4a40b291ede0",
+    "caseId": "caaf5fbf-b99e-48de-b2a3-41b88898334a",
     "premisesId": "cbf8e709-7af2-4433-9276-7d5ba9113950",
     "creatorId": "eden.wu@richtechailab.com",
     "stage": 1,
-    "closeAt": "2024-07-20T20:24:24.740Z",
-    "closingDate": "2024-07-20T20:24:24.740Z",
+    "closeAt": null,
+    "closingDate": null,
     "mortgageContingencyDate": "2024-07-20T20:24:24.740Z",
     "additionalClients": ["26ea9b74-b431-4b08-88cd-436ba25486bb"],
     "contacts": ["8d587c04-0d59-4b70-8264-922d26bf6f00"],

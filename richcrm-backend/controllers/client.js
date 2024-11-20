@@ -344,8 +344,10 @@ class ClientController {
             }
 
             // Check if dob is valid
-            if (dob !== undefined && dob !== "") {
+            if (dob !== undefined && dob !== "" && dob !== null) {
                 clientObj.dob = new Date(dob).toISOString();
+            } else if (dob === null) {
+                clientObj.dob = null;
             }
 
             // Check work number is valid
