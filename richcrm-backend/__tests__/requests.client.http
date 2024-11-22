@@ -19,7 +19,7 @@ POST http://localhost:3001/v1/client/query
 content-type: application/json
 
 {
-    "keyword": "john"
+    "keyword": "Devon"
 }
 
 

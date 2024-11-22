@@ -36,7 +36,9 @@ class ClientService {
             console.log("[ClientService][readClientByKeyWord] Invalid keyword");
             return null;
         }
-        const data = await Client.getClientsByKeyword(keyword);
+        const keywords = keyword.split(/[\s,]+/).map(kw => kw.trim()).filter(Boolean);
+
+        const data = await Client.getClientsByKeywords(keywords);
 
         if (data.Items !== undefined) {
             return data.Items;
