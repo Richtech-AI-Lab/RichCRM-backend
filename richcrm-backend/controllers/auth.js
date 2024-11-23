@@ -1,5 +1,6 @@
 var UserService = require('../db/user/user.service');
 const Types = require("../db/types");
+const PasswordUtil = require('../utils/Password');
 
 class AuthController {
     async registerUser(req, res) {
@@ -13,13 +14,14 @@ class AuthController {
                     message: 'User already exists'
                 });
             }
-            const user = await UserService.createUser({emailAddress, password, userName, role});
+            const salt = PasswordUtil.generateSalt();
+            const encryptedPassword = PasswordUtil.encrypt(password, salt);
+            const user = await UserService.createUser({emailAddress, salt, password: encryptedPassword, userName, role});
             if (user !== null) {
                 res.status(200).json({
                     status: "success",
                     data: [{
                         emailAddress: user.EmailAddress,
-                        password: user.Password,
                         userName: user.UserName,
                         role: user.Role,
                     }],
