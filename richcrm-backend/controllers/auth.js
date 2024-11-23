@@ -1,6 +1,7 @@
 var UserService = require('../db/user/user.service');
 const Types = require("../db/types");
 const PasswordUtil = require('../utils/Password');
+const JwTokenUtil = require('../utils/JwToken');
 
 class AuthController {
     async registerUser(req, res) {
@@ -56,21 +57,45 @@ class AuthController {
                     message: 'User not found'
                 });
             }
-            if (user.Password !== password) {
+
+            if (!PasswordUtil.isValidPassword(user.Password, password, user.Salt)) {
                 return res.status(400).json({
                     status: "failed",
                     data: [],
                     message: 'Invalid password'
                 });
             }
+
+            delete user.Password;
+            delete user.Salt;
+            delete user.RefreshToken;
+
+            let accessToken, refreshToken = undefined;
+            accessToken = JwTokenUtil.generateToken(user, process.env.ACCESS_TOKEN_KEY, process.env.ACCESS_TOKEN_TIME_EXPIRATION);
+            refreshToken = JwTokenUtil.generateToken(user, process.env.REFRESH_TOKEN_KEY, process.env.REFRESH_TOKEN_TIME_EXPIRATION);
+            if (accessToken === undefined || refreshToken === undefined) {
+                throw new Error('token generation failed');
+            }
+
+            const tokenResult = await UserService.updateUser({
+                emailAddress: user.EmailAddress,
+                refreshToken
+            });
+            if (tokenResult === undefined || tokenResult === null) {
+                throw new Error('refresh token update failed');
+            }
+
             res.status(200).json({
                 status: "success",
                 data: [{
                     emailAddress: user.EmailAddress,
-                    password: user.Password,
                     userName: user.UserName,
                     role: user.Role,
                     uploadFolderName: user.UploadFolderName,
+                    token: {
+                        access: accessToken,
+                        refresh: refreshToken
+                    }
                 }],
                 message: '[AuthController][loginUser] User logged in successfully'
             });
