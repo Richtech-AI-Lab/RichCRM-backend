@@ -24,28 +24,22 @@ class UserService {
 
     async createUser (user) {
         // Check if the user object is valid
-        if (user.emailAddress === undefined ||
+        if (
+            user.emailAddress === undefined ||
             user.password === undefined ||
             user.userName === undefined ||
-            user.role === undefined) {
+            user.salt === undefined ||
+            user.role === undefined
+        ) {
             console.log('[USER-Create] Invalid user object');
             return null;
         }
-
-        // Check if the password is valid
         
-
         // Check if the role is valid
-        switch (user.role) {
-            case userRole.ADMIN:
-                break;
-            case userRole.ATTORNEY:
-                break;
-            case userRole.CLIENT:
-                break;
-            default:
-                console.log('[USER-Create] Invalid role');
-                return null;
+        const roleValid = Object.values(userRole).includes(user.role);
+        if (!roleValid) {
+            console.log('[USER-Create] Invalid role');
+            return null;
         }
 
         const data = await User.createUser(user);
