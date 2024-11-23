@@ -2,6 +2,7 @@ var express = require('express');
 var check = require('express-validator').check;
 var validate = require('../../middlewares/validation');
 var AuthController = require('../../controllers/auth');
+const passport = require('../../middlewares/tokenStrategy/accessTokenStrategy');
 
 const router = express.Router();
 
@@ -200,6 +201,31 @@ router.post(
         .withMessage("Invalid new password, must be at least 8 characters long"),
     validate,
     AuthController.changePassword
+);
+
+/**
+ * @api {get} v1/auth/me Get user information
+ * @apiName SelfUserInfo
+ * @apiGroup Auth
+ * 
+ * @apiHeader {String} Authorization Bearer token to authenticate the user.
+ * 
+ * @apiSuccess {String} emailAddress Email Address of the User.
+ * @apiSuccess {String} userName User name of the User.
+ * @apiSuccess {Number} role Role of the User (0-Admin, 1-Attorney).
+ * 
+ * @apiError Unauthorized The user is not authenticated.
+ */
+router.get(
+    "/me",
+    check("Authorization")
+        .exists()
+        .withMessage("Authorization header is required")
+        .matches(/^Bearer\s.+$/)
+        .withMessage('Authorization header not in format: Bearer <token>'),
+    validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
+    AuthController.me
 );
 
 
