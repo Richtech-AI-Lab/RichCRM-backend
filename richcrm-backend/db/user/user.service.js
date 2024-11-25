@@ -52,21 +52,12 @@ class UserService {
             console.log('[USER-Update] Invalid user object');
             return null;
         }
-        
 
         // Check if the role is valid
-        if (user.role !== undefined && user.role !== null) {
-            switch (user.role) {
-                case userRole.ADMIN:
-                    break;
-                case userRole.ATTORNEY:
-                    break;
-                case userRole.CLIENT:
-                    break;
-                default:
-                    console.log('[USER-Update] Invalid role');
-                    return null;
-            }
+        const roleValid = Object.values(userRole).includes(user.role);
+        if (user.role !== undefined && user.role !== null && !roleValid) {
+            console.log('[USER-Update] Invalid role');
+            return null;
         }
 
         const data = await User.updateUser(user);
