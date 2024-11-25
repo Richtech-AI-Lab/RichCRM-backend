@@ -201,6 +201,27 @@ router.post(
 );
 
 /**
+ * @api {post} v1/auth/refresh Refresh access token
+ * @apiName RefreshAccessToken
+ * @apiGroup Auth
+ * 
+ * @apiBody {String} Authorization refresh token to authenticate the user.
+ * 
+ * @apiSuccess {String} new Access token of the User.
+ * 
+ * @apiError Unauthorized The user is not authenticated.
+ */
+router.post(
+    "/refresh",
+    check('refreshToken')
+        .notEmpty()
+        .isJWT()
+        .withMessage('invalid refresh token'),
+    validate,
+    AuthController.refresh
+);
+
+/**
  * @api {get} v1/auth/me Get user information
  * @apiName SelfUserInfo
  * @apiGroup Auth
