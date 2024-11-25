@@ -146,7 +146,8 @@ class AuthController {
     }
 
     async changePassword(req, res) {
-        const {emailAddress, currentPassword, newPassword} = req.body;
+        const emailAddress = req.user.EmailAddress;
+        const {currentPassword, newPassword} = req.body;
         try {
             const user = await UserService.readUser(emailAddress);
             if (user === null) {
@@ -171,8 +172,13 @@ class AuthController {
                 });
             }
             
-
-            const result = await UserService.updateUser({emailAddress, password: newPassword});
+            const newSalt = PasswordUtil.generateSalt();
+            const newEncryptedPassword = PasswordUtil.encrypt(newPassword, newSalt);
+            const result = await UserService.updateUser({
+                emailAddress, 
+                password: newEncryptedPassword,
+                salt: newSalt
+            });
             if (result === null) {
                 return res.status(400).json({
                     status: "failed",
@@ -184,7 +190,6 @@ class AuthController {
                 status: "success",
                 data: [{
                     emailAddress: user.EmailAddress,
-                    password: newPassword,
                     role: user.Role,
                     userName: user.UserName,
                     uploadFolderName: user.UploadFolderName,
