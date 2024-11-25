@@ -166,8 +166,9 @@ router.post(
  * @api {post} v1/auth/change-password Change a user's password
  * @apiName ChangePassword
  * @apiGroup Auth
+ * 
+ * @apiHeader {String} Authorization Bearer token to authenticate the user.
  *
- * @apiBody {String} emailAddress Email address of the User.
  * @apiBody {String} currentPassword Old password of the User.
  * @apiBody {String} newPassword New password of the User.
  *
@@ -186,11 +187,7 @@ router.post(
  */
 router.post(
     "/change-password",
-    check("emailAddress")
-        .notEmpty()
-        .isEmail()
-        .withMessage("Invalid email address")
-        .normalizeEmail(),
+    passport.authenticate("user-jwtStrategy", {session: false}),
     check("currentPassword")
         .notEmpty()
         .isLength({ min: 8 })
