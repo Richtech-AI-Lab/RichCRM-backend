@@ -66,13 +66,15 @@ class AuthController {
                 });
             }
 
-            delete user.Password;
-            delete user.Salt;
-            delete user.RefreshToken;
+            const userPayload = {
+                UserName: user.UserName,
+                Role: user.Role,
+                EmailAddress: user.EmailAddress,
+            }
 
             let accessToken, refreshToken = undefined;
-            accessToken = JwTokenUtil.generateToken(user, process.env.ACCESS_TOKEN_KEY, process.env.ACCESS_TOKEN_TIME_EXPIRATION);
-            refreshToken = JwTokenUtil.generateToken(user, process.env.REFRESH_TOKEN_KEY, process.env.REFRESH_TOKEN_TIME_EXPIRATION);
+            accessToken = JwTokenUtil.generateToken(userPayload, process.env.ACCESS_TOKEN_KEY, process.env.ACCESS_TOKEN_TIME_EXPIRATION);
+            refreshToken = JwTokenUtil.generateToken(userPayload, process.env.REFRESH_TOKEN_KEY, process.env.REFRESH_TOKEN_TIME_EXPIRATION);
             if (accessToken === undefined || refreshToken === undefined) {
                 throw new Error('token generation failed');
             }
