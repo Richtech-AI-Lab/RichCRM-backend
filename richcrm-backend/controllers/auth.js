@@ -429,6 +429,66 @@ class AuthController {
         }
         res.end();
     }
+
+    async resetPassword(req, res) {
+        const { email, verificationCode, newPassword } = req.body;
+        try {
+            const user = await UserService.readUser(email);
+            if (user === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User not found'
+                });
+            }
+
+            if (user.verificationCode !== verificationCode) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'Invalid verification code'
+                });
+            }
+
+            if (user.VerificationExp < new Date()) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'Verification code expired'
+                });
+            }
+
+            const salt = PasswordUtil.generateSalt();
+            const encryptedPassword = PasswordUtil.encrypt(newPassword, salt);
+            const result = await UserService.updateUser({
+                emailAddress: user.EmailAddress,
+                password: encryptedPassword,
+                salt: salt
+            });
+
+            if (result === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User reset password failed'
+                });
+            }
+
+            res.status(200).json({
+                status: "success",
+                data: [],
+                message: 'User reset password successfully'
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: 'Internal server error'
+            });
+        }
+        res.end();
+    }
 }
 
 module.exports = new AuthController();

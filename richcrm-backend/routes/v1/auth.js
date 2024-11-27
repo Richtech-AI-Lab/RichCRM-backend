@@ -268,5 +268,39 @@ router.post(
     AuthController.resetPasswordRequest
 );
 
+/**
+ * @api {post} v1/auth/password-reset reset password
+ * @apiName password-reset
+ * @apiGroup Auth
+ * 
+ * @apiBody {String} user’s email address.
+ * @apiBody {String} new password
+ * @apiBody {String} verification code sent to user’s email address.
+ * 
+ * @apiSuccessExample Example data on success:
+ * {
+ *  "status": "success",
+ *  "data": [],
+ *  "message": "User reset password successfully"
+ * }
+ */
+router.post(
+    "/password-reset",
+    check('email')
+        .notEmpty()
+        .isEmail()
+        .withMessage("Invalid email address")
+        .normalizeEmail(),
+    check('newPassword')
+        .notEmpty()
+        .isLength({ min: 8 })
+        .withMessage("Password is invalid, must provide password to update user"),
+    check('verificationCode')
+        .notEmpty()
+        .isLength({ min: 6, max: 6 })
+        .withMessage("Verification code is invalid, must provide verification code to reset password"),
+    validate,
+    AuthController.resetPassword
+);
 
 module.exports = router;
