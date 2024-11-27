@@ -2,6 +2,9 @@ var UserService = require('../db/user/user.service');
 const Types = require("../db/types");
 const PasswordUtil = require('../utils/Password');
 const JwTokenUtil = require('../utils/JwToken');
+const ses = require('../services/ses');
+
+const PASSWORD_RESET_EXP_LENGTH = 10 * 60 * 1000; // 10 minutes
 
 class AuthController {
     async registerUser(req, res) {
@@ -372,6 +375,58 @@ class AuthController {
             });
         }
 
+        res.end();
+    }
+
+    async resetPasswordRequest(req, res) {
+        const { email } = req.body;
+        try {   
+            const user = await UserService.readUser(email);
+            if (user === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User not found'
+                });
+            }
+
+            const verificationCode = PasswordUtil.generateVerificationCode(6);
+            var expDate = new Date();
+            expDate.setTime(expDate.getTime() + PASSWORD_RESET_EXP_LENGTH);
+            const result = await UserService.updateUser({
+                emailAddress: user.EmailAddress,
+                verificationCode: verificationCode,
+                verificationExp: expDate
+            });
+
+            if (result === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User reset password request failed'
+                });  
+            }
+
+            // TODO: need a better template format for email verification
+            const returnData = await ses.sendEmail({
+                toAddresses: [user.EmailAddress],
+                templateContent: `Dear customer ${user.UserName},\n\nPlease use the following verification code to reset your password: ${verificationCode}\nThis code will expire in 10 minutes.\nIf you did not request a password reset, please ignore this email.\nThank you for using our service!\n\nSincerely,\nRichCRM Team`,
+                templateTitle: 'Password reset request verification'
+            });
+
+            return res.status(200).json({
+                status: "success",
+                data: [],
+                message: 'User reset password request successfully'
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: 'Internal server error'
+            });
+        }
         res.end();
     }
 }
