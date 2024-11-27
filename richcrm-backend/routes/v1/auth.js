@@ -246,5 +246,27 @@ router.get(
     AuthController.me
 );
 
+/**
+ * @api {post} v1/auth/password-reset-request reset password request
+ * @apiName password-reset-request
+ * @apiGroup Auth
+ * 
+ * @apiBody {String} Authorization refresh token to authenticate the user.
+ * 
+ * @apiSuccess {String} new Access token of the User.
+ * 
+ * @apiError Unauthorized The user is not authenticated.
+ */
+router.post(
+    "/password-reset-request",
+    check('email')
+        .notEmpty()
+        .isEmail()
+        .withMessage("Invalid email address")
+        .normalizeEmail(),
+    validate,
+    AuthController.resetPasswordRequest
+);
+
 
 module.exports = router;
