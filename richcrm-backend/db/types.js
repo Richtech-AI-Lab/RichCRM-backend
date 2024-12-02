@@ -127,26 +127,21 @@ module.exports = {
                 name: "Initial signed contract",
                 status: 0,
             },
+        ],
+        CONTRACT_SIGNING: [
             {
                 taskType: 2,
                 name: "Deposit",
                 status: 0,
             },
-        ],
-        CONTRACT_SIGNING: [
             {
                 taskType: 0,
-                name: "Confirm wire info with seller",
-                status: 0,
-            },
-            {
-                taskType: 0,
-                name: "Send the deposit",
+                name: "Confirm wire info and send the deposit",
                 status: 0,
             },
             {
                 taskType: 1,
-                name: "Inform the seller about the sending, and request the fully signed contract",
+                name: "Inform the seller and request the fully signed contract",
                 status: 0,
                 templates: [
                     "[IMPORTANT] FEK Notice to Purchaser's Attorney as Seller",

@@ -402,7 +402,6 @@ class CaseController {
             purchaserPrice,
             downPayment,
             mortgageAmount,
-            annualPropertyTax,
             sellersConcession,
             referral,
             bank,
@@ -459,14 +458,11 @@ class CaseController {
                 purchaserPrice: existingCase.PurchaserPrice,
                 downPayment: existingCase.DownPayment,
                 mortgageAmount: existingCase.MortgageAmount,
-                annualPropertyTax: existingCase.AnnualPropertyTax,
                 sellersConcession: existingCase.SellersConcession,
                 referral: existingCase.Referral,
                 bank: existingCase.Bank,
                 personalNote: existingCase.PersonalNote,
             }
-
-            console.log(caseObj);
 
             // Check if the stage is valid
             var stageObj;
@@ -530,18 +526,24 @@ class CaseController {
             }
 
             // Check if the closing date is valid
-            if (closingDate !== undefined && closingDate !== "") {
+            if (closingDate !== undefined && closingDate !== "" && closingDate !== null) {
                 caseObj.closingDate = new Date(closingDate).toISOString();
+            } else if (closingDate === null) {
+                caseObj.closingDate = null;
             }
 
             // Check if the close at date is valid
-            if (closeAt !== undefined && closeAt !== "") {
+            if (closeAt !== undefined && closeAt !== "" && closeAt !== null) {
                 caseObj.closeAt = new Date(closeAt).toISOString();
+            } else if (closeAt === null) {
+                caseObj.closeAt = null;
             }
 
             // Check if the mortgage contingency date is valid
-            if (mortgageContingencyDate !== undefined && mortgageContingencyDate !== "") {
+            if (mortgageContingencyDate !== undefined && mortgageContingencyDate !== "" && mortgageContingencyDate !== null) {
                 caseObj.mortgageContingencyDate = new Date(mortgageContingencyDate).toISOString();
+            } else if (mortgageContingencyDate === null) {
+                caseObj.mortgageContingencyDate = null;
             }
 
             // Update additional clients list 
@@ -572,11 +574,6 @@ class CaseController {
             // Update mortgage amount
             if (mortgageAmount !== undefined && mortgageAmount !== "" && mortgageAmount > 0) {
                 caseObj.mortgageAmount = mortgageAmount;
-            }
-
-            // Update annual property tax
-            if (annualPropertyTax !== undefined && annualPropertyTax !== "" && annualPropertyTax > 0) {
-                caseObj.annualPropertyTax = annualPropertyTax;
             }
 
             // Update sellers concession
@@ -669,7 +666,6 @@ class CaseController {
                         "purchaserPrice": existingCase.PurchaserPrice,
                         "downPayment": existingCase.DownPayment,
                         "mortgageAmount": existingCase.MortgageAmount,
-                        "annualPropertyTax": existingCase.AnnualPropertyTax,
                         "sellersConcession": existingCase.SellersConcession,
                         "referral": existingCase.Referral,
                         "bank": existingCase.Bank,
@@ -844,7 +840,6 @@ class CaseController {
             "purchaserPrice": c.PurchaserPrice,
             "downPayment": c.DownPayment,
             "mortgageAmount": c.MortgageAmount,
-            "annualPropertyTax": c.AnnualPropertyTax,
             "sellersConcession": c.SellersConcession,
             "referral": c.Referral,
             "bank": c.Bank,

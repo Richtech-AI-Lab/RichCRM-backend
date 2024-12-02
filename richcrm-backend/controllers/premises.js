@@ -165,6 +165,7 @@ class PremisesController {
             inspectionDate,
             receivedDate,
             needTermitesInspection,
+            annualPropertyTax,
         } = req.body;
 
         try {
@@ -199,6 +200,7 @@ class PremisesController {
                 isTwoFamily: premises.IsTwoFamily,
                 twoFamilyFirstFloorTenantId: premises.TwoFamilyFirstFloorTenantId,
                 twoFamilySecondFloorTenantId: premises.TwoFamilySecondFloorTenantId,
+                annualPropertyTax: premises.AnnualPropertyTax,
             };
 
             console.log(premisesObj);
@@ -369,18 +371,28 @@ class PremisesController {
             }
 
             // Update inspectionDate
-            if (inspectionDate !== undefined && inspectionDate !== "") {
+            if (inspectionDate !== undefined && inspectionDate !== "" && inspectionDate !== null) {
                 premisesObj.inspectionDate = new Date(inspectionDate).toISOString();
+            } else if (inspectionDate === null) {
+                premisesObj.inspectionDate = null;
             }
 
             // Update receivedDate
-            if (receivedDate !== undefined && receivedDate !== "") {
+            if (receivedDate !== undefined && receivedDate !== "" && receivedDate !== null) {
                 premisesObj.receivedDate = new Date(receivedDate).toISOString();
+            } else if (receivedDate === null) {
+                premisesObj.receivedDate = null;
             }
 
             // Update needTermitesInspection
             if (needTermitesInspection !== undefined) {
                 premisesObj.needTermitesInspection = needTermitesInspection;
+            }
+
+            // Update annualPropertyTax
+            // Update annual property tax
+            if (annualPropertyTax !== undefined && annualPropertyTax !== "" && annualPropertyTax > 0) {
+                premisesObj.annualPropertyTax = annualPropertyTax;
             }
 
             const p = await PremisesService.updatePremises(premisesObj);
@@ -469,6 +481,7 @@ class PremisesController {
             inspectionDate: p.InspectionDate,
             receivedDate: p.ReceivedDate,
             needTermitesInspection: p.NeedTermitesInspection,
+            annualPropertyTax: p.AnnualPropertyTax,
         };
     }
 

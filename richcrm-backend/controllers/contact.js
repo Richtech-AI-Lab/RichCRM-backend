@@ -100,6 +100,41 @@ class ContactController {
                 }
             }
 
+
+            // Check existing contact
+            const existingContacts = await ContactService.readContactByKeyWord(firstName);
+            if (existingContacts !== null) {
+                for (let i = 0; i < existingContacts.length; i++) {
+                    const contact = existingContacts[i];
+                    if (contact.FirstName === firstName && 
+                        contact.LastName === lastName &&
+                        contact.Company === company) {
+                        // Update tags
+                        const contactObj = this.procContact(contact);
+                        tagList.forEach(tag => {
+                            if (!contactObj.tags.includes(tag)) {
+                                contactObj.tags.push(tag);
+                            }
+                        });
+                        if (contactObj.email === null || contactObj.email === "") {
+                            contactObj.email = email;
+                        }
+                        if (contactObj.cellNumber === null || contactObj.cellNumber === "") {
+                            contactObj.cellNumber = cellNumber;
+                        }
+                        const updatedContact = await ContactService.updateContact(contactObj);
+                        if (updatedContact !== null) {
+                            return res.status(200).json({
+                                status: "success",
+                                data: [contactObj],
+                                message: '[ContactController][registerContact] Existing contact updated successfully',
+                            });
+                        }
+                    }
+                }
+            }
+
+
             // Check if address exists
             if (mailingAddress !== undefined) {
                 const existingAddress = await AddressService.readAddress(mailingAddress);

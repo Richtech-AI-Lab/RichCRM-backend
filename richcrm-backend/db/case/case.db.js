@@ -24,7 +24,6 @@
  * @property {float} PurchaserPrice - Purchaser's price
  * @property {float} DownPayment - Down payment
  * @property {float} MortgageAmount - Mortgage amount
- * @property {float} AnnualPropertyTax - Annual property tax
  * @property {float} SellersConcession - Seller's concession
  * @property {string} Referral - Referral in this case
  * @property {string} Bank - Bank in this case
@@ -281,11 +280,6 @@ class Case {
             updateExpressions.push('MortgageAmount = :ma');
         }
 
-        if (c.annualPropertyTax !== undefined) {
-            params.ExpressionAttributeValues[':apt'] = c.annualPropertyTax;
-            updateExpressions.push('AnnualPropertyTax = :apt');
-        }
-
         if (c.sellersConcession !== undefined) {
             params.ExpressionAttributeValues[':sc'] = c.sellersConcession;
             updateExpressions.push('SellersConcession = :sc');
@@ -312,7 +306,6 @@ class Case {
         } else {
             return null;
         }
-        console.log(params);
         const data = await db.update(params).promise();
         return data.Attributes;
     }

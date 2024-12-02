@@ -110,6 +110,21 @@ class Client {
         return data;
     }
 
+    async getClientsByKeywords(keywords) {
+        const filterExpression = keywords.map((k, i) => `(contains(FirstName, :k${i}) or contains(LastName, :k${i}) or contains(Email, :k${i}) or contains(CellNumber, :k${i}))`).join(' and ');
+        const expressionAttributeValues = {};
+        keywords.forEach((k, i) => {
+            expressionAttributeValues[`:k${i}`] = k;
+        });
+        const params = {
+            TableName: this.table,
+            FilterExpression: filterExpression,
+            ExpressionAttributeValues: expressionAttributeValues,
+        };
+        const data = await db.scan(params).promise();
+        return data;
+    }
+
 
     async createClient(client) {
         const params = {
