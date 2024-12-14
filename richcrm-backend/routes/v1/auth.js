@@ -327,4 +327,29 @@ router.get(
     AuthController.accountVerification
 );
 
+/**
+ * @api {get} v1/auth/resend-account-verification resend account verification email
+ * @apiName resend-account-verification
+ * @apiGroup Auth
+ * 
+ * @apiBody {String} user’s email address.
+ * 
+ * @apiSuccessExample Example data on success:
+ * {
+ *  "status": "success",
+ *  "data": [],
+ *  "message": "User email verified successfully"
+ * }
+ */
+router.post(
+    "/resend-account-verification",
+    check('email')
+        .notEmpty()
+        .isEmail()
+        .withMessage("Invalid email address")
+        .normalizeEmail(),
+    validate,
+    AuthController.resendAccountVerification
+);
+
 module.exports = router;
