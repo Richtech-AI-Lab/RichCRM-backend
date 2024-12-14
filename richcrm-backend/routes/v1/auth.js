@@ -303,4 +303,28 @@ router.post(
     AuthController.resetPassword
 );
 
+/**
+ * @api {get} v1/auth/account-verification/:v account verification
+ * @apiName account-verification
+ * @apiGroup Auth
+ * 
+ * @apiParam {String} v verification token.
+ * 
+ * @apiSuccessExample Example data on success:
+ * {
+ *  "status": "success",
+ *  "data": [],
+ *  "message": "User email verified successfully"
+ * }
+ */
+router.get(
+    "/account-verification/:v",
+    check('v')
+        .notEmpty()
+        .isJWT()
+        .withMessage('invalid verification token'),
+    validate,
+    AuthController.accountVerification
+);
+
 module.exports = router;
