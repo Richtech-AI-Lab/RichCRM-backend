@@ -154,7 +154,7 @@ class AuthController {
         const {emailAddress, password} = req.body;
         try {
             const user = await UserService.readUser(emailAddress);
-            if (user.Password !== password) {
+            if (!PasswordUtil.isValidPassword(user.Password, password, user.Salt)) {
                 return res.status(400).json({
                     status: "failed",
                     data: [],
