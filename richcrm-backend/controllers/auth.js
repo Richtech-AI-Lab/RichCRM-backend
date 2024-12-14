@@ -8,8 +8,20 @@ const PASSWORD_RESET_EXP_LENGTH = 10 * 60 * 1000; // 10 minutes
 
 class AuthController {
     async registerUser(req, res) {
+        const baseUrl = `${req.protocol}://${req.get('host')}`;
+
         const {emailAddress, password, userName, role} = req.body;
         try {
+            var v_token = undefined;
+            v_token = JwTokenUtil.generateToken({emailAddress}, process.env.VERIFY_EMAIL_TOKEN_KEY, process.env.VERIFY_EMAIL_TOKEN_TIME_EXPIRATION);
+            if (v_token === undefined) {
+                return res.status(500).json({
+                    status: "failed",
+                    data: [],
+                    message: 'Token generation failed'
+                });
+            }
+
             const existingUser = await UserService.readUser(emailAddress);
             if (existingUser !== null) {
                 return res.status(400).json({
@@ -20,8 +32,23 @@ class AuthController {
             }
             const salt = PasswordUtil.generateSalt();
             const encryptedPassword = PasswordUtil.encrypt(password, salt);
-            const user = await UserService.createUser({emailAddress, salt, password: encryptedPassword, userName, role});
-            if (user !== null) {
+            const user = await UserService.createUser({
+                emailAddress, 
+                salt, 
+                password: encryptedPassword, 
+                userName, 
+                role,
+                emailVerified: false,
+            });
+
+            // TODO: need a better template format for email verification
+            const returnData = await ses.sendEmail({
+                toAddresses: [user.EmailAddress],
+                templateContent: `Dear customer ${user.UserName},\n\nPlease use the following verification url to verify your email address: \n\t${baseUrl}/v1/auth/account-verification/${v_token}\nThis url will expire in ${process.env.VERIFY_EMAIL_TOKEN_TIME_EXPIRATION}.\nIf you did not request an account registration, please ignore this email.\nThank you for using our service!\n\nSincerely,\nRichCRM Team`,
+                templateTitle: 'Email verification'
+            });
+
+            if (user !== null && v_token !== undefined) {
                 res.status(200).json({
                     status: "success",
                     data: [{
@@ -481,6 +508,58 @@ class AuthController {
             });
         } catch (error) {
             console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: 'Internal server error'
+            });
+        }
+        res.end();
+    }
+
+    async accountVerification(req, res) {
+        const v_token = req.params.v;
+        try {
+            const tokenPayload = await JwTokenUtil.verify(v_token, process.env.VERIFY_EMAIL_TOKEN_KEY);
+            const user = await UserService.readUser(tokenPayload.emailAddress);
+            if (user === null ) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User invalid error'
+                });
+            }
+
+            const result = await UserService.updateUser({
+                emailAddress: user.EmailAddress,
+                emailVerified: true
+            });
+
+            return result ? 
+                res.status(200).json({
+                    status: "success",
+                    data: [],
+                    message: 'User email verified successfully'
+                })
+            :
+                res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User email verification failed'
+                });
+            
+        } catch (error) {
+            console.error(error);
+
+            // resend verification email if token expired
+            if (error.name === 'TokenExpiredError') {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'Token expired error'
+                });
+            }
+
             res.status(500).json({
                 status: "failed",
                 data: [],
