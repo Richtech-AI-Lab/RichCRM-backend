@@ -88,6 +88,14 @@ class AuthController {
                 });
             }
 
+            if (!user.EmailVerified) {
+                return res.status(401).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User account not verified'
+                });
+            }
+
             if (!PasswordUtil.isValidPassword(user.Password, password, user.Salt)) {
                 return res.status(400).json({
                     status: "failed",
