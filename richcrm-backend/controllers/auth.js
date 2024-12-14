@@ -248,7 +248,7 @@ class AuthController {
     }
 
     async updateUser(req, res) {
-        const {emailAddress, password, userName, role, uploadFolderName} = req.body;
+        const {emailAddress, userName, role, uploadFolderName} = req.body;
         try {
             const user = await UserService.readUser(emailAddress);
             if (user === null) {
@@ -260,13 +260,9 @@ class AuthController {
             }
             const userObj = {
                 emailAddress: user.EmailAddress,
-                password: user.Password,
                 userName: user.UserName,
                 role: user.Role,
                 uploadFolderName: user.UploadFolderName,
-            }
-            if (password !== undefined && password !== userObj.password && password !== '') {
-                userObj.password = password;
             }
 
             if (userName !== undefined && userName !== userObj.userName && userName !== '') {
