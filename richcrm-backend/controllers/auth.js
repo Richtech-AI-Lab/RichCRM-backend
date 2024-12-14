@@ -551,7 +551,6 @@ class AuthController {
         } catch (error) {
             console.error(error);
 
-            // resend verification email if token expired
             if (error.name === 'TokenExpiredError') {
                 return res.status(400).json({
                     status: "failed",
