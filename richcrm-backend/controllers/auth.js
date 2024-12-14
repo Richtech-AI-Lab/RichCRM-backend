@@ -517,6 +517,65 @@ class AuthController {
         res.end();
     }
 
+    async resendAccountVerification(req, res) {
+        try {
+            const { email } = req.body;
+            const user = await UserService.readUser(email);
+            if (user === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User not found'
+                });
+            }
+
+            if (user.EmailVerified) {
+                return res.status(401).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User email verified'
+                });
+            }
+
+            const v_token = JwTokenUtil.generateToken({emailAddress: user.EmailAddress}, process.env.VERIFY_EMAIL_TOKEN_KEY, process.env.VERIFY_EMAIL_TOKEN_TIME_EXPIRATION) ?? undefined;
+            if (v_token === undefined) {
+                return res.status(500).json({
+                    status: "failed",
+                    data: [],
+                    message: 'Token generation failed'
+                });
+            }
+
+            // TODO: need a better template format for email verification
+            const returnData = await ses.sendEmail({
+                toAddresses: [user.EmailAddress],
+                templateContent: `Dear customer ${user.UserName},\n\nPlease use the following verification url to verify your email address: \n\t${req.protocol}://${req.get('host')}/v1/auth/account-verification/${v_token}\nThis url will expire in ${process.env.VERIFY_EMAIL_TOKEN_TIME_EXPIRATION}.\nIf you did not request an account registration, please ignore this email.\nThank you for using our service!\n\nSincerely,\nRichCRM Team`,
+                templateTitle: 'Email verification'
+            });
+
+            return returnData ?
+                res.status(200).json({
+                    status: "success",
+                    data: [],
+                    message: 'User account verification email sent successfully'
+                })
+            :
+                res.status(500).json({
+                    status: "failed",
+                    data: [],
+                    message: 'User account verification email sent failed'
+                });
+        } catch (error) {
+            console.error(error);
+
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: 'Internal server error'
+            });
+        }
+    }
+
     async accountVerification(req, res) {
         const v_token = req.params.v;
         try {
