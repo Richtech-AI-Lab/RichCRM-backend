@@ -13,6 +13,7 @@
  * @property {string} refreshToken - User's renew token
  * @property {string} VerificationCode - User's verification code
  * @property {number} VerificationExp - User's verification expiration time
+ * @property {boolean} EmailVerified - User's email verification status
  */
 
 const db = require('../dynamodb');
@@ -50,6 +51,7 @@ class User {
                 Salt: user.salt,
                 UserName: user.userName,
                 Role: user.role,
+                EmailVerified: user.emailVerified ?? false,
                 UploadFolderName: user.uploadFolderName
             }
         };
@@ -105,6 +107,11 @@ class User {
         if (user.refreshToken !== undefined) {
             updateExpressions.push("RefreshToken = :t");
             params.ExpressionAttributeValues[':t'] = user.refreshToken;
+        }
+
+        if (user.emailVerified === true) {
+            updateExpressions.push("EmailVerified = :ev");
+            params.ExpressionAttributeValues[':ev'] = user.emailVerified;
         }
 
         if (updateExpressions.length > 0) {
