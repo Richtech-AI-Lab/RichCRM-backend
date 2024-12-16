@@ -5,6 +5,7 @@ var CaseController = require('../../controllers/case');
 
 
 const router = express.Router();
+const passport = require("../../middlewares/tokenStrategy/accessTokenStrategy");
 
 /**
  * @api {get} v1/case/:caseId Get a case by ID
@@ -84,6 +85,7 @@ router.get(
         .notEmpty()
         .withMessage("Case ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.readCase
 );
 
@@ -173,6 +175,7 @@ router.post(
     check("closed")
         .default(false),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.readAllCasesByCreatorId
 );
 
@@ -263,6 +266,7 @@ router.post(
     check("closed")
         .default(false),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.readAllCasesByClientId
 )
 
@@ -354,6 +358,7 @@ router.post(
     check("closed")
         .default(false),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.readAllCasesByContactId
 )
 
@@ -445,6 +450,7 @@ router.post(
     check("closed")
         .default(false),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.readAllCasesByKeyword
 )
 
@@ -549,6 +555,7 @@ router.post(
         .isArray()
         .withMessage("Contacts should be an array"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.createCase
 );
 
@@ -680,6 +687,7 @@ router.post(
         .isNumeric()
         .withMessage("Sellers Concession should be a number"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.updateCase
 );
 
@@ -736,6 +744,7 @@ router.post(
         .notEmpty()
         .withMessage("Case ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.closeCase
 )
 
@@ -756,6 +765,7 @@ router.post(
         .notEmpty()
         .withMessage("Case ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.deleteCase
 )
 
@@ -766,6 +776,7 @@ router.post(
         .notEmpty()
         .withMessage("Creator ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.deleteAllCases
 )
 
