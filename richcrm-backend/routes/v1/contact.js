@@ -4,6 +4,7 @@ var validate = require('../../middlewares/validation');
 var ContactController = require('../../controllers/contact');
 
 const router = express.Router();
+const passport = require('../../middlewares/tokenStrategy/accessTokenStrategy')
 
 
 /**
@@ -42,6 +43,7 @@ const router = express.Router();
  */
 router.get(
     "/all",
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ContactController.getAllContacts
 );
 
@@ -88,6 +90,7 @@ router.get(
         .isUUID()
         .withMessage("Contact ID is required, or should be a valid UUID"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ContactController.getContact
 );
 
@@ -163,6 +166,7 @@ router.post(
     check("note")
         .optional(),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ContactController.registerContact
 );
 
@@ -208,6 +212,7 @@ router.post(
         .notEmpty()
         .withMessage("Keyword is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ContactController.queryContacts
 );
 
@@ -253,6 +258,7 @@ router.post(
         .notEmpty()
         .withMessage("Tag is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ContactController.queryContactsByTag
 )
 
@@ -292,6 +298,7 @@ router.post(
         .isString()
         .withMessage("Tag is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ContactController.queryContactsByCaseAndTag
 )
 
@@ -372,6 +379,7 @@ router.post(
     check("note")
         .optional(),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ContactController.updateContact
 )
 
@@ -394,6 +402,7 @@ router.post(
         .notEmpty()
         .withMessage("Contact ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ContactController.deleteContact
 )
 

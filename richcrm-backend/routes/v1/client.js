@@ -4,6 +4,7 @@ var validate = require('../../middlewares/validation');
 var ClientController = require('../../controllers/client');
 
 const router = express.Router();
+const passport = require('../../middlewares/tokenStrategy/accessTokenStrategy')
 
 /**
  * @api {post} v1/client/register Register a new client
@@ -77,6 +78,7 @@ router.post(
         .isUUID()
         .withMessage("Organization ID should be a valid UUID"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ClientController.registerClient
 );
 
@@ -127,7 +129,9 @@ router.post(
  */
 router.get(
     "/all",
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ClientController.getAllClients
+
 )
 
 /**
@@ -183,6 +187,7 @@ router.post(
         .notEmpty()
         .withMessage("Keyword is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ClientController.queryClients
 );
 
@@ -240,6 +245,7 @@ router.post(
         .notEmpty()
         .withMessage("Client Type is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ClientController.queryClientsByType
 )
 
@@ -295,6 +301,8 @@ router.post(
     check("clientId")
         .notEmpty()
         .withMessage("Client ID is required"),
+    validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ClientController.getClient
 );
 
@@ -352,6 +360,7 @@ router.get(
         .notEmpty()
         .withMessage("Client ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ClientController.getClient
 )
 
@@ -431,6 +440,7 @@ router.post(
         .isUUID()
         .withMessage("Organization ID should be a valid UUID"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ClientController.updateClient
 )
 
@@ -451,6 +461,7 @@ router.post(
         .notEmpty()
         .withMessage("ClientId is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     ClientController.deleteClient
 )
 
