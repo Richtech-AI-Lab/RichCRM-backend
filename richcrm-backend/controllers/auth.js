@@ -4,6 +4,8 @@ const PasswordUtil = require('../utils/Password');
 const JwTokenUtil = require('../utils/JwToken');
 const ses = require('../services/ses');
 
+const TEST_FLAG = process.env.TEST_MODE === 'on' ?? false;
+
 const PASSWORD_RESET_EXP_LENGTH = 10 * 60 * 1000; // 10 minutes
 
 class AuthController {
@@ -56,7 +58,10 @@ class AuthController {
                         userName: user.UserName,
                         role: user.Role,
                     }],
-                    message: 'User created successfully'
+                    message: 'User created successfully',
+                    ...(TEST_FLAG && ({
+                        v_token: v_token
+                    }))
                 });
             } else {
                 res.status(400).json({
@@ -219,23 +224,24 @@ class AuthController {
                 password: newEncryptedPassword,
                 salt: newSalt
             });
-            if (result === null) {
-                return res.status(400).json({
+
+            return result === null ?
+                res.status(400).json({
                     status: "failed",
                     data: [],
                     message: '[AuthController][changePassword] Password change failed'
+                })
+            :
+                res.status(200).json({
+                    status: "success",
+                    data: [{
+                        emailAddress: user.EmailAddress,
+                        role: user.Role,
+                        userName: user.UserName,
+                        uploadFolderName: user.UploadFolderName,
+                    }],
+                    message: '[AuthController][changePassword] Password changed successfully'
                 });
-            }
-            res.status(200).json({
-                status: "success",
-                data: [{
-                    emailAddress: user.EmailAddress,
-                    role: user.Role,
-                    userName: user.UserName,
-                    uploadFolderName: user.UploadFolderName,
-                }],
-                message: '[AuthController][changePassword] Password changed successfully'
-            });
         } catch (error) {
             console.error(error);
             res.status(500).json({
