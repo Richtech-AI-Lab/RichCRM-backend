@@ -722,6 +722,60 @@ router.post(
 )
 
 /**
+ * @api {post} v1/case/reopen Reopen a case
+ * @apiName ReopenCase
+ * @apiGroup Case
+ * 
+ * @apiBody {String} caseId [REQUIRED] Case ID.
+ * 
+ * @apiSuccessExample Example data on success:
+ * {
+ *     "caseId": "2443b04b-a4d8-43d1-843b-a31b0dd3c1a9",
+ *     "creatorId": "test1@gmail.com",
+ *     "premisesId": "8e5ac210-7c07-4dde-8ed2-f0d2b9f23699",
+ *     "premisesName": "130 W 3rd St # 1203_New York NY 10012-1296",
+ *     "stage": 0,
+ *     "caseType": 1,
+ *     "clientType": 0,
+ *     "clientId": "bdddb23a-e4bb-4cb1-84d4-077c8b209395",
+ *     "clientName": "Woooo, Larry",
+ *     "createAt": "2024-09-14T20:45:29.767Z",
+ *     "closeAt": null,
+ *     "closingDate": "2024-07-20T20:24:24.740Z",
+ *     "mortgageContingencyDate": "2024-07-20T20:24:24.740Z",
+ *     "additionalClients": [
+ *       "738ffc97-299b-423a-b759-2116a402b18d",
+ *       "86a6d1d3-9644-40cc-bec5-e2710567d882",
+ *       "26ea9b74-b431-4b08-88cd-436ba25486bb"
+ *     ],
+ *     "contacts": [
+ *       "8d587c04-0d59-4b70-8264-922d26bf6f00",
+ *       "8c2bfe8d-0e87-4e19-8b32-d372188c56b2"
+ *     ],
+ *  "additionalOrganizations": [
+ *      "7c377ce8-d6d5-4823-b60f-92ce5603d53f",
+ *      "03c290cf-1758-4edc-95d5-be61f2339fd6",
+ *      "b4e53724-6e7b-4070-be8a-d6c78d961ade"
+ *   ],
+ *   "purchaserPrice": 1000000,
+ *   "downPayment": 200000,
+ *   "mortgageAmount": 800000,
+ *   "sellersConcession": 10000,
+ *   "referral": "Jack",
+ *   "bank": "Chase",
+ *   "personalNote": "This is a test case",
+ * }
+ */
+router.post(
+    "/reopen",
+    check("caseId")
+        .notEmpty()
+        .withMessage("Case ID is required"),
+    validate,
+    CaseController.reopenCase
+)
+
+/**
  * @api {post} v1/case/delete Delete a case
  * @apiName DeleteCase
  * @apiGroup Case
