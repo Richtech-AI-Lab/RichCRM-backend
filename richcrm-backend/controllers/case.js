@@ -15,6 +15,7 @@ class CaseController {
         this.createCase = this.createCase.bind(this);
         this.updateCase = this.updateCase.bind(this);
         this.closeCase = this.closeCase.bind(this);
+        this.reopenCase = this.reopenCase.bind(this);
         this.deleteCase = this.deleteCase.bind(this);
         this.procCases = this.procCases.bind(this);
         this.readCase = this.readCase.bind(this);
@@ -637,40 +638,17 @@ class CaseController {
                     message: '[CaseController][closeCase] Case does not exist'
                 });
             }
+            const closeAt = new Date().toISOString();
             const c = await CaseService.updateCase({
                 caseId: caseId,
                 creatorId: existingCase.CreatorId,
-                closeAt: new Date().toISOString()
+                closeAt: closeAt
             });
             if (c !== null) {
+                existingCase.CloseAt = closeAt;
                 return res.status(200).json({
                     status: "success",
-                    data: [{
-                        "caseId": caseId,
-                        "creatorId": existingCase.CreatorId,
-                        "premisesId": existingCase.PremisesId,
-                        "premisesName": existingCase.PremisesName,
-                        "stage": existingCase.Stage,
-                        "caseType": existingCase.CaseType,
-                        "clientType": existingCase.ClientType,
-                        "clientId": existingCase.ClientId,
-                        "organizationId": existingCase.OrganizationId,
-                        "clientName": existingCase.ClientName,
-                        "createAt": existingCase.CreateAt,
-                        "closeAt": c.CloseAt,
-                        "closingDate": existingCase.ClosingDate,
-                        "mortgageContingencyDate": existingCase.MortgageContingencyDate,
-                        "additionalClients": existingCase.AdditionalClients,
-                        "contacts": existingCase.Contacts,
-                        "additionalOrganizations": existingCase.AdditionalOrganizations,
-                        "purchaserPrice": existingCase.PurchaserPrice,
-                        "downPayment": existingCase.DownPayment,
-                        "mortgageAmount": existingCase.MortgageAmount,
-                        "sellersConcession": existingCase.SellersConcession,
-                        "referral": existingCase.Referral,
-                        "bank": existingCase.Bank,
-                        "personalNote": existingCase.PersonalNote
-                    }],
+                    data: [existingCase],
                     message: '[CaseController][closeCase] Case closed successfully'
                 });
             } else {
@@ -689,6 +667,51 @@ class CaseController {
             });
         }
     }
+
+    async reopenCase(req, res) {
+        const {caseId} = req.body;
+        if (caseId === undefined) {
+            console.log("[CaseController][reopenCase] Invalid case id");
+            return null;
+        }
+        try {
+            const existingCase = await CaseService.readCase(caseId);
+            if (existingCase === null) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[CaseController][reopenCase] Case does not exist'
+                });
+            }
+            const c = await CaseService.updateCase({
+                caseId: caseId,
+                creatorId: existingCase.CreatorId,
+                closeAt: null
+            });
+            if (c !== null) {
+                existingCase.CloseAt = null;
+                return res.status(200).json({
+                    status: "success",
+                    data: [existingCase],
+                    message: '[CaseController][reopenCase] Case reopened successfully'
+                });
+            } else {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[CaseController][reopenCase] Case reopen failed'
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                status: "failed",
+                data: [],
+                message: `[CaseController][reopenCase] Internal server error: ${error}`
+            });
+        }
+    }
+
 
     async deleteCase(req, res) {
         const {caseId} = req.body;

@@ -55,13 +55,14 @@ class Case {
             FilterExpression: "CreatorId = :c",
             ExpressionAttributeValues: {
                 ":c": creatorId,
+                ":null": null,
             },
         };
 
         if (closed === true) {
-            params.FilterExpression += " AND attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (attribute_exists(CloseAt) AND NOT CloseAt = :null)";
         } else {
-            params.FilterExpression += " AND NOT attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
         const data = await db.scan(params).promise();
         return data;
@@ -73,13 +74,14 @@ class Case {
             FilterExpression: "(ClientId = :c OR contains(AdditionalClients, :c))",
             ExpressionAttributeValues: {
                 ":c": clientId,
+                ":null": null,
             },
         };
 
         if (closed === true) {
-            params.FilterExpression += " AND attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (attribute_exists(CloseAt) AND NOT CloseAt = :null)";
         } else {
-            params.FilterExpression += " AND NOT attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
         const data = await db.scan(params).promise();
         return data;
@@ -91,13 +93,14 @@ class Case {
             FilterExpression: "OrganizationId = :o OR contains(AdditionalOrganizations, :o)",
             ExpressionAttributeValues: {
                 ":o": organizationId,
+                ":null": null,
             },
         };
 
         if (closed === true) {
-            params.FilterExpression += " AND attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (attribute_exists(CloseAt) AND NOT CloseAt = :null)";
         } else {
-            params.FilterExpression += " AND NOT attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
         const data = await db.scan(params).promise();
         return data;
@@ -109,13 +112,14 @@ class Case {
             FilterExpression: "(contains(Contacts, :c) OR contains(AdditionalClients, :c) OR ClientId = :c OR OrganizationId = :c OR contains(AdditionalOrganizations, :c))",
             ExpressionAttributeValues: {
                 ":c": contactId,
+                ":null": null,
             },
         };
 
         if (closed === true) {
-            params.FilterExpression += " AND attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (attribute_exists(CloseAt) AND NOT CloseAt = :null)";
         } else {
-            params.FilterExpression += " AND NOT attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
         const data = await db.scan(params).promise();
         return data;
@@ -140,13 +144,14 @@ class Case {
             FilterExpression: "(contains(ClientName, :k) OR contains(PremisesName, :k))",
             ExpressionAttributeValues: {
                 ":k": keyword,
+                ":null": null,
             },
         };
 
         if (closed === true) {
-            params.FilterExpression += " AND attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (attribute_exists(CloseAt) AND NOT CloseAt = :null)";
         } else {
-            params.FilterExpression += " AND NOT attribute_exists(CloseAt)";
+            params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
         const data = await db.scan(params).promise();
         return data;
