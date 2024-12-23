@@ -3,6 +3,7 @@ import express from 'express';
 import clientRouter from '../routes/v1/client';
 import bodyParser from 'body-parser';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const app = new express();
 app.use(bodyParser.json())
@@ -20,7 +21,9 @@ const clientObj = {
     email: "john.doe@hotmail.com"
 }
 
-const testToken = jwt.sign({ id: 'test-user', roles: ['1'] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '1h' });
+const accessKey = process.env.ACCESS_TOKEN_KEY || crypto.randomBytes(64).toString('hex');
+const testToken = jwt.sign( {id: 'test-user', email: 'test1@gmail.com', roles: ['1'] },
+                             accessKey, { expiresIn: '1h'});
 
 describe('Client Routes', function () {
 
