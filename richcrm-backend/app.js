@@ -30,6 +30,7 @@ app.use(bodyParser.json({limit: '40mb'}));
 const crmLogger = require('./middlewares/logging');
 const corsOptions = require('./middlewares/cors');
 const cors = require('cors');
+const userJwtStrategy = require('./middlewares/tokenStrategy/accessTokenStrategy');
 
 app.use(cors(corsOptions));
 
@@ -44,6 +45,8 @@ app.use(express.urlencoded({ extended: false }));
 app.disable("x-powered-by"); //Reduce fingerprinting
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(userJwtStrategy.initialize()); //enable auth strategy
 
 app.use('/', indexRouter);
 app.use('/v1/auth', v1AuthRouter);
