@@ -195,7 +195,7 @@ class CaseController {
         } else if (organizationId !== undefined && organizationId !== "") {
             existingCase = await CaseService.readCaseByPresmisesIdAndClientId(premisesId, organizationId);
         }
-        if (existingCase !== null && existingCase.length > 0) {
+        if (existingCase != null && existingCase.length > 0) {
             return res.status(400).json({
                 status: "failed",
                 data: [{

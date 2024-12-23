@@ -2,6 +2,7 @@ import request from 'supertest';
 import express from 'express';
 import clientRouter from '../routes/v1/client';
 import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
 
 const app = new express();
 app.use(bodyParser.json())
@@ -19,10 +20,15 @@ const clientObj = {
     email: "john.doe@hotmail.com"
 }
 
+const testToken = jwt.sign( {id: 'test-user', email: 'test1@gmail.com', roles: ['1'] }, 
+                             process.env.ACCESS_TOKEN_KEY, { expiresIn: '1h'});
+
 describe('Client Routes', function () {
 
     test('/client/register', async () => {
-        const res = await request(app).post('/v1/client/register')
+        const res = await request(app)
+            .post('/v1/client/register')
+            .set('Authorization', `Bearer ${testToken}`)
             .send(clientObj)
             .set('Accept', 'application/json');
         
@@ -39,7 +45,9 @@ describe('Client Routes', function () {
 
     
     test('client/query', async () => {
-        const res = await request(app).post('/v1/client/query')
+        const res = await request(app)
+            .post('/v1/client/query')
+            .set('Authorization', `Bearer ${testToken}`)
             .send({ keyword: clientObj.email })
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -49,7 +57,9 @@ describe('Client Routes', function () {
     });
 
     test('client/:clientId', async () => {
-        const res = await request(app).get(`/v1/client/${testClientId}`);
+        const res = await request(app)
+            .get(`/v1/client/${testClientId}`)
+            .set('Authorization', `Bearer ${testToken}`);
         console.log(res.body);
         expect(res.statusCode).toBe(200);
         expect(res.body.status).toEqual('success');
@@ -57,7 +67,9 @@ describe('Client Routes', function () {
     });
 
     test('client/delete', async () => {
-        const res = await request(app).post('/v1/client/delete')
+        const res = await request(app)
+            .post('/v1/client/delete')
+            .set('Authorization', `Bearer ${testToken}`)
             .send({ clientId: testClientId })
             .set('Accept', 'application/json');
         console.log(res.body);
