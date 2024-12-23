@@ -8,8 +8,9 @@ import premisesRouter from '../routes/v1/premises';
 import tagRouter from '../routes/v1/tag';
 import bodyParser from 'body-parser';
 import { clientType } from '../db/types';
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+import authRouter from '../routes/v1/auth';
+
+
 
 const app = new express();
 app.use(bodyParser.json())
@@ -20,8 +21,11 @@ app.use('/v1/contact', contactRouter);
 app.use('/v1/organization', organizationRouter);
 app.use('/v1/premises', premisesRouter);
 app.use('/v1/tag', tagRouter);
+app.use('/v1/auth', authRouter);
 
 var testCaseId;
+
+var testToken;
 
 const tagObj1 = {
     label: "Other",
@@ -61,10 +65,6 @@ const organizationObj1 = {
     organizationType: 2
 }
 
-const accessKey = process.env.ACCESS_TOKEN_KEY || crypto.randomBytes(64).toString('hex');
-const testToken = jwt.sign( {id: 'test-user', email: 'test1@gmail.com', roles: ['1'] },
-                             accessKey, { expiresIn: '1h'});
-
 var caseObj = {
     premisesId: "cbf8e709-7af2-4433-9276-7d5ba9113950",
     creatorId: "test1@gmail.com",
@@ -76,7 +76,22 @@ var caseObj = {
     additionalOrganizations: [],
 }
 
+const test_user1 = {
+    emailAddress: 'new_test_acc@gmail.com', 
+    password: '88888888'
+}
+
 describe('Case Routes', function () {
+
+    beforeAll(async () => {
+        const signInResponse = await request(app)
+            .post('/v1/auth/login')
+            .send(test_user1)
+            .set('Accept', 'application/json');
+        console.log(signInResponse.body);
+        expect(signInResponse.statusCode).toBe(200);
+        testToken = signInResponse.body.data[0]?.token?.access;
+    });
 
     test('/tag/create', async () => {
         const res = await request(app)

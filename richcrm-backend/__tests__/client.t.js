@@ -2,15 +2,18 @@ import request from 'supertest';
 import express from 'express';
 import clientRouter from '../routes/v1/client';
 import bodyParser from 'body-parser';
-import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import authRouter from '../routes/v1/auth';
+
 
 const app = new express();
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/v1/client', clientRouter);
+app.use('/v1/auth', authRouter);
 
 var testClientId;
+var testToken;
 
 const clientObj = {
     clientId: "d5dbbca5-808c-4df8-b51b-b09b1cb595bd",
@@ -21,12 +24,23 @@ const clientObj = {
     email: "john.doe@hotmail.com"
 }
 
-const accessKey = process.env.ACCESS_TOKEN_KEY || crypto.randomBytes(64).toString('hex');
-const testToken = jwt.sign( {id: 'test-user', email: 'test1@gmail.com', roles: ['1'] },
-                             accessKey, { expiresIn: '1h'});
+const test_user1 = {
+    emailAddress: 'new_test_acc@gmail.com', 
+    password: '88888888'
+}
 
-describe('Client Routes', function () {
+describe('Case Routes', function () {
 
+    beforeAll(async () => {
+        const signInResponse = await request(app)
+            .post('/v1/auth/login')
+            .send(test_user1)
+            .set('Accept', 'application/json');
+        console.log(signInResponse.body);
+        expect(signInResponse.statusCode).toBe(200);
+        testToken = signInResponse.body.data[0]?.token?.access;
+    });
+    
     test('/client/register', async () => {
         const res = await request(app)
             .post('/v1/client/register')

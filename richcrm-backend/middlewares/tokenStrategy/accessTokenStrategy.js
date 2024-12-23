@@ -1,13 +1,12 @@
 const passport = require('passport');
-const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-const crypto = require('crypto');
-const accessKey =  process.env.ACCESS_TOKEN_KEY || crypto.randomBytes(64).toString('hex');
+const { Strategy: JwtStrategy, ExtractJwt} = require('passport-jwt');
 
 passport.use(
-    'user-jwtStrategy', new JwtStrategy(
+    'user-jwtStrategy',
+    new JwtStrategy(
         {
             jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: accessKey,
+            secretOrKey: process.env.ACCESS_TOKEN_KEY
         },
         async function (jwtPayload, done) {
             if (jwtPayload === null || jwtPayload === undefined) {
