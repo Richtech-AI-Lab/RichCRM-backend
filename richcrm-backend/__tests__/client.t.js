@@ -20,8 +20,7 @@ const clientObj = {
     email: "john.doe@hotmail.com"
 }
 
-const testToken = jwt.sign( {id: 'test-user', email: 'test1@gmail.com', roles: ['1'] }, 
-                             process.env.ACCESS_TOKEN_KEY, { expiresIn: '1h'});
+const testToken = jwt.sign({ id: 'test-user', roles: ['1'] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '1h' });
 
 describe('Client Routes', function () {
 
