@@ -9,7 +9,6 @@ import tagRouter from '../routes/v1/tag';
 import bodyParser from 'body-parser';
 import { clientType } from '../db/types';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
 
 const app = new express();
 app.use(bodyParser.json())
@@ -60,10 +59,6 @@ const organizationObj1 = {
     organizationName: "Testy Organization Test",
     organizationType: 2
 }
-
-beforeAll(() => {
-    process.env.ACCESS_TOKEN_KEY = crypto.randomBytes(32).toString('hex');
-});
 
 const testToken = jwt.sign({ id: 'test-user', roles: ['1'] }, process.env.ACCESS_TOKEN_KEY, { expiresIn: '1h' });
 

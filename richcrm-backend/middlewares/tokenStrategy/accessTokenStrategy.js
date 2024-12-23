@@ -1,5 +1,12 @@
 const passport = require('passport');
-const { Strategy: JwtStrategy, ExtractJwt} = require('passport-jwt');
+const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
+const crypto = require('crypto');
+
+
+beforeAll(() => {
+    process.env.ACCESS_TOKEN_KEY = process.env.ACCESS_TOKEN_KEY || crypto.randomBytes(32).toString('hex');
+});
+
 
 passport.use(
     'user-jwtStrategy', new JwtStrategy(
