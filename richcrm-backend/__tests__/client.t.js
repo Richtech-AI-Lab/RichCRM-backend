@@ -13,7 +13,8 @@ app.use('/v1/client', clientRouter);
 app.use('/v1/auth', authRouter);
 
 var testClientId;
-var testToken;
+var testAccessToken;
+var testRefreshToken;
 
 const clientObj = {
     clientId: "d5dbbca5-808c-4df8-b51b-b09b1cb595bd",
@@ -32,19 +33,20 @@ const test_user1 = {
 describe('Case Routes', function () {
 
     beforeAll(async () => {
-        const signInResponse = await request(app)
+        const res = await request(app)
             .post('/v1/auth/login')
             .send(test_user1)
             .set('Accept', 'application/json');
-        console.log(signInResponse.body);
-        expect(signInResponse.statusCode).toBe(200);
-        testToken = signInResponse.body.data[0]?.token?.access;
+        console.log(res.body);
+        expect(res.statusCode).toBe(200);
+        testAccessToken = res.body.data[0].token.access;
+        testRefreshToken = res.body.data[0].token.refresh;
     });
     
     test('/client/register', async () => {
         const res = await request(app)
             .post('/v1/client/register')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send(clientObj)
             .set('Accept', 'application/json');
         
@@ -63,7 +65,7 @@ describe('Case Routes', function () {
     test('client/query', async () => {
         const res = await request(app)
             .post('/v1/client/query')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({ keyword: clientObj.email })
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -75,7 +77,7 @@ describe('Case Routes', function () {
     test('client/:clientId', async () => {
         const res = await request(app)
             .get(`/v1/client/${testClientId}`)
-            .set('Authorization', `Bearer ${testToken}`);
+            .set('Authorization', `Bearer ${testAccessToken}`);
         console.log(res.body);
         expect(res.statusCode).toBe(200);
         expect(res.body.status).toEqual('success');
@@ -85,7 +87,7 @@ describe('Case Routes', function () {
     test('client/delete', async () => {
         const res = await request(app)
             .post('/v1/client/delete')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({ clientId: testClientId })
             .set('Accept', 'application/json');
         console.log(res.body);

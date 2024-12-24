@@ -25,7 +25,8 @@ app.use('/v1/auth', authRouter);
 
 var testCaseId;
 
-var testToken;
+var testAccessToken;
+var testRefreshToken;
 
 const tagObj1 = {
     label: "Other",
@@ -84,19 +85,20 @@ const test_user1 = {
 describe('Case Routes', function () {
 
     beforeAll(async () => {
-        const signInResponse = await request(app)
+        const res = await request(app)
             .post('/v1/auth/login')
             .send(test_user1)
             .set('Accept', 'application/json');
-        console.log(signInResponse.body);
-        expect(signInResponse.statusCode).toBe(200);
-        testToken = signInResponse.body.data[0]?.token?.access;
+        console.log(res.body);
+        expect(res.statusCode).toBe(200);
+        testAccessToken = res.body.data[0].token.access;
+        testRefreshToken = res.body.data[0].token.refresh;
     });
 
     test('/tag/create', async () => {
         const res = await request(app)
             .post('/v1/tag/create')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send(tagObj1)
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -107,7 +109,7 @@ describe('Case Routes', function () {
     test('/client/register', async () => {
         const res = await request(app)
             .post('/v1/client/register')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send(clientObj1)
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -118,7 +120,7 @@ describe('Case Routes', function () {
 
         const res2 = await request(app)
             .post('/v1/client/register')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send(clientObj2)
             .set('Accept', 'application/json');
         console.log(res2.body);
@@ -131,7 +133,7 @@ describe('Case Routes', function () {
     test('/contact/register', async () => {
         const res = await request(app)
             .post('/v1/contact/register')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send(contactObj1)
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -144,7 +146,7 @@ describe('Case Routes', function () {
     test('/organization/register', async () => {
         const res = await request(app)
             .post('/v1/organization/register')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send(organizationObj1)
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -158,7 +160,7 @@ describe('Case Routes', function () {
     test('/case/create', async () => {
         const res = await request(app)
             .post('/v1/case/create')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send(caseObj)
             .set('Accept', 'application/json');
         
@@ -180,7 +182,7 @@ describe('Case Routes', function () {
     test('case/:id', async () => {
         const res = await request(app)
             .get(`/v1/case/${testCaseId}`)
-            .set('Authorization', `Bearer ${testToken}`);
+            .set('Authorization', `Bearer ${testAccessToken}`);
 
         console.log(res.body.data[0]);
         expect(res.statusCode).toBe(200);
@@ -200,7 +202,7 @@ describe('Case Routes', function () {
 
         const res = await request(app)
             .post('/v1/case/all')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({
                 creatorId: "test1@gmail.com",
             })
@@ -214,7 +216,7 @@ describe('Case Routes', function () {
     test('case/query/client', async () => {
         const res = await request(app)
             .post('/v1/case/query/client')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({
                 clientId: caseObj.additionalClients[0],
             })
@@ -240,7 +242,7 @@ describe('Case Routes', function () {
 
         const res = await request(app)
             .post('/v1/case/update')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send(caseObj)
             .set('Accept', 'application/json');
 
@@ -255,7 +257,7 @@ describe('Case Routes', function () {
     test('case/delete', async () => {
         const res = await request(app)
             .post('/v1/case/delete')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({caseId: testCaseId})
             .set('Accept', 'application/json');
 
@@ -267,7 +269,7 @@ describe('Case Routes', function () {
     test('/client/delete', async () => {
         const res = await request(app)
             .post('/v1/client/delete')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({clientId: caseObj.clientId})
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -276,7 +278,7 @@ describe('Case Routes', function () {
 
         const res2 = await request(app)
             .post('/v1/client/delete')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({clientId: caseObj.additionalClients[0]})
             .set('Accept', 'application/json');
         console.log(res2.body);
@@ -287,7 +289,7 @@ describe('Case Routes', function () {
     test('/contact/delete', async () => {
         const res = await request(app)
             .post('/v1/contact/delete')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({contactId: caseObj.contacts[0]})
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -298,7 +300,7 @@ describe('Case Routes', function () {
     test('/organization/delete', async () => {
         const res = await request(app)
             .post('/v1/organization/delete')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({organizationId: caseObj.additionalOrganizations[0]})
             .set('Accept', 'application/json');
         console.log(res.body);
@@ -309,7 +311,7 @@ describe('Case Routes', function () {
     test('/tag/delete', async () => {
         const res = await request(app)
             .post('/v1/tag/delete')
-            .set('Authorization', `Bearer ${testToken}`)
+            .set('Authorization', `Bearer ${testAccessToken}`)
             .send({label: tagObj1.label})
             .set('Accept', 'application/json');
         console.log(res.body);
