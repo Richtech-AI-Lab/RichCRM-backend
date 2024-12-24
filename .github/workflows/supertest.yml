@@ -8,6 +8,10 @@ env:
     SMARTY_AUTH_ID: "${{ secrets.SMARTY_AUTH_ID }}"
     SMARTY_AUTH_TOKEN: "${{ secrets.SMARTY_AUTH_TOKEN }}"
     SES_SOURCE_EMAIL: no-reply@richcrm.org
+    ACCESS_TOKEN_KEY: "${{ secrets.ACCESS_TOKEN_KEY }}"
+    REFRESH_TOKEN_KEY: "${{ secrets.REFRESH_TOKEN_KEY }}"
+    ACCESS_TOKEN_TIME_EXPIRATION: 1h
+    REFRESH_TOKEN_TIME_EXPIRATION: 1y
 
 on:
   push:
