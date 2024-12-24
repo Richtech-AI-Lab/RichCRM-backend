@@ -8,7 +8,6 @@ const PASSWORD_RESET_EXP_LENGTH = 10 * 60 * 1000; // 10 minutes
 
 class AuthController {
     async registerUser(req, res) {
-        const baseUrl = `${req.protocol}://${req.get('host')}`;
 
         const {emailAddress, password, userName, role} = req.body;
         try {
@@ -44,7 +43,7 @@ class AuthController {
             // TODO: need a better template format for email verification
             const returnData = await ses.sendEmail({
                 toAddresses: [user.EmailAddress],
-                templateContent: `Dear customer ${user.UserName},\n\nPlease use the following verification url to verify your email address: \n\t${baseUrl}/v1/auth/account-verification/${v_token}\nThis url will expire in ${process.env.VERIFY_EMAIL_TOKEN_TIME_EXPIRATION}.\nIf you did not request an account registration, please ignore this email.\nThank you for using our service!\n\nSincerely,\nRichCRM Team`,
+                templateContent: `Dear customer ${user.UserName},\n\nPlease use the following verification url to verify your email address: \n\t${process.env.FRONTEND_URL}/email-verification?v_token=${v_token}\nThis url will expire in ${process.env.VERIFY_EMAIL_TOKEN_TIME_EXPIRATION}.\nIf you did not request an account registration, please ignore this email.\nThank you for using our service!\n\nSincerely,\nRichCRM Team`,
                 templateTitle: 'Email verification'
             });
 
@@ -553,7 +552,7 @@ class AuthController {
             // TODO: need a better template format for email verification
             const returnData = await ses.sendEmail({
                 toAddresses: [user.EmailAddress],
-                templateContent: `Dear customer ${user.UserName},\n\nPlease use the following verification url to verify your email address: \n\t${req.protocol}://${req.get('host')}/v1/auth/account-verification/${v_token}\nThis url will expire in ${process.env.VERIFY_EMAIL_TOKEN_TIME_EXPIRATION}.\nIf you did not request an account registration, please ignore this email.\nThank you for using our service!\n\nSincerely,\nRichCRM Team`,
+                templateContent: `Dear customer ${user.UserName},\n\nPlease use the following verification url to verify your email address: \n\t${process.env.FRONTEND_URL}/email-verification?v_token=${v_token}\nThis url will expire in ${process.env.VERIFY_EMAIL_TOKEN_TIME_EXPIRATION}.\nIf you did not request an account registration, please ignore this email.\nThank you for using our service!\n\nSincerely,\nRichCRM Team`,
                 templateTitle: 'Email verification'
             });
 
