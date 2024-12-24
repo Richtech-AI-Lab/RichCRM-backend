@@ -781,6 +781,7 @@ router.post(
         .notEmpty()
         .withMessage("Case ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     CaseController.reopenCase
 )
 
