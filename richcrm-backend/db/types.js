@@ -106,7 +106,7 @@ module.exports = {
                 name: "Schedule contract review with client",
                 status: 0,
                 templates: [
-                    "Default Template",
+                    "%(caseObj.premisesName)s Contract review",
                 ]
             },
             {
@@ -119,7 +119,7 @@ module.exports = {
                 name: "Collect signed contract and deposit from client",
                 status: 0,
                 templates: [
-                    "Default Template",
+                    "%(caseObj.premisesName)s Contract Signing and Deposit",
                 ]
             },
             {
@@ -144,7 +144,7 @@ module.exports = {
                 name: "Inform the seller and request the fully signed contract",
                 status: 0,
                 templates: [
-                    "[IMPORTANT] FEK Notice to Purchaser's Attorney as Seller",
+                    "[IMPORTANT] %(caseObj.premisesName)s",
                 ]
             },
             {
@@ -165,7 +165,7 @@ module.exports = {
                 name: "Inform the client about the upcoming timeline",
                 status: 0,
                 templates: [
-                    "[IMPORTANT] FEK Notice to Purchaser",
+                    "[FEK Notice] %(caseObj.premisesName)s",
                 ]
             },
             {
@@ -178,7 +178,7 @@ module.exports = {
                 name: "Send the commitment to title company and seller",
                 status: 0,
                 templates: [
-                    "[IMPORTANT] FEK Notice to Purchaser's Attorney as Seller"
+                    "[Committment] %(caseObj.premisesName)s"
                 ]
             },
             {
