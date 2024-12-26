@@ -247,8 +247,16 @@ class AuthController {
     }
 
     async updateUser(req, res) {
+        const oauthEmailAddress = req.user.EmailAddress;
         const {emailAddress, userName, role, uploadFolderName} = req.body;
         try {
+            if (emailAddress !== oauthEmailAddress) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[AuthController][updateUser] Email on access token does not match with the request'
+                });
+            }
             const user = await UserService.readUser(emailAddress);
             if (user === null) {
                 return res.status(400).json({
