@@ -61,8 +61,16 @@ class CaseController {
     }
 
     async readAllCasesByCreatorId(req, res) {
+        const emailAddress = req.user.EmailAddress;
         const { creatorId, closed } = req.body;
         try {
+            if (emailAddress !== creatorId) {
+                return res.status(400).json({
+                    status: "failed",
+                    data: [],
+                    message: '[CaseController][readAllCasesByCreatorId] Creator id should be the same as the logged in user'
+                });
+            }
             var caseList = [];
             const cases = await CaseService.readAllCasesByCreatorId(creatorId, closed);
             if (cases !== null) {
@@ -84,10 +92,11 @@ class CaseController {
     }
 
     async readAllCasesByClientId(req, res) {
+        const creatorId = req.user.EmailAddress;
         const { clientId, closed } = req.body;
         try {
             var caseList = [];
-            const cases = await CaseService.readAllCasesByClientId(clientId, closed);
+            const cases = await CaseService.readAllCasesByClientId(clientId, creatorId, closed);
             if (cases !== null) {
                 caseList = await this.procCases(cases);
             }
@@ -108,10 +117,11 @@ class CaseController {
     }
 
     async readAllCasesByContactId(req, res) {
+        const creatorId = req.user.EmailAddress;
         const { contactId, closed } = req.body;
         try {
             var caseList = [];
-            const cases = await CaseService.readAllCasesByContactId(contactId, closed);
+            const cases = await CaseService.readAllCasesByContactId(contactId, creatorId, closed);
             if (cases !== null) {
                 caseList = await this.procCases(cases);
             }
@@ -132,11 +142,12 @@ class CaseController {
     }
 
     async readAllCasesByKeyword(req, res) {
+        const creatorId = req.user.EmailAddress;
         const { keyword, closed } = req.body;
 
         try {
             var caseList = [];
-            const cases = await CaseService.readAllCasesByKeyword(keyword, closed);
+            const cases = await CaseService.readAllCasesByKeyword(keyword, creatorId, closed);
             if (cases !== null) {
                 caseList = await this.procCases(cases);
             }
@@ -156,7 +167,18 @@ class CaseController {
     }
     
     async createCase(req, res) {
+        const emailAddress = req.user.EmailAddress;
         const {creatorId, premisesId, caseType, clientType, clientId, organizationId, stage, additionalClients, contacts, additionalOrganizations} = req.body;
+        
+        // Check if the creator id is valid
+        if (emailAddress !== creatorId) {
+            return res.status(400).json({
+                status: "failed",
+                data: [],
+                message: '[CaseController][createCase] Creator id should be the same as the logged in user'
+            });
+        }
+        
         // Create the case object
         var caseObj = {
             creatorId: creatorId,
@@ -192,9 +214,9 @@ class CaseController {
         // Check if the case already exists
         var existingCase;
         if (clientId !== undefined && clientId !== "") {
-            existingCase = await CaseService.readCaseByPresmisesIdAndClientId(premisesId, clientId);
+            existingCase = await CaseService.readCaseByPresmisesIdAndClientId(premisesId, clientId, creatorId);
         } else if (organizationId !== undefined && organizationId !== "") {
-            existingCase = await CaseService.readCaseByPresmisesIdAndClientId(premisesId, organizationId);
+            existingCase = await CaseService.readCaseByPresmisesIdAndClientId(premisesId, organizationId, creatorId);
         }
         if (existingCase != null && existingCase.length > 0) {
             return res.status(400).json({
