@@ -21,8 +21,8 @@ class CaseService {
         return null;
     }
 
-    async readAllCasesByClientId(clientId, closed) {
-        const data = await Case.getCasesByClientId(clientId, closed);
+    async readAllCasesByClientId(clientId, creatorId, closed) {
+        const data = await Case.getCasesByClientId(clientId, creatorId, closed);
 
         if (data.Items !== undefined) {
             return data.Items;
@@ -31,8 +31,8 @@ class CaseService {
         return null;
     }
 
-    async readAllCasesByContactId(contactId, closed) {
-        const data = await Case.getCasesByContactId(contactId, closed);
+    async readAllCasesByContactId(contactId, creatorId, closed) {
+        const data = await Case.getCasesByContactId(contactId, creatorId, closed);
 
         if (data.Items !== undefined) {
             return data.Items;
@@ -41,8 +41,8 @@ class CaseService {
         return null;
     }
 
-    async readAllCasesByOrganizationId(organizationId, closed) {
-        const data = await Case.getCasesByOrganizationId(organizationId, closed);
+    async readAllCasesByOrganizationId(organizationId, creatorId, closed) {
+        const data = await Case.getCasesByOrganizationId(organizationId, creatorId, closed);
 
         if (data.Items !== undefined) {
             return data.Items;
@@ -51,8 +51,8 @@ class CaseService {
         return null;
     }
 
-    async readCaseByPresmisesIdAndClientId(premisesId, clientId) {
-        const data = await Case.getCaseByPremisesIdAndClientId(premisesId, clientId);
+    async readCaseByPresmisesIdAndClientId(premisesId, clientId, creatorId) {
+        const data = await Case.getCaseByPremisesIdAndClientId(premisesId, clientId, creatorId);
 
         if (data.Items !== undefined) {
             return data.Items;
@@ -61,8 +61,8 @@ class CaseService {
         return null;
     }
 
-    async readAllCasesByKeyword(keyword, closed) {
-        const data = await Case.getCasesByKeyword(keyword, closed);
+    async readAllCasesByKeyword(keyword, creatorId, closed) {
+        const data = await Case.getCasesByKeyword(keyword, creatorId, closed);
 
         if (data.Items !== undefined) {
             return data.Items;
@@ -71,8 +71,8 @@ class CaseService {
         return null;
     }
 
-    async readAllCases() {
-        const data = await Case.getAllCases();
+    async readAllCases(creatorId) {
+        const data = await Case.getAllCases(creatorId);
 
         if (data.Items !== undefined) {
             return data.Items;
