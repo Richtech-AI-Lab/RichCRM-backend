@@ -22,19 +22,21 @@ GET http://localhost:3001/v1/case/f1f5fb13-832b-4aae-9ba9-3646cc88d120
 ### Read All Cases by Creator
 POST http://localhost:3001/v1/case/all
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkVkZW4iLCJSb2xlIjowLCJFbWFpbEFkZHJlc3MiOiJ2ZXJraG80MDRAZ21haWwuY29tIiwiaWF0IjoxNzM1MjQ3MDAwLCJleHAiOjE3MzUyNTA2MDB9.v2JOuuXSIrisugbRZ0EvQH-DKMi0yjtkNgBoYgXdWZ4
 
 {
-    "creatorId": "test1@gmail.com",
-    "closed": true
+    "creatorId": "verkho404@gmail.com",
+    "closed": false
 }
 
 
 ### Read All Cases by ClientId
 POST http://localhost:3001/v1/case/query/client
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkVkZW4iLCJSb2xlIjowLCJFbWFpbEFkZHJlc3MiOiJ2ZXJraG80MDRAZ21haWwuY29tIiwiaWF0IjoxNzM1MjQ3MDAwLCJleHAiOjE3MzUyNTA2MDB9.v2JOuuXSIrisugbRZ0EvQH-DKMi0yjtkNgBoYgXdWZ4
 
 {
-    "clientId": "449a5faa-6377-4604-9361-fbd3e412c299"
+    "clientId": "b8a07cc3-715c-45dc-a900-77d18a108dd2"
 }
 
 
@@ -50,9 +52,10 @@ content-type: application/json
 ### Read All Cases by Keyword
 POST http://localhost:3001/v1/case/query/keyword
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkVkZW4iLCJSb2xlIjowLCJFbWFpbEFkZHJlc3MiOiJ2ZXJraG80MDRAZ21haWwuY29tIiwiaWF0IjoxNzM1MjQ3MDAwLCJleHAiOjE3MzUyNTA2MDB9.v2JOuuXSIrisugbRZ0EvQH-DKMi0yjtkNgBoYgXdWZ4
 
 {
-    "keyword": "an",
+    "keyword": "en",
     "closed": false
 }
 
@@ -111,7 +114,8 @@ content-type: application/json
 ### DO NOT USE! Delete All Cases
 POST http://localhost:3001/v1/case/delete/all
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkVkZW4iLCJSb2xlIjowLCJFbWFpbEFkZHJlc3MiOiJ2ZXJraG80MDRAZ21haWwuY29tIiwiaWF0IjoxNzM1MjQ3MDAwLCJleHAiOjE3MzUyNTA2MDB9.v2JOuuXSIrisugbRZ0EvQH-DKMi0yjtkNgBoYgXdWZ4
 
 {
-    "creatorId": "test1@gmail.com"
+    "creatorId": "verkho404@gmail.com"
 }

@@ -147,18 +147,16 @@ router.post(
         .withMessage("Invalid email address")
         .normalizeEmail(),
     check("password")
-        .notEmpty()
-        .isLength({ min: 8 })
-        .withMessage("Password is invalid, must provide password to update user"),
+        .optional()
+        .isLength({ min: 8 }),
     check("userName")
-        .notEmpty()
-        .withMessage("User name is required"),
+        .optional(),
     check("role")
-        .notEmpty()
-        .withMessage("Role is required"),
+        .optional(),
     check("uploadFolderName")
         .optional(),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     AuthController.updateUser
 );
 

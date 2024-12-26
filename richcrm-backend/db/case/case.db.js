@@ -68,12 +68,13 @@ class Case {
         return data;
     }
 
-    async getCasesByClientId(clientId, closed) {
+    async getCasesByClientId(clientId, creatorId, closed) {
         const params = {
             TableName: this.table,
-            FilterExpression: "(ClientId = :c OR contains(AdditionalClients, :c))",
+            FilterExpression: "(ClientId = :c OR contains(AdditionalClients, :c)) AND CreatorId = :creatorId",
             ExpressionAttributeValues: {
                 ":c": clientId,
+                ":creatorId": creatorId,
                 ":null": null,
             },
         };
@@ -87,12 +88,13 @@ class Case {
         return data;
     }
 
-    async getCasesByOrganizationId(organizationId, closed) {
+    async getCasesByOrganizationId(organizationId, creatorId, closed) {
         const params = {
             TableName: this.table,
-            FilterExpression: "OrganizationId = :o OR contains(AdditionalOrganizations, :o)",
+            FilterExpression: "(OrganizationId = :o OR contains(AdditionalOrganizations, :o)) AND CreatorId = :creatorId",
             ExpressionAttributeValues: {
                 ":o": organizationId,
+                ":creatorId": creatorId,
                 ":null": null,
             },
         };
@@ -106,12 +108,13 @@ class Case {
         return data;
     }
 
-    async getCasesByContactId(contactId, closed) {
+    async getCasesByContactId(contactId, creatorId, closed) {
         const params = {
             TableName: this.table,
-            FilterExpression: "(contains(Contacts, :c) OR contains(AdditionalClients, :c) OR ClientId = :c OR OrganizationId = :c OR contains(AdditionalOrganizations, :c))",
+            FilterExpression: "(contains(Contacts, :c) OR contains(AdditionalClients, :c) OR ClientId = :c OR OrganizationId = :c OR contains(AdditionalOrganizations, :c)) AND CreatorId = :creatorId",
             ExpressionAttributeValues: {
                 ":c": contactId,
+                ":creatorId": creatorId,
                 ":null": null,
             },
         };
@@ -125,25 +128,27 @@ class Case {
         return data;
     }
 
-    async getCaseByPremisesIdAndClientId(premisesId, clientId) {
+    async getCaseByPremisesIdAndClientId(premisesId, clientId, creatorId) {
         const params = {
             TableName: this.table,
-            FilterExpression: "PremisesId = :p AND (ClientId = :c OR OrganizationId = :c)",
+            FilterExpression: "PremisesId = :p AND (ClientId = :c OR OrganizationId = :c) AND CreatorId = :creatorId",
             ExpressionAttributeValues: {
                 ":p": premisesId,
                 ":c": clientId,
+                ":creatorId": creatorId,
             },
         };
         const data = await db.scan(params).promise();
         return data;
     }
 
-    async getCasesByKeyword(keyword, closed) {
+    async getCasesByKeyword(keyword, creatorId, closed) {
         const params = {
             TableName: this.table,
-            FilterExpression: "(contains(ClientName, :k) OR contains(PremisesName, :k))",
+            FilterExpression: "(contains(ClientName, :k) OR contains(PremisesName, :k)) AND CreatorId = :creatorId",
             ExpressionAttributeValues: {
                 ":k": keyword,
+                ":creatorId": creatorId,
                 ":null": null,
             },
         };
@@ -157,9 +162,13 @@ class Case {
         return data;
     }
 
-    async getAllCases() {
+    async getAllCases(creatorId) {
         const params = {
             TableName: this.table,
+            FilterExpression: "CreatorId = :c",
+            ExpressionAttributeValues: {
+                ":c": creatorId,
+            },
         };
         const data = await db.scan(params).promise();
         return data;

@@ -189,6 +189,7 @@ class TemplateController {
 
             // Replace the placeholders in the template content
             console.log(templateObj.templateContent);
+            const templateTitleParsed = sprintf(templateObj.templateTitle, data);
             const templateContent = sprintf(templateObj.templateContent, data);
             // console.log(templateContent);
             // console.log(templateObj.templateContent);
@@ -196,7 +197,7 @@ class TemplateController {
             return res.status(200).json({
                 status: "success",
                 data: [{
-                    templateTitle: template.TemplateTitle,
+                    templateTitle: templateTitleParsed,
                     templateContent: templateContent
                 }],
                 message: '[TemplateController][fillTemplate] Template filled'
