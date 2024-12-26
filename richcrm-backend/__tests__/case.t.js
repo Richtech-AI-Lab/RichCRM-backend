@@ -68,7 +68,7 @@ const organizationObj1 = {
 
 var caseObj = {
     premisesId: "cbf8e709-7af2-4433-9276-7d5ba9113950",
-    creatorId: "test1@gmail.com",
+    creatorId: "new_test_acc@gmail.com",
     stage: 0,
     caseType: 1,
     clientType: 0,
@@ -204,13 +204,13 @@ describe('Case Routes', function () {
             .post('/v1/case/all')
             .set('Authorization', `Bearer ${testAccessToken}`)
             .send({
-                creatorId: "test1@gmail.com",
+                creatorId: caseObj.creatorId,
             })
             .set('Accept', 'application/json');
         console.log(res.body);
         expect(res.statusCode).toBe(200);
         expect(res.body.status).toEqual('success');
-        expect(res.body.data[0].creatorId).toEqual("test1@gmail.com");
+        expect(res.body.data[0].creatorId).toEqual(caseObj.creatorId);
     });
 
     test('case/query/client', async () => {
