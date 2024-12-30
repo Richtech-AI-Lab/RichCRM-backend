@@ -14,6 +14,7 @@ class ContactController {
         this.registerContact = this.registerContact.bind(this);
         this.queryContacts = this.queryContacts.bind(this);
         this.queryContactsByTag = this.queryContactsByTag.bind(this);
+        this.queryContactsByTags = this.queryContactsByTags.bind(this);
         this.queryContactsByCaseAndTag = this.queryContactsByCaseAndTag.bind(this);
         this.updateContact = this.updateContact.bind(this);
         this.deleteContact = this.deleteContact.bind(this);
@@ -268,6 +269,58 @@ class ContactController {
                 status: "failed",
                 data: [],
                 message: `[ContactController][queryContactsByTag] Internal server error: ${error}`,
+            });
+        }
+    }
+
+    async queryContactsByTags(req, res) {
+        const { tags } = req.body;
+        var contactList = [];
+        try {
+            const tagList = [];
+            for (let i = 0; i < tags.length; i++) {
+                const tag = tags[i];
+                const tagObj = await TagService.readTagByLabel(tag);
+                if (tagObj !== null) {
+                    tagList.push(tag);
+                }
+            }
+
+            if (tagList.length === 0) {
+                return this.getAllContacts(req, res);
+            }
+
+            const contacts = await ContactService.readContactsByTags(tagList);
+            if (contacts !== null) {
+                contactList = this.procContacts(contacts);
+            }
+            const clients = await ClientService.readClientsByTags(tagList);
+            if (clients !== null) {
+                clients.forEach(client => {
+                    contactList.push({
+                        contactId: client.ClientId,
+                        tags: client.Tags,
+                        firstName: client.FirstName,
+                        lastName: client.LastName,
+                        cellNumber: client.CellNumber,
+                        workNumber: client.WorkNumber,
+                        email: client.Email,
+                        mailingAddress: client.AddressId,
+                        wechatAccount: client.WechatAccount,
+                    });
+                });
+            }
+            return res.status(200).json({
+                status: "success",
+                data: contactList,
+                message: '[ContactController][queryContactsByTags] Contacts queried successfully',
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({
+                status: "failed",
+                data: [],
+                message: `[ContactController][queryContactsByTags] Internal server error: ${error}`,
             });
         }
     }

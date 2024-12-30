@@ -33,11 +33,22 @@ content-type: application/json
 
 
 ### Query contact by contactType
-POST http://localhost:3001/v1/contact/query/tag
+POST https://api.richcrm.org/v1/contact/query/tag
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkVkZW4iLCJSb2xlIjowLCJFbWFpbEFkZHJlc3MiOiJ2ZXJraG80MDRAZ21haWwuY29tIiwiaWF0IjoxNzM1NTk0MjkyLCJleHAiOjE3MzU1OTc4OTJ9.fLyFji-ZMUdNqYY7lx1U8xYLL8PHHkLXI06khU3YVBE
 
 {
-    "tag": "Client"
+    "tag": "Attorney"
+}
+
+
+### Query contact by tags
+POST http://localhost:3001/v1/contact/query/tags
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VyTmFtZSI6IkVkZW4iLCJSb2xlIjowLCJFbWFpbEFkZHJlc3MiOiJ2ZXJraG80MDRAZ21haWwuY29tIiwiaWF0IjoxNzM1NTk0MjkyLCJleHAiOjE3MzU1OTc4OTJ9.fLyFji-ZMUdNqYY7lx1U8xYLL8PHHkLXI06khU3YVBE
+
+{
+    "tags": []
 }
 
 

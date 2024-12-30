@@ -10,12 +10,12 @@ content-type: application/json
 }
 
 ### Login
-POST https://api.richcrm.org/v1/auth/login
+POST http://localhost:3001/v1/auth/login
 content-type: application/json
 
 {
-    "emailAddress": "test1@gmail.com",
-    "password": "1234561341"
+    "emailAddress": "verkho404@gmail.com",
+    "password": "88888888"
 }
 
 ### Delete User

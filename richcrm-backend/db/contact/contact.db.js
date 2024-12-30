@@ -65,6 +65,26 @@ class Contact {
         return data;
     }
 
+    async getContactsByTags(labels) {
+        let filterExpression = '';
+        const expressionAttributeValues = {};
+        for (let i = 0; i < labels.length; i++) {
+            filterExpression += `contains(Tags, :t${i})`;
+            if (i < labels.length - 1) {
+                filterExpression += ' OR ';
+            }
+            expressionAttributeValues[`:t${i}`] = labels[i];
+        };
+        const params = {
+            TableName: this.table,
+            FilterExpression: filterExpression,
+            ExpressionAttributeValues: expressionAttributeValues,
+        };
+        const data = await db.scan(params).promise();
+        return data;
+    }
+
+
     async getContactsByKeyword(keyword) {
         const params = {
             TableName: this.table,

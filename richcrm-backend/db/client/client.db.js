@@ -62,6 +62,25 @@ class Client {
         return data;
     }
 
+    async getClientsByTags(labels) {
+        let filterExpression = "";
+        const expressionAttributeValues = {};
+        labels.forEach((label, i) => {
+            filterExpression += `contains(Tags, :t${i})`;
+            expressionAttributeValues[`:t${i}`] = label;
+            if (i < labels.length - 1) {
+                filterExpression += ' OR ';
+            }
+        });
+        const params = {
+            TableName: this.table,
+            FilterExpression: filterExpression,
+            ExpressionAttributeValues: expressionAttributeValues,
+        };
+        const data = await db.scan(params).promise();
+        return data;
+    }
+
     async getClientsByType(clientType) {
         const params = {
             TableName: this.table,

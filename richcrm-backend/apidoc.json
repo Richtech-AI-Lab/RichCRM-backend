@@ -1,6 +1,6 @@
 {
     "name": "RichCRM Backend API",
-    "version": "0.1.0",
+    "version": "0.0.6",
     "description": "REST API for RichCRM Backend",
     "apidoc": {
         "header": {

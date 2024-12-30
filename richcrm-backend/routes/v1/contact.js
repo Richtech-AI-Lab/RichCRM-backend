@@ -218,7 +218,7 @@ router.post(
 
 
 /**
- * @api {post} v1/contact/query/tag
+ * @api {post} v1/contact/query/tag Query contacts by tag
  * @apiName QueryContactsByTag
  * @apiGroup Contact
  * 
@@ -263,7 +263,53 @@ router.post(
 )
 
 /**
- * @api {post} v1/contact/query/caseandtag
+ * @api {post} v1/contact/query/tags Query contacts by multiple tags
+ * @apiName QueryContactsByMultipleTag(s)
+ * @apiGroup Contact
+ * 
+ * @apiBody {Array} tags Tag label(s), an array of strings, pass empty array to get all contacts.
+ * 
+ * @apiSuccess {String} contactId Contact ID.
+ * @apiSuccess {Array} tags Tag Labels (foreign key to Tag).
+ * @apiSuccess {String} firstName First Name of the Contact.
+ * @apiSuccess {String} lastName Last Name of the Contact.
+ * @apiSuccess {String} company Company name.
+ * @apiSuccess {String} position Position of the Contact in the company.
+ * @apiSuccess {String} cellNumber Cell phone number of the Contact.
+ * @apiSuccess {String} email Email address of the Contact.
+ * @apiSuccess {String} mailingAddress Mailing address of the Contact.
+ * @apiSuccess {String} wechatAccount WeChat Account of the Contact.
+ * @apiSuccess {String} note Note for this Contact.
+ * 
+ * 
+ * @apiSuccessExample Success-Response:
+ * [{
+ *  "contactId": "8d587c04-0d59-4b70-8264-922d26bf6f00",
+ *  "tags": ["Tag1", "Tag2"],
+ *  "firstName": "Lawson",
+ *  "lastName": "Wu",
+ *  "company": "RichTech",
+ *  "position": "CTO",
+ *  "cellNumber": "0912345678",
+ *  "email": "test@gmail.com",
+ *  "mailingAddress": "Framingham MA 01701-4607",
+ *  "wechatAccount": "lawsonwu",
+ *  "note": "This is a test contact."
+ * }]
+ */
+router.post(
+    "/query/tags",
+    check("tags")
+        .notEmpty()
+        .isArray()
+        .withMessage("Tags are required"),
+    validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
+    ContactController.queryContactsByTags
+)
+
+/**
+ * @api {post} v1/contact/query/caseandtag Query contacts by case and tag
  * @apiName QueryContactsByCaseAndTag
  * @apiGroup Contact
  * 
