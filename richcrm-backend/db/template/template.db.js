@@ -22,7 +22,7 @@ class Template {
                 TemplateTitle: templateTitle,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -35,7 +35,7 @@ class Template {
             },
         };
         console.log(params);
-        await db.put(params).promise();
+        await db.put(params);
         return params.Item;
     }
 
@@ -51,7 +51,7 @@ class Template {
             },
             ReturnValues: "UPDATED_NEW",
         };
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
 
         return data.Attributes;
     }
@@ -63,7 +63,7 @@ class Template {
                 TemplateTitle: templateTitle,
             },
         };
-        const data = await db.delete(params).promise();
+        const data = await db.delete(params);
 
         return data;
     }

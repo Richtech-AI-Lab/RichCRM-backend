@@ -27,7 +27,7 @@ class Address {
                 AddressId: addressId
             }
         };
-        const address = await db.get(params).promise();
+        const address = await db.get(params);
         return address;
     }
 
@@ -39,7 +39,7 @@ class Address {
                 }
             }
         };
-        const addresses = await db.batchGet(params).promise();
+        const addresses = await db.batchGet(params);
         return addresses;
     }
 
@@ -47,7 +47,7 @@ class Address {
         const params = {
             TableName: this.table
         };
-        const addresses = await db.scan(params).promise();
+        const addresses = await db.scan(params);
         return addresses;
     }
 
@@ -64,7 +64,7 @@ class Address {
                 Plus4: address.plus4
             }
         };
-        await db.put(params).promise();
+        await db.put(params);
         
         return params.Item;
     }
@@ -85,7 +85,7 @@ class Address {
                 ':p': address.plus4
             }
         };
-        await db.update(params).promise();
+        await db.update(params);
         
         return params.Item;
     }
@@ -97,7 +97,7 @@ class Address {
                 AddressId: addressId
             }
         };
-        await db.delete(params).promise();
+        await db.delete(params);
     }
 }
 

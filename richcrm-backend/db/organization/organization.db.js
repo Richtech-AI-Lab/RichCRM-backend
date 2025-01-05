@@ -29,7 +29,7 @@ class Organization {
                 OrganizationId: organizationId,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -37,7 +37,7 @@ class Organization {
         const params = {
             TableName: this.table,
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -49,7 +49,7 @@ class Organization {
                 ":t": organizationType,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -61,7 +61,7 @@ class Organization {
                 ":k": keyword,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -78,7 +78,7 @@ class Organization {
                 AddressId: organization.addressId,
             },
         };
-        await db.put(params).promise();
+        await db.put(params);
         return params.Item;
     }
 
@@ -116,7 +116,7 @@ class Organization {
             params.ExpressionAttributeValues[":a"] = organization.addressId;
         }
 
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
         return data.Attributes;
     }
 
@@ -127,7 +127,7 @@ class Organization {
                 OrganizationId: organizationId,
             },
         };
-        const data = await db.delete(params).promise();
+        const data = await db.delete(params);
         return data;
     }
 }

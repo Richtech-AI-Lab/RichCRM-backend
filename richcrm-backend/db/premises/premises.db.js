@@ -45,7 +45,7 @@ class Premises {
                 PremisesId: premisesId,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -57,7 +57,7 @@ class Premises {
                 ':a': addressId,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -92,7 +92,7 @@ class Premises {
                 NeedTermitesInspection: premises.needTermitesInspection,
             },
         };
-        await db.put(params).promise();
+        await db.put(params);
         return params.Item;
     }
 
@@ -202,7 +202,7 @@ class Premises {
             params.UpdateExpression += ", AnnualPropertyTax = :apt";
         }
 
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
 
         return data.Attributes;
     }
@@ -214,7 +214,7 @@ class Premises {
                 PremisesId: premisesId,
             },
         };
-        const data = await db.delete(params).promise();
+        const data = await db.delete(params);
         return data;
     }
 }

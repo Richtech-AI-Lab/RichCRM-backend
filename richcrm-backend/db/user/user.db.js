@@ -30,7 +30,7 @@ class User {
                 EmailAddress: emailAddress
             }
         };
-        const user = await db.get(params).promise();
+        const user = await db.get(params);
         return user;
     }
 
@@ -38,7 +38,7 @@ class User {
         const params = {
             TableName: this.table
         };
-        const users = await db.scan(params).promise();
+        const users = await db.scan(params);
         return users;
     }
 
@@ -55,7 +55,7 @@ class User {
                 UploadFolderName: user.uploadFolderName
             }
         };
-        await db.put(params).promise();
+        await db.put(params);
         
         return params.Item;
     }
@@ -124,7 +124,7 @@ class User {
             params.ExpressionAttributeNames = expressionAttributeNames;
         }
 
-        const update = await db.update(params).promise();
+        const update = await db.update(params);
         return update.Attributes;
     }
 
@@ -135,7 +135,7 @@ class User {
                 EmailAddress: emailAddress
             }
         };
-        return await db.delete(params).promise();
+        return await db.delete(params);
     }
 }
 

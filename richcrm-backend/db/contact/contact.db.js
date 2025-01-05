@@ -32,7 +32,7 @@ class Contact {
                 ContactId: contactId,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -43,7 +43,7 @@ class Contact {
         };
         let contacts = [];
         while (true) {
-            const data = await db.scan(params).promise();
+            const data = await db.scan(params);
             contacts = contacts.concat(data.Items);
             if (!data.LastEvaluatedKey) {
                 break;
@@ -61,7 +61,7 @@ class Contact {
                 ':t': label,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -80,7 +80,7 @@ class Contact {
             FilterExpression: filterExpression,
             ExpressionAttributeValues: expressionAttributeValues,
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -96,7 +96,7 @@ class Contact {
                 '#p': 'Position',
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -108,7 +108,7 @@ class Contact {
                 ':c': phoneNumber,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -120,7 +120,7 @@ class Contact {
                 ':e': email,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -141,7 +141,7 @@ class Contact {
                 Note: contact.note,
             },
         };
-        await db.put(params).promise();
+        await db.put(params);
         return params.Item;
     }
 
@@ -210,7 +210,7 @@ class Contact {
             params.UpdateExpression += ', Note = :n';
         }
         
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
         return data.Attributes;
     }
 
@@ -221,7 +221,7 @@ class Contact {
                 ContactId: contactId,
             },
         };
-        await db.delete(params).promise();
+        await db.delete(params);
     }
 }
 

@@ -25,7 +25,7 @@ class Tag {
                 Label: label,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -37,7 +37,7 @@ class Tag {
                 ':t': tagType,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -45,7 +45,7 @@ class Tag {
         const params = {
             TableName: this.table,
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -59,7 +59,7 @@ class Tag {
                 TagType: tag.tagType,
             },
         };
-        const data = await db.put(params).promise();
+        const data = await db.put(params);
         return params.Item;
     }
 
@@ -103,7 +103,7 @@ class Tag {
         if (Object.keys(expressionAttributeNames).length > 0) {
             params.ExpressionAttributeNames = expressionAttributeNames;
         }
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
         return data.Attributes;
     }
 
@@ -114,7 +114,7 @@ class Tag {
                 Label: label,
             },
         };
-        const data = await db.delete(params).promise();
+        const data = await db.delete(params);
         return data;
     }
 }
