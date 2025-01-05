@@ -28,7 +28,7 @@ class Task {
                 TaskId: taskId,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -41,7 +41,7 @@ class Task {
                 ':s': stageId,
             },
         };
-        const data = await db.query(params).promise();
+        const data = await db.query(params);
         return data;
     }
 
@@ -58,7 +58,7 @@ class Task {
                 FileURL: task.fileURL,
             },
         };
-        await db.put(params).promise();
+        await db.put(params);
         return params.Item;
     }
 
@@ -92,7 +92,7 @@ class Task {
             params.UpdateExpression  += ", FileURL = :f";
         }
         
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
 
         return data.Attributes;
     }
@@ -104,7 +104,7 @@ class Task {
                 TaskId: taskId,
             },
         };
-        await db.delete(params).promise();
+        await db.delete(params);
     }
 }
 

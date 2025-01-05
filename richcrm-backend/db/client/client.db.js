@@ -38,7 +38,7 @@ class Client {
                 ClientId: clientId,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -46,7 +46,7 @@ class Client {
         const params = {
             TableName: this.table,
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -58,7 +58,7 @@ class Client {
                 ':t': label,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -77,7 +77,7 @@ class Client {
             FilterExpression: filterExpression,
             ExpressionAttributeValues: expressionAttributeValues,
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -89,7 +89,7 @@ class Client {
                 ':t': clientType,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -101,7 +101,7 @@ class Client {
                 ':c': phoneNumber,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -113,7 +113,7 @@ class Client {
                 ':e': email,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -125,7 +125,7 @@ class Client {
                 ':k': keyword,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -140,7 +140,7 @@ class Client {
             FilterExpression: filterExpression,
             ExpressionAttributeValues: expressionAttributeValues,
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -167,7 +167,7 @@ class Client {
                 OrganizationId: client.organizationId,
             },
         };
-        await db.put(params).promise();
+        await db.put(params);
         return params.Item;
     }
 
@@ -252,7 +252,7 @@ class Client {
             params.ExpressionAttributeNames = expressionAttributeNames;
         }
 
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
         return data.Attributes;
     }
 
@@ -263,7 +263,7 @@ class Client {
                 ClientId: clientId,
             },
         };
-        const data = await db.delete(params).promise();
+        const data = await db.delete(params);
         return data;
     }
 

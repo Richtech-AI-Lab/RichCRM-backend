@@ -1,22 +1,19 @@
-var AWS = require("aws-sdk");
+var { SESClient, SendEmailCommand, VerifyEmailIdentityCommand } = require("@aws-sdk/client-ses");
 require('dotenv').config();
 
+const clientConfig = {
+    region: process.env.REGION,
+    credentials: {
+        accessKeyId: process.env.ACCESSKEYID,
+        secretAccessKey: process.env.SECRETACCESSKEY,
+    },
+};
+
 if (process.env.NODE_ENV === 'local') {
-    AWS.config.update({
-        accessKeyId: process.env.ACCESSKEYID,
-        secretAccessKey: process.env.SECRETACCESSKEY,
-        region: process.env.REGION,
-        endpoint: new AWS.Endpoint(process.env.ENDPOINT)
-    });
-} else {
-    AWS.config.update({
-        accessKeyId: process.env.ACCESSKEYID,
-        secretAccessKey: process.env.SECRETACCESSKEY,
-        region: process.env.REGION,
-    });
+    clientConfig.endpoint = process.env.ENDPOINT;
 }
 
-const SES = new AWS.SES();
+const SES = new SESClient(clientConfig);
 
 const ses = {
 
@@ -26,7 +23,8 @@ const ses = {
                 const params = {
                     EmailAddress: email,
                 }
-                return await SES.verifyEmailIdentity(params).promise();
+                const command = new VerifyEmailIdentityCommand(params);
+                return await SES.send(command);
             })
         } catch (err) {
             console.log("Fail to verify emails: ", err, err.stack);
@@ -59,14 +57,15 @@ const ses = {
                     Data: data.templateTitle,
                 },
             },
-            Source: process.env.SES_SOURCE_EMAIL /* required */,
+            Source: process.env.SES_SOURCE_EMAIL, /* required */
             ReplyToAddresses: [
                 process.env.SES_REPLY_EMAIL,
             ],
         }
 
         try {
-            const data = await SES.sendEmail(params).promise();
+            const command = new SendEmailCommand(params);
+            const data = await SES.send(command);
             return data;
         } catch (err) {
             console.log("Fail to send email: ", err, err.stack);

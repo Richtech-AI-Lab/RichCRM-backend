@@ -26,7 +26,7 @@ class Stage {
                 StageId: stageId,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -38,7 +38,7 @@ class Stage {
                 ":c": caseId,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -51,7 +51,7 @@ class Stage {
                 ":s": stageType,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -66,7 +66,7 @@ class Stage {
                 StageStatus: stage.stageStatus,
             },
         };
-        await db.put(params).promise();
+        await db.put(params);
         return params.Item;
     }
 
@@ -91,7 +91,7 @@ class Stage {
             params.ExpressionAttributeValues[':ts'] = stage.tasks;
             params.UpdateExpression += ', Tasks = :ts';
         }
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
         
         return data.Attributes;
     }
@@ -103,7 +103,7 @@ class Stage {
                 StageId: stageId,
             },
         };
-        await db.delete(params).promise();
+        await db.delete(params);
     }
 }
 

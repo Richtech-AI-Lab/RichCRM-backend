@@ -45,7 +45,7 @@ class Case {
                 CaseId: caseId,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -64,7 +64,7 @@ class Case {
         } else {
             params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -84,7 +84,7 @@ class Case {
         } else {
             params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -104,7 +104,7 @@ class Case {
         } else {
             params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -124,7 +124,7 @@ class Case {
         } else {
             params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -138,7 +138,7 @@ class Case {
                 ":creatorId": creatorId,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -158,7 +158,7 @@ class Case {
         } else {
             params.FilterExpression += " AND (NOT attribute_exists(CloseAt) OR CloseAt = :null)";
         }
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -170,7 +170,7 @@ class Case {
                 ":c": creatorId,
             },
         };
-        const data = await db.scan(params).promise();
+        const data = await db.scan(params);
         return data;
     }
 
@@ -197,7 +197,7 @@ class Case {
                 AdditionalOrganizations: c.additionalOrganizations,
             },
         };
-        await db.put(params).promise();
+        await db.put(params);
         return params.Item;
     }
 
@@ -320,7 +320,7 @@ class Case {
         } else {
             return null;
         }
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
         return data.Attributes;
     }
 
@@ -331,7 +331,7 @@ class Case {
                 CaseId: caseId,
             },
         };
-        await db.delete(params).promise();
+        await db.delete(params);
     }
 
 }

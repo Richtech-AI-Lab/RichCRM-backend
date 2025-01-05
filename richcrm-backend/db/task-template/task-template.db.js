@@ -28,7 +28,7 @@ class TaskTemplate {
                 TaskName: taskName,
             },
         };
-        const data = await db.get(params).promise();
+        const data = await db.get(params);
         return data;
     }
 
@@ -42,7 +42,7 @@ class TaskTemplate {
                 Templates: taskTemplate.templates,
             },
         };
-        const data = await db.put(params).promise();
+        const data = await db.put(params);
         return params.Item;
     }
 
@@ -77,7 +77,7 @@ class TaskTemplate {
             return null;
         }
         console.log(params);
-        const data = await db.update(params).promise();
+        const data = await db.update(params);
         return data?.Attributes;
     }
 
@@ -88,7 +88,7 @@ class TaskTemplate {
                 TaskName: taskName,
             },
         };
-        const data = await db.delete(params).promise();
+        const data = await db.delete(params);
         return data;
     }
 }
