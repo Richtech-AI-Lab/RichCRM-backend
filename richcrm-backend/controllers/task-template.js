@@ -11,7 +11,6 @@ class TaskTemplateController {
         this.getTaskTemplatesByStage = this.getTaskTemplatesByStage.bind(this);
         this.createOrUpdateTaskTemplate = this.createOrUpdateTaskTemplate.bind(this);
         this.createTaskTemplateWithTemplateObjs = this.createTaskTemplateWithTemplateObjs.bind(this);
-        this.updateTaskTemplate = this.updateTaskTemplate.bind(this);
         this.deleteTaskTemplate = this.deleteTaskTemplate.bind(this);
         this.updateLinkedTaskTemplates = this.updateLinkedTaskTemplates.bind(this);
         this.removeLinkedTaskTemplates = this.removeLinkedTaskTemplates.bind(this);
@@ -153,6 +152,7 @@ class TaskTemplateController {
                 }
 
                 // Update prev and next task templates
+                await this.removeLinkedTaskTemplates(existingTaskTemplates[0].PrevTTID, existingTaskTemplates[0].NextTTID);
                 await this.updateLinkedTaskTemplates(prevTtid, nextTtid, taskTemplate.ttid);
 
                 return res.status(200).json({
@@ -212,8 +212,24 @@ class TaskTemplateController {
         };
 
         try {
-            const taskTemplates = await TaskTemplateService.readTaskTemplatesByStage(stage, creatorId);
-            const updatedTemplates = taskTemplates.map(template => {
+            let taskTemplates = await TaskTemplateService.readTaskTemplatesByStage(stage, creatorId);
+
+            if (isUpdate) {
+                const existingTaskTemplate = taskTemplates.find(template => template.TTID === ttid);
+                if (existingTaskTemplate === null) {
+                    console.error(`[TaskTemplateController][checkForLoop] TaskTemplate not found: ${ttid}`);
+                    return true;
+                }
+                taskTemplates = taskTemplates.map(template => {
+                    if (template.TTID === existingTaskTemplate.PrevTTID) {
+                        return { ...template, NextTTID: existingTaskTemplate.NextTTID };
+                    } else if (template.TTID === existingTaskTemplate.NextTTID) {
+                        return { ...template, PrevTTID: existingTaskTemplate.PrevTTID };
+                    }
+                    return template;
+                });
+            }
+            taskTemplates = taskTemplates.map(template => {
                 if (template.TTID === prevTtid) {
                     return { ...template, NextTTID: ttid };
                 } else if (template.TTID === nextTtid) {
@@ -225,17 +241,17 @@ class TaskTemplateController {
             });
 
             if (!isUpdate) {
-                updatedTemplates.push(taskTemplateObj);
+                taskTemplates.push(taskTemplateObj);
             }
 
             let slow = taskTemplateObj;
             let fast = taskTemplateObj;
 
             while (fast && fast.NextTTID) {
-                slow = updatedTemplates.find(template => template.TTID === slow.NextTTID);
-                fast = updatedTemplates.find(template => template.TTID === fast.NextTTID);
+                slow = taskTemplates.find(template => template.TTID === slow.NextTTID);
+                fast = taskTemplates.find(template => template.TTID === fast.NextTTID);
                 if (fast) {
-                    fast = updatedTemplates.find(template => template.TTID === fast.NextTTID);
+                    fast = taskTemplates.find(template => template.TTID === fast.NextTTID);
                 }
                 if (slow && fast && slow.TTID === fast.TTID) {
                     return true;
@@ -307,94 +323,6 @@ class TaskTemplateController {
                 status: "failed",
                 data: [],
                 message: `[TaskTemplateController][createTaskTemplateWithTemplateObjs] Internal Server Error: ${error}`,
-            });
-        }
-    }
-
-
-
-    async updateTaskTemplate(req, res) {
-        const { ttid, taskName, stage, prevTtid, nextTtid, creatorId, taskType, templates } = req.body;
-        try {
-            const existingTaskTemplate = await TaskTemplateService.readTaskTemplateByTTID(ttid);
-            if (existingTaskTemplate === null) {
-                res.status(400).json({
-                    status: "failed",
-                    data: [],
-                    message: "[TaskTemplateController][updateTaskTemplate] TaskTemplate not found",
-                });
-            }
-            const taskTemplateObj = {
-                ttid: ttid,
-                taskName: existingTaskTemplate.TaskName,
-                stage: existingTaskTemplate.Stage,
-                prevTtid: existingTaskTemplate.PrevTTID,
-                nextTtid: existingTaskTemplate.NextTTID,
-                creatorId: existingTaskTemplate.CreatorId,
-                taskType: existingTaskTemplate.TaskType,
-                templates: existingTaskTemplate.Templates,
-            };
-
-            if (taskName !== undefined || taskName !== "" || taskName !== null) {
-                taskTemplateObj.taskName = taskName;
-            }
-
-            if (stage !== undefined || stage !== "" || stage !== null) {
-                const stageEnum = Types.castIntToEnum(Types.stage, stage);
-                if (stageEnum === undefined) {
-                    res.status(400).json({
-                        status: "failed",
-                        data: [],
-                        message: "[TaskTemplateController][createTaskTemplate] Invalid stage",
-                    });
-                }
-                taskTemplateObj.stage = stage;
-            }
-
-            if (taskType !== undefined || taskType !== "" || taskType !== null) {
-                const taskTypeEnum = Types.castIntToEnum(Types.taskType, taskType);
-                if (taskTypeEnum === undefined) {
-                    res.status(400).json({
-                        status: "failed",
-                        data: [],
-                        message: "[TaskTemplateController][createTaskTemplate] Invalid taskType",
-                    });
-                }
-                taskTemplateObj.taskType = taskType;
-            }
-
-            if (prevTtid !== taskTemplateObj.prevTtid || nextTtid !== taskTemplateObj.nextTtid) {
-                await this.removeLinkedTaskTemplates(taskTemplateObj.prevTtid, taskTemplateObj.nextTtid);
-                await this.updateLinkedTaskTemplates(prevTtid, nextTtid, ttid);
-                
-                console.log("Updated prev and next ttid, from: ", taskTemplateObj.prevTtid, taskTemplateObj.nextTtid, " to: ", prevTtid, nextTtid);
-                taskTemplateObj.prevTtid = prevTtid;
-                taskTemplateObj.nextTtid = nextTtid;
-            }
-
-            if (templates !== undefined || templates.length !== 0) {
-                taskTemplateObj.templates = await TemplateController.validateTemplates(templates);
-            }
-
-            const data = await TaskTemplateService.updateTaskTemplate(taskTemplateObj);
-            if (data === null) {
-                res.status(400).json({
-                    status: "failed",
-                    data: [],
-                    message: "[TaskTemplateController][updateTaskTemplate] TaskTemplate not updated",
-                });
-            }
-            res.status(200).json({
-                status: "success",
-                data: [taskTemplateObj],
-                message: "[TaskTemplateController][updateTaskTemplate] TaskTemplate updated",
-            });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({
-                status: "failed",
-                data: [],
-                message: `[TaskTemplateController][updateTaskTemplate] Internal Server Error: ${error}`,
             });
         }
     }

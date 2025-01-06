@@ -31,7 +31,7 @@ content-type: application/json
     "creatorId": "verkho404@gmail.com",
     "stage": 1,
     "taskType": 2,
-    "prevTtid": "c38215d6-bece-4079-90c3-7ba5db201d15",
+    "prevTtid": null,
     "nextTtid": "ffaf67eb-1938-4c6f-815c-ca6d21296918"
 }
 

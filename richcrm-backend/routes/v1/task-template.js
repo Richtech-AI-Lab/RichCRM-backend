@@ -6,6 +6,40 @@ var TaskTemplateController = require('../../controllers/task-template');
 const router = express.Router();
 
 
+/**
+ * @api {post} v1/task-template/read/stage Read a task template by stage
+ * @apiName ReadTaskTemplateByStage
+ * @apiGroup TaskTemplate
+ * 
+ * @apiBody {String} stage Stage.
+ * @apiBody {String} creatorId Creator ID.
+ * 
+ * @apiSuccess {UUID} ttid Task Template ID.
+ * @apiSuccess {String} creatorId Creator ID.
+ * @apiSuccess {Number} stage Stage.
+ * @apiSuccess {String} taskName Task Name.
+ * @apiSuccess {Number} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
+ * @apiSuccess {UUID} prevTtid Previous Task Template ID.
+ * @apiSuccess {UUID} nextTtid Next Task Template ID.
+ * @apiSuccess {Boolean} isDefault Default task template for the stage.
+ * @apiSuccess {List} templates List of templates titles.
+ * 
+ * @apiSuccessExample Example data on success:
+ * [{
+ *  "ttid": "123e4567-e89b-12d3-a456-426614174000",
+ *  "creatorId": "test1@gmail.com",
+ *  "stage": 1,
+ *  "taskName": "Customized Task",
+ *  "taskType": 1,
+ *  "prevTtid": "123e4567-e89b-12d3-a456-426614174001",
+ *  "nextTtid": null,
+ *  "isDefault": false,
+ *  "templates": [
+ *      "Test Email Template 1",
+ *      "Test Email Template 2"
+ *  ]
+ * }]
+ */
 router.post(
     "/read/stage",
     check("stage")
@@ -25,21 +59,35 @@ router.post(
  * @apiGroup TaskTemplate
  * 
  * @apiBody {String} taskName Task Name.
- * @apiBody {String} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
+ * @apiBody {String} creatorId Creator ID.
+ * @apiBody {Number} stage Stage.
+ * @apiBody {Boolean} isDefault Default task template for the stage.
+ * @apiBody {UUID} prevTtid Previous Task Template ID.
+ * @apiBody {UUID} nextTtid Next Task Template ID.
+ * @apiBody {Number} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
  * @apiBody {List} templates List of templates titles.
  * 
+ * @apiSuccess {UUID} ttid Task Template ID.
+ * @apiSuccess {String} creatorId Creator ID.
+ * @apiSuccess {Number} stage Stage.
  * @apiSuccess {String} taskName Task Name.
- * @apiSuccess {String} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
+ * @apiSuccess {Number} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
+ * @apiSuccess {UUID} prevTtid Previous Task Template ID.
+ * @apiSuccess {UUID} nextTtid Next Task Template ID.
+ * @apiSuccess {Boolean} isDefault Default task template for the stage.
  * @apiSuccess {List} templates List of templates titles.
  * 
  * @apiSuccessExample Example data on success:
  * {
+ * "ttid": "123e4567-e89b-12d3-a456-426614174000",
+ * "creatorId": "test1@gmail.com",
+ * "stage": 1,
  * "taskName": "Customized Task",
  * "taskType": 1,
- * "templates": [
- * "Test Email Template 1",
- * "Test Email Template 2"
- * ]
+ * "prevTtid": "123e4567-e89b-12d3-a456-426614174001",
+ * "nextTtid": null,
+ * "isDefault": false,
+ * "templates": [],
  * }
  */
 router.post(
@@ -78,29 +126,6 @@ router.post(
 )
 
 
-/**
- * @api {post} v1/task-template/create/template Create a new task template with template objects
- * @apiName CreateTaskTemplateWithTemplateObjs
- * @apiGroup TaskTemplate
- * 
- * @apiBody {String} taskName Task Name.
- * @apiBody {String} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
- * @apiBody {List} templateObjs List of template objects (templateTitle, templateContent).
- * 
- * @apiSuccess {String} taskName Task Name.
- * @apiSuccess {String} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
- * @apiSuccess {List} templates List of templates titles.
- * 
- * @apiSuccessExample Example data on success:
- * {
- * "taskName": "Customized Task",
- * "taskType": 1,
- * "templates": [
- * "Test Email Template 1",
- * "Test Email Template 2"
- * ]
- * }
- */
 router.post(
     "/create/template",
     check("taskName")
@@ -120,24 +145,33 @@ router.post(
 
 
 /**
- * @api {post} v1/task-template/read Read a task template by task name
- * @apiName ReadTaskTemplateByName
+ * @api {post} v1/task-template/read Read a task template by ttid
+ * @apiName ReadTaskTemplateByTTID
  * @apiGroup TaskTemplate
  * 
- * @apiBody {String} taskName Task Name.
+ * @apiBody {UUID} ttid Task Template ID.
  * 
+ * @apiSuccess {UUID} ttid Task Template ID.
+ * @apiSuccess {String} creatorId Creator ID.
+ * @apiSuccess {Number} stage Stage.
  * @apiSuccess {String} taskName Task Name.
- * @apiSuccess {String} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
+ * @apiSuccess {Number} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
+ * @apiSuccess {UUID} prevTtid Previous Task Template ID.
+ * @apiSuccess {UUID} nextTtid Next Task Template ID.
+ * @apiSuccess {Boolean} isDefault Default task template for the stage.
  * @apiSuccess {List} templates List of templates titles.
  * 
  * @apiSuccessExample Example data on success:
  * {
+ * "ttid": "123e4567-e89b-12d3-a456-426614174000",
+ * "creatorId": "test1@gmail.com",
+ * "stage": 1,
  * "taskName": "Customized Task",
  * "taskType": 1,
- * "templates": [
- * "Test Email Template 1",
- * "Test Email Template 2"
- * ]
+ * "prevTtid": "123e4567-e89b-12d3-a456-426614174001",
+ * "nextTtid": null,
+ * "isDefault": false,
+ * "templates": [],
  * }
  */
 router.post(
@@ -149,48 +183,6 @@ router.post(
     validate,
     TaskTemplateController.getTaskTemplateByTTID
 )
-
-
-/**
- * @api {post} v1/task-template/update Update a task template by task name
- * @apiName UpdateTaskTemplate
- * @apiGroup TaskTemplate
- * 
- * @apiBody {String} taskName Task Name.
- * @apiBody {String} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
- * @apiBody {List} templates List of templates titles.
- * 
- * @apiSuccess {String} taskName Task Name.
- * @apiSuccess {String} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
- * @apiSuccess {List} templates List of templates titles.
- * 
- * @apiSuccessExample Example data on success:
- * {
- * "taskName": "Customized Task",
- * "taskType": 1,
- * "templates": [
- * "Test Email Template 1",
- * "Test Email Template 2"
- * ]
- * }
- */
-router.post(
-    "/update",
-    check("taskName")
-        .notEmpty()
-        .withMessage("Task Name is required"),
-    check("taskType")
-        .optional()
-        .isInt()
-        .withMessage("Task Type is required"),
-    check("templates")
-        .optional()
-        .isArray()
-        .withMessage("Templates is required"),
-    validate,
-    TaskTemplateController.updateTaskTemplate
-)
-
 
 /**
  * @api {post} v1/task-template/delete Delete a task template by task name
