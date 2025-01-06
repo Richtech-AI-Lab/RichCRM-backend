@@ -5,6 +5,20 @@ var TaskTemplateController = require('../../controllers/task-template');
 
 const router = express.Router();
 
+
+router.post(
+    "/read/stage",
+    check("stage")
+        .notEmpty()
+        .isInt()
+        .withMessage("Stage is required"),
+    check("creatorId")
+        .notEmpty()
+        .withMessage("Creator ID is required"),
+    validate,
+    TaskTemplateController.getTaskTemplatesByStage
+)
+
 /**
  * @api {post} v1/task-template/create Create a new task template
  * @apiName CreateTaskTemplate
@@ -33,6 +47,24 @@ router.post(
     check("taskName")
         .notEmpty()
         .withMessage("Task Name is required"),
+    check("creatorId")
+        .notEmpty()
+        .withMessage("Creator ID is required"),
+    check("stage")
+        .notEmpty()
+        .isInt()
+        .withMessage("Stage is required"),
+    check("isDefault")
+        .default(false)
+        .isBoolean(),
+    check("prevTtid")
+        .optional({ nullable: true })
+        .isUUID()
+        .withMessage("Prev Task Template ID must be a UUID or null"),
+    check("nextTtid")
+        .optional({ nullable: true })
+        .isUUID()
+        .withMessage("Next Task Template ID must be a UUID or null"),
     check("taskType")
         .notEmpty()
         .isInt()
@@ -110,11 +142,12 @@ router.post(
  */
 router.post(
     "/read",
-    check("taskName")
+    check("ttid")
         .notEmpty()
-        .withMessage("Task Name is required"),
+        .isUUID()
+        .withMessage("ttid is required"),
     validate,
-    TaskTemplateController.getTaskTemplateByName
+    TaskTemplateController.getTaskTemplateByTTID
 )
 
 
@@ -174,9 +207,10 @@ router.post(
  */
 router.post(
     "/delete",
-    check("taskName")
+    check("ttid")
         .notEmpty()
-        .withMessage("Task Name is required"),
+        .isUUID()
+        .withMessage("ttid is required"),
     validate,
     TaskTemplateController.deleteTaskTemplate
 )
