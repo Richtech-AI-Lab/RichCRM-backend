@@ -185,13 +185,13 @@ router.post(
 )
 
 /**
- * @api {post} v1/task-template/delete Delete a task template by task name
+ * @api {post} v1/task-template/delete Delete a task template by ttid
  * @apiName DeleteTaskTemplate
  * @apiGroup TaskTemplate
  * 
- * @apiBody {String} taskName Task Name.
+ * @apiBody {String} ttid Task Template ID.
  * 
- * @apiSuccess {String} taskName Task Name.
+ * @apiSuccess {String} ttid Task Template ID.
  * 
  * @apiSuccessExample Example data on success:
  * {

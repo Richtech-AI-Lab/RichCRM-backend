@@ -21,6 +21,7 @@ const router = express.Router();
  * @apiSuccess {String} name Task name.
  * @apiSuccess {String} status Task status (0 - NOT_STARTED, 1 - PENDING, 2 - FINISHED, 3 - OVERDUE).
  * @apiSuccess {List} templates List of templates titles.
+ * @apiSuccess {String} ttid Task Template ID that this task is based on.
  * 
  * @apiSuccessExample Example data on success:
  * {
@@ -33,6 +34,7 @@ const router = express.Router();
  *      "Test Email Template 1",
  *      "Test Email Template 2"
  *    ]
+ *  "ttid": "e29e020b-9735-40a4-a494-2b6df1949c1b",
  * }
  */
 router.post(
@@ -49,6 +51,9 @@ router.post(
     check("status")
         .notEmpty()
         .withMessage("Status is required"),
+    check("ttid")
+        .optional()
+        .isUUID(),
     validate,
     TaskController.createTask
 )
@@ -67,6 +72,7 @@ router.post(
  * @apiSuccess {String} name Task name.
  * @apiSuccess {String} status Task status (0 - NOT_STARTED, 1 - PENDING, 2 - FINISHED, 3 - OVERDUE).
  * @apiSuccess {List} templates List of templates titles.
+ * @apiSuccess {String} ttid Task Template ID that this task is based on.
  * 
  * @apiSuccessExample Example data on success:
  * {
@@ -79,6 +85,7 @@ router.post(
  *   "Test Email Template 1",
  *   "Test Email Template 2"
  *  ]
+ *  "ttid": "e29e020b-9735-40a4-a494-2b6df1949c1b",
  * }
  * 
  */
@@ -109,6 +116,8 @@ router.get(
  * @apiSuccess {String} name Task name.
  * @apiSuccess {String} status Task status (0 - NOT_STARTED, 1 - PENDING, 2 - FINISHED, 3 - OVERDUE).
  * @apiSuccess {List} templates List of templates titles.
+ * @apiSuccess {String} fileURL URL of the uploaded file.
+ * @apiSuccess {String} ttid Task Template ID that this task is based on.
  * 
  * @apiSuccessExample Example data on success:
  * {
@@ -122,6 +131,8 @@ router.get(
  *   "Test Email Template 2",
  *   "Test Email Template 3"
  *  ]
+ *  "fileURL": "https://s3.amazonaws.com/bucketname/filename",
+ *  "ttid": "e29e020b-9735-40a4-a494-2b6df1949c1b",
  * }
  * 
  */

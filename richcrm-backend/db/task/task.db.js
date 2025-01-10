@@ -11,6 +11,7 @@
  * @property {status} Status - Status of task (0-NOT_STARTED, 1-PENDING, 2-FINISHED, 3-OVERDUE)
  * @property {[string]} Templates - Foreign key to Email Template
  * @property {string} FileURL - URL of the uploaded file
+ * @property {UUID} TTID - Task Template ID that this task is based on
  */
 
 const db = require('../dynamodb');
@@ -56,6 +57,7 @@ class Task {
                 Status: task.status,
                 Templates: task.templates,
                 FileURL: task.fileURL,
+                TTID: task.ttid,
             },
         };
         await db.put(params);

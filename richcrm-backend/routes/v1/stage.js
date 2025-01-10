@@ -4,7 +4,7 @@ var validate = require('../../middlewares/validation');
 var StageController = require('../../controllers/stage');
 
 const router = express.Router();
-
+const passport = require("../../middlewares/tokenStrategy/accessTokenStrategy");
 
 /**
  * @api {get} v1/stage/:stageId Read a stage by stage ID
@@ -123,6 +123,7 @@ router.post(
         .notEmpty()
         .withMessage("Case ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     StageController.createStage
 )
 

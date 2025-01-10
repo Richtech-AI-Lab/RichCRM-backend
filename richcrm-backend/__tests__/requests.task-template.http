@@ -41,8 +41,8 @@ POST http://localhost:3001/v1/task-template/read/stage
 content-type: application/json
 
 {
-    "stage": 1,
-    "creatorId": "verkho404@gmail.com"
+    "stage": 0,
+    "creatorId": "eden.wu@richtech-ai-lab.org"
 }
 
 ### Delete Task Template

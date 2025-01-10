@@ -26,7 +26,8 @@ class TaskController {
                     name: task.Name,
                     status: task.Status,
                     templates: task.Templates,
-                    fileURL: task.FileURL
+                    fileURL: task.FileURL,
+                    ttid: task.TTID,
                 }],
                 message: '[TaskController][readTaskById] Task found'
             });
@@ -40,7 +41,7 @@ class TaskController {
     }
 
     async createTask(req, res) {
-        const { taskType, stageId, name, status, templates, fileURL } = req.body;
+        const { taskType, stageId, name, status, templates, fileURL, ttid } = req.body;
         try {
             // Check if the taskType is valid
             const taskTypeEnum = Types.castIntToEnum(Types.taskType, taskType);
@@ -82,7 +83,8 @@ class TaskController {
                 name: name,
                 status: status,
                 templates: templateTitles,
-                fileURL: fileURL
+                fileURL: fileURL,
+                ttid: ttid,
             };
             const data = await TaskService.createTask(taskObj);
             return res.status(200).json({
@@ -94,7 +96,8 @@ class TaskController {
                     name: data.Name,
                     status: data.Status,
                     templates: data.Templates,
-                    fileURL: data.FileURL
+                    fileURL: data.FileURL,
+                    ttid: data.TTID,
                 }],
                 message: '[TaskController][createTask] Task created'
             });
@@ -127,7 +130,8 @@ class TaskController {
                 name: task.Name,
                 status: task.Status,
                 templates: task.Templates,
-                fileURL: task.FileURL
+                fileURL: task.FileURL,
+                ttid: task.TTID,
             };
 
             // Check if the status is valid
@@ -180,7 +184,8 @@ class TaskController {
                     name: taskObj.name,
                     status: taskObj.status,
                     templates: data.Templates,
-                    fileURL: data.FileURL
+                    fileURL: data.FileURL,
+                    ttid: data.TTID,
                 }],
                 message: '[TaskController][updateTask] Task updated'
             });

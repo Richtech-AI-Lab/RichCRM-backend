@@ -376,7 +376,7 @@ class CaseController {
 
                 // Create the stage
                 var stageObj;
-                const stageRet = await StageController.createStageByCaseIdAndStageType(c.CaseId, c.Stage);
+                const stageRet = await StageController.createStageByCaseIdAndStageType(c.CaseId, c.Stage, emailAddress);
                 if (stageRet.status === "success") {
                     console.log(`[CaseController][createCase] Stage created successfully`);
                     stageObj = stageRet.data[0];
@@ -411,6 +411,7 @@ class CaseController {
     }
 
     async updateCase(req, res) {
+        const emailAddress = req.user.EmailAddress;
         const {
             caseId,
             creatorId,
@@ -501,7 +502,7 @@ class CaseController {
 
                 // Update the stage
                 if (stage !== existingCase.Stage) {
-                    const stageRet = await StageController.createStageByCaseIdAndStageType(existingCase.CaseId, stage);
+                    const stageRet = await StageController.createStageByCaseIdAndStageType(existingCase.CaseId, stage, emailAddress);
                     if (stageRet.status === "success") {
                         console.log(`[CaseController][updateCase] Stage created successfully`);
                         stageObj = stageRet.data[0];

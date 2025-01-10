@@ -81,7 +81,7 @@ class StageController {
     }
 
    
-    async createStageByCaseIdAndStageType(caseId, stageType) {
+    async createStageByCaseIdAndStageType(caseId, stageType, creatorId) {
         
         try {
             // Check if the caseId is valid
@@ -125,29 +125,28 @@ class StageController {
             const stageId = uuidv4();
             // IMPORTANT: Generate new tasks for this stage
             var tasks = [];
-            const taskConfigs = Types.stageDefaultTaskList[stageTypeEnum]
-            for (let i = 0; i < taskConfigs.length; i++) {
+            const taskTemplates = await TaskTemplateService.readTaskTemplatesByStage(stageType, creatorId);
+            // const taskConfigs = Types.stageDefaultTaskList[stageTypeEnum]
+            for (let i = 0; i < taskTemplates.length; i++) {
                 const taskId = uuidv4();
 
                 // Check TaskTemplate exist
-                const taskConfig = taskConfigs[i];
-                const taskTemplate = await TaskTemplateService.readTaskTemplateByName(taskConfigs[i].name);
-                if (taskTemplate !== null) {
-                    console.log(`[StageController][createStage] TaskTemplate found: ${taskTemplate.TaskName}`);
-                    taskConfig.templates = taskTemplate.Templates;
-                }
+                const taskConfig = taskTemplates[i];
 
                 // Check if the templates exists
-                const templateTitles = await TemplateController.validateTemplates(taskConfig.templates);
+                const templateTitles = await TemplateController.validateTemplates(taskConfig.Templates);
 
                 const taskObj = {
                     taskId: taskId,
                     stageId: stageId,
-                    taskType: taskConfig.taskType,
-                    name: taskConfig.name,
-                    status: taskConfig.status,
+                    taskType: taskConfig.TaskType,
+                    name: taskConfig.TaskName,
+                    status: 0,
                     templates: templateTitles,
+                    ttid: taskConfig.TTID,
                 };
+
+                console.log("---------------", taskObj);
                 const t = await TaskService.createTask(taskObj);
                 tasks.push(t.TaskId);
             }
@@ -190,9 +189,10 @@ class StageController {
     }
 
     async createStage(req, res) {
+        const emailAddress = req.user.EmailAddress;
         const { caseId, stageType } = req.body;
 
-        const ret = await this.createStageByCaseIdAndStageType(caseId, stageType);
+        const ret = await this.createStageByCaseIdAndStageType(caseId, stageType, emailAddress);
         if (ret.status === "success") {
             return res.status(200).json(ret);
         } else {

@@ -78,6 +78,12 @@ class TaskTemplateController {
                     data: sortedTaskTemplates.map(this.procTaskTamplate),
                     message: "[TaskTemplateController][readTaskTemplateByTaskNameAndCreatorId] TaskTemplates found",
                 });
+            } else {
+                res.status(400).json({
+                    status: "success",
+                    data: [],
+                    message: "[TaskTemplateController][readTaskTemplateByTaskNameAndCreatorId] TaskTemplates is empty",
+                });
             }
         } catch (error) {
             console.error(error);
@@ -90,7 +96,7 @@ class TaskTemplateController {
     }
 
     async createOrUpdateTaskTemplate(req, res) {
-        const { taskName, stage, prevTtid, nextTtid, creatorId, taskType, templates } = req.body;
+        const { taskName, stage, prevTtid, nextTtid, creatorId, taskType, templates, isDefault } = req.body;
         try {
             if (stage === undefined || stage === "" || stage === null) {
                 const stageEnum = Types.castIntToEnum(Types.stage, stage);
@@ -122,6 +128,7 @@ class TaskTemplateController {
                 creatorId: creatorId,
                 taskType: taskType,
                 templates: templates,
+                isDefault: isDefault ?? false,
             };
 
             if (taskType === Types.taskType.CONTACT && templates) {
@@ -368,6 +375,7 @@ class TaskTemplateController {
             creatorId: taskTemplate.CreatorId,
             taskType: taskTemplate.TaskType,
             templates: taskTemplate.Templates,
+            isDefault: taskTemplate.IsDefault,
         }
     }
 

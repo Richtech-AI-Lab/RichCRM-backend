@@ -1,0 +1,45 @@
+### SETUP - Case set up
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Case set up",
+    "creatorId": "eden.wu@richtech-ai-lab.org",
+    "stage": 0,
+    "taskType": 0,
+    "isDefault": true,
+    "prevTtid": null,
+    "nextTtid": null,
+    "templates": []
+}
+
+### SETUP - Inspection report
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Inspection report",
+    "creatorId": "eden.wu@richtech-ai-lab.org",
+    "stage": 0,
+    "taskType": 2,
+    "isDefault": true,
+    "prevTtid": "df53d589-9306-45b3-a629-0b3aa5b5f7c8",
+    "nextTtid": null,
+    "templates": []
+}
+
+
+### SETUP - Confirm case details
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Confirm case details",
+    "creatorId": "eden.wu@richtech-ai-lab.org",
+    "stage": 0,
+    "taskType": 1,
+    "isDefault": true,
+    "prevTtid": "ac451f27-baa4-4b40-b2fb-3d13361e2fce",
+    "nextTtid": null,
+    "templates": ["[IMPORTANT] FEK Notice to Purchaser", "Default Template"]
+}
