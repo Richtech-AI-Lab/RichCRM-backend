@@ -43,3 +43,80 @@ content-type: application/json
     "nextTtid": null,
     "templates": ["[IMPORTANT] FEK Notice to Purchaser", "Default Template"]
 }
+
+
+### CONTRACT_PREPARING - Initial contract
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Initial contract",
+    "creatorId": "eden.wu@richtech-ai-lab.org",
+    "stage": 1,
+    "taskType": 2,
+    "isDefault": true,
+    "prevTtid": null,
+    "nextTtid": null,
+    "templates": []
+}
+
+
+### CONTRACT_PREPARING - Schedule contract review with client
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Schedule contract review with client",
+    "creatorId": "eden.wu@richtech-ai-lab.org",
+    "stage": 1,
+    "taskType": 1,
+    "isDefault": true,
+    "prevTtid": "e9ec4af3-14b6-44d1-a480-4aa82e0399a8",
+    "nextTtid": null,
+    "templates": ["%(caseObj.premisesName)s Contract review"]
+}
+
+### CONTRACT_PREPARING - Contract review
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Contract review",
+    "creatorId": "eden.wu@richtech-ai-lab.org",
+    "stage": 1,
+    "taskType": 0,
+    "isDefault": true,
+    "prevTtid": "28abd785-bd02-4f25-abf9-26f536b191bc",
+    "nextTtid": null,
+    "templates": []
+}
+
+### CONTRACT_PREPARING - Collect signed contract and deposit from client
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Collect signed contract and deposit from client",
+    "creatorId": "eden.wu@richtech-ai-lab.org",
+    "stage": 1,
+    "taskType": 1,
+    "isDefault": true,
+    "prevTtid": "44fb4e08-587e-4f67-9044-fefe4744d62c",
+    "nextTtid": null,
+    "templates": ["%(caseObj.premisesName)s Contract Signing and Deposit"]
+}
+
+### CONTRACT_PREPARING - Initial signed contract
+POST http://localhost:3001/v1/task-template/create
+content-type: application/json
+
+{
+    "taskName": "Initial signed contract",
+    "creatorId": "eden.wu@richtech-ai-lab.org",
+    "stage": 1,
+    "taskType": 2,
+    "isDefault": true,
+    "prevTtid": "50a20074-27d6-4950-b666-7c9a41641708",
+    "nextTtid": null,
+    "templates": []
+}

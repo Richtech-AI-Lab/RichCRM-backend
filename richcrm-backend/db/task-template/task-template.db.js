@@ -54,11 +54,10 @@ class TaskTemplate {
     async getTaskTemplatesByStage(stage, creatorId) {
         const params = {
             TableName: this.table,
-            FilterExpression: 'Stage = :s AND (CreatorId = :c OR IsDefault = :d)',
+            FilterExpression: 'Stage = :s AND CreatorId = :c',
             ExpressionAttributeValues: {
                 ':s': stage,
                 ':c': creatorId,
-                ':d': true,
             },
         };
         const data = await db.scan(params);
@@ -90,7 +89,6 @@ class TaskTemplate {
     }
 
     async createTaskTemplate(taskTemplate) {
-        console.log(taskTemplate);
         const params = {
             TableName: this.table,
             Item: {
@@ -121,7 +119,6 @@ class TaskTemplate {
         };
 
         var updateExpressions = [];
-        var expressionAttributeNames = {};
 
         // Optional fields
         if (taskTemplate.taskName) {
@@ -165,7 +162,7 @@ class TaskTemplate {
         } else {
             return null;
         }
-        console.log(params);
+
         const data = await db.update(params);
         return data?.Attributes;
     }

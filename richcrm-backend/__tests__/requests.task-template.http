@@ -18,7 +18,7 @@ content-type: application/json
     "creatorId": "verkho404@gmail.com",
     "stage": 1,
     "taskType": 1,
-    "prevTtid": "ffaf67eb-1938-4c6f-815c-ca6d21296918",
+    "prevTtid": "0d181905-98d4-427a-98f5-3d83d4007e0a",
     "nextTtid": null
 }
 
@@ -31,8 +31,8 @@ content-type: application/json
     "creatorId": "verkho404@gmail.com",
     "stage": 1,
     "taskType": 2,
-    "prevTtid": null,
-    "nextTtid": "ffaf67eb-1938-4c6f-815c-ca6d21296918"
+    "prevTtid": "2fb3955e-ce61-46ff-b841-518db7e7e5d7",
+    "nextTtid": "7f20339d-fa18-475a-bd8e-19f21a42fb3e"
 }
 
 
@@ -41,8 +41,8 @@ POST http://localhost:3001/v1/task-template/read/stage
 content-type: application/json
 
 {
-    "stage": 0,
-    "creatorId": "eden.wu@richtech-ai-lab.org"
+    "stage": 1,
+    "creatorId": "verkho404@gmail.com"
 }
 
 ### Delete Task Template
@@ -83,4 +83,12 @@ content-type: application/json
 
 {
     "taskName": "Confirm case details"
+}
+
+### Create Default Task Templates
+POST http://localhost:3001/v1/task-template/create/default
+content-type: application/json
+
+{
+    "creatorId": "verkho404@gmail.com"
 }

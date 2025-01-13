@@ -207,4 +207,14 @@ router.post(
     TaskTemplateController.deleteTaskTemplate
 )
 
+
+router.post(
+    "/create/default",
+    check("creatorId")
+        .notEmpty()
+        .withMessage("Creator ID is required"),
+    validate,
+    TaskTemplateController.createDefaultTaskTemplates
+)
+
 module.exports = router;

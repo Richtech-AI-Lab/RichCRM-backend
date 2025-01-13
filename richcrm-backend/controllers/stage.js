@@ -1,7 +1,7 @@
 const StageService = require('../db/stage/stage.service');
 const CaseService = require('../db/case/case.service');
 const TaskService = require('../db/task/task.service');
-const TaskTemplateService = require('../db/task-template/task-template.service');
+const TaskTemplateController = require('./task-template');
 const TemplateController = require('./template');
 
 const Types = require('../db/types');
@@ -125,8 +125,12 @@ class StageController {
             const stageId = uuidv4();
             // IMPORTANT: Generate new tasks for this stage
             var tasks = [];
-            const taskTemplates = await TaskTemplateService.readTaskTemplatesByStage(stageType, creatorId);
+            let taskTemplates = await TaskTemplateController._getTaskTemplatesByStage(stageType, creatorId);
             // const taskConfigs = Types.stageDefaultTaskList[stageTypeEnum]
+            if (!taskTemplates || taskTemplates.length == 0) {
+                taskTemplates = Types.stageDefaultTaskList[stageTypeEnum];
+            }
+                
             for (let i = 0; i < taskTemplates.length; i++) {
                 const taskId = uuidv4();
 
@@ -139,11 +143,11 @@ class StageController {
                 const taskObj = {
                     taskId: taskId,
                     stageId: stageId,
-                    taskType: taskConfig.TaskType,
-                    name: taskConfig.TaskName,
+                    taskType: taskConfig.taskType,
+                    name: taskConfig.taskName,
                     status: 0,
                     templates: templateTitles,
-                    ttid: taskConfig.TTID,
+                    ttid: taskConfig.ttid,
                 };
 
                 console.log("---------------", taskObj);
