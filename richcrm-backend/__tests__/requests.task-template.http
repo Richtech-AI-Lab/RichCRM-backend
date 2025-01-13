@@ -82,7 +82,7 @@ POST http://localhost:3001/v1/task-template/delete
 content-type: application/json
 
 {
-    "taskName": "Confirm case details"
+    "ttid": "a7640332-b8ff-4635-a1fe-272b51ecde91"
 }
 
 ### Create Default Task Templates

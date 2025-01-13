@@ -208,6 +208,36 @@ router.post(
 )
 
 
+/**
+ * @api {post} v1/task-template/create/default Create default task templates
+ * @apiName UpdateTaskTemplate
+ * @apiGroup TaskTemplate
+ * 
+ * @apiBody {String} creatorId Creator ID.
+ * 
+ * @apiSuccess {UUID} ttid Task Template ID.
+ * @apiSuccess {String} creatorId Creator ID.
+ * @apiSuccess {Number} stage Stage.
+ * @apiSuccess {String} taskName Task Name.
+ * @apiSuccess {Number} taskType Task Type (0 - ACTION, 1 - CONTACT, 2 - UPLOAD).
+ * @apiSuccess {UUID} prevTtid Previous Task Template ID.
+ * @apiSuccess {UUID} nextTtid Next Task Template ID.
+ * @apiSuccess {Boolean} isDefault Default task template for the stage.
+ * @apiSuccess {List} templates List of templates titles.
+ * 
+ * @apiSuccessExample Example data on success:
+ * {
+ * "ttid": "123e4567-e89b-12d3-a456-426614174000",
+ * "creatorId": "eden.wu@richtech-ai-lab.com",
+ * "stage": 1,
+ * "taskName": "Customized Task",
+ * "taskType": 1,
+ * "prevTtid": "123e4567-e89b-12d3-a456-426614174001",
+ * "nextTtid": null,
+ * "isDefault": false,
+ * "templates": [],
+ * }
+ */
 router.post(
     "/create/default",
     check("creatorId")
