@@ -1,5 +1,5 @@
 ### Create Task Template
-POST http://localhost:3001/v1/task-template/create
+POST https://api.richcrm.org/v1/task-template/create
 content-type: application/json
 
 {
@@ -10,7 +10,7 @@ content-type: application/json
 }
 
 ### Create Task Template 2 b75f74e9-9bcd-40b4-ab9d-8084a5f3b0b8
-POST http://localhost:3001/v1/task-template/create
+POST https://api.richcrm.org/v1/task-template/create
 content-type: application/json
 
 {
@@ -18,7 +18,7 @@ content-type: application/json
     "creatorId": "verkho404@gmail.com",
     "stage": 1,
     "taskType": 1,
-    "prevTtid": "0d181905-98d4-427a-98f5-3d83d4007e0a",
+    "prevTtid": "882e226b-408a-4d0e-a061-53cf11d9a0de",
     "nextTtid": null
 }
 
@@ -50,7 +50,7 @@ POST http://localhost:3001/v1/task-template/delete
 content-type: application/json
 
 {
-    "ttid": "2338b625-c902-43c2-b5c2-1b77967789a4"
+    "ttid": "d54365b4-e0cf-4b8e-a753-a5c5b9031ac1"
 }
 
 ### Create Task Template With Template Objects
@@ -90,5 +90,5 @@ POST http://localhost:3001/v1/task-template/create/default
 content-type: application/json
 
 {
-    "creatorId": "verkho404@gmail.com"
+    "creatorId": "test1@gmail.com"
 }

@@ -452,7 +452,7 @@ class TaskTemplateController {
                 for (let j = 0; j < taskList.length; j++) {
                     const taskObj = taskList[j];
                     const taskTemplate = {
-                        taskName: taskObj.name,
+                        taskName: taskObj.taskName,
                         stage: i,
                         creatorId: creatorId,
                         taskType: taskObj.taskType,
