@@ -11,7 +11,7 @@ Content-Type: application/json
 GET http://localhost:3001/v1/stage/59f4581b-4360-4f2a-be37-b516cfd330ff
 
 ### Get Stage by Case ID and Stage Type
-GET http://localhost:3001/v1/stage/048c4235-183f-4061-8ff5-ab75d4dbc625/2
+GET http://localhost:3001/v1/stage/ae177344-1804-4b01-b322-d8e90e2dd370/0
 
 
 ### Update Stage by Stage ID
@@ -19,9 +19,15 @@ POST http://localhost:3001/v1/stage/update
 Content-Type: application/json
 
 {
-    "stageId": "f75e0782-2515-4df3-8449-593a6e6dd726",
-    "stageStatus": 1,
-    "newTask": "f88d45df-b6f6-4d87-99e8-8ffc789e9834"
+    "stageId": "ee77a0d8-312e-4cf9-aaba-f558a611d920",
+    "tasks": [
+        "326d76a0-2286-4d5c-abdd-2058f9abd079",
+        "9cc5e3dc-f648-44b5-8c72-62d9514cb57c",
+        "c8d40298-939d-4db4-b09e-d12c6d7e9236",
+        "53116a70-78cb-4df0-b908-840ed9f6cb2c",
+        "aa2b5219-8c00-439d-a7ff-d5d097287134",
+        "86d01134-d03c-417d-93e8-8bf83dd70385"
+    ]
 }
 
 ### Delete Stage by Stage ID

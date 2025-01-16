@@ -203,8 +203,8 @@ aws dynamodb create-table \
 aws dynamodb create-table \
     --table-name TaskTemplate \
     --attribute-definitions \
-        AttributeName=TaskName,AttributeType=S \
-    --key-schema AttributeName=TaskName,KeyType=HASH \
+        AttributeName=TTID,AttributeType=S \
+    --key-schema AttributeName=TTID,KeyType=HASH \
     --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
     --table-class STANDARD
 

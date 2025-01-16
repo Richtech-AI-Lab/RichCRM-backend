@@ -1,7 +1,7 @@
 const StageService = require('../db/stage/stage.service');
 const CaseService = require('../db/case/case.service');
 const TaskService = require('../db/task/task.service');
-const TaskTemplateService = require('../db/task-template/task-template.service');
+const TaskTemplateController = require('./task-template');
 const TemplateController = require('./template');
 
 const Types = require('../db/types');
@@ -81,7 +81,7 @@ class StageController {
     }
 
    
-    async createStageByCaseIdAndStageType(caseId, stageType) {
+    async createStageByCaseIdAndStageType(caseId, stageType, creatorId) {
         
         try {
             // Check if the caseId is valid
@@ -125,29 +125,32 @@ class StageController {
             const stageId = uuidv4();
             // IMPORTANT: Generate new tasks for this stage
             var tasks = [];
-            const taskConfigs = Types.stageDefaultTaskList[stageTypeEnum]
-            for (let i = 0; i < taskConfigs.length; i++) {
+            let taskTemplates = await TaskTemplateController._getTaskTemplatesByStage(stageType, creatorId);
+            // const taskConfigs = Types.stageDefaultTaskList[stageTypeEnum]
+            if (!taskTemplates || taskTemplates.length == 0) {
+                taskTemplates = Types.stageDefaultTaskList[stageTypeEnum];
+            }
+                
+            for (let i = 0; i < taskTemplates.length; i++) {
                 const taskId = uuidv4();
 
                 // Check TaskTemplate exist
-                const taskConfig = taskConfigs[i];
-                const taskTemplate = await TaskTemplateService.readTaskTemplateByName(taskConfigs[i].name);
-                if (taskTemplate !== null) {
-                    console.log(`[StageController][createStage] TaskTemplate found: ${taskTemplate.TaskName}`);
-                    taskConfig.templates = taskTemplate.Templates;
-                }
+                const taskConfig = taskTemplates[i];
 
                 // Check if the templates exists
-                const templateTitles = await TemplateController.validateTemplates(taskConfig.templates);
+                const templateTitles = await TemplateController.validateTemplates(taskConfig.Templates);
 
                 const taskObj = {
                     taskId: taskId,
                     stageId: stageId,
                     taskType: taskConfig.taskType,
-                    name: taskConfig.name,
-                    status: taskConfig.status,
+                    name: taskConfig.taskName,
+                    status: 0,
                     templates: templateTitles,
+                    ttid: taskConfig.ttid,
                 };
+
+                console.log("---------------", taskObj);
                 const t = await TaskService.createTask(taskObj);
                 tasks.push(t.TaskId);
             }
@@ -190,9 +193,10 @@ class StageController {
     }
 
     async createStage(req, res) {
+        const emailAddress = req.user.EmailAddress;
         const { caseId, stageType } = req.body;
 
-        const ret = await this.createStageByCaseIdAndStageType(caseId, stageType);
+        const ret = await this.createStageByCaseIdAndStageType(caseId, stageType, emailAddress);
         if (ret.status === "success") {
             return res.status(200).json(ret);
         } else {
@@ -201,7 +205,7 @@ class StageController {
     }
 
     async updateStage(req, res) {
-        const { stageId, stageStatus, newTask } = req.body;
+        const { stageId, stageStatus, tasks } = req.body;
 
         try {
             // Check if the stageId is valid
@@ -223,7 +227,7 @@ class StageController {
             };
 
             // Check if the stageStatus is valid
-            if (stageStatus !== undefined) {
+            if (stageStatus !== undefined && stageStatus !== null) {
                 const stageStatusEnum = Types.castIntToEnum(Types.status, stageStatus);
                 if (stageStatusEnum === null) {
                     return res.status(400).json({
@@ -241,8 +245,8 @@ class StageController {
                 stageObj.tasks = [];
             }
             
-            if (newTask !== undefined) {
-                stageObj.tasks = await this.updateTaskList(stageObj.tasks, newTask);
+            if (tasks !== undefined) {
+                stageObj.tasks = await this.updateTaskList(tasks);
             }
 
             const s = await StageService.updateStage(stageObj);
@@ -361,19 +365,17 @@ class StageController {
     }
 
     // Update new task to task list
-    async updateTaskList(tasks, newTask) {
-        if (newTask !== undefined) {
-            if (!tasks.includes(newTask)) {
-                // validate if task exists
-                const task = await TaskService.getTaskById(newTask);
-                if (task === null) {
-                    console.log(`[StageController][updateStage] Task not found: ${newTask}`);
-                    return tasks;
-                }
-                tasks.push(newTask);
+    async updateTaskList(newTasks) {
+        var newTaskList = [];
+        for (let i = 0; i < newTasks.length; i++) {
+            const newTask = newTasks[i];
+            const task = await TaskService.getTaskById(newTask);
+            if (task === null) {
+                continue;
             }
+            newTaskList.push(newTask);
         }
-        return tasks;
+        return newTaskList
     }
 }
 

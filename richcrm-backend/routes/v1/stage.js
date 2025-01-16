@@ -4,7 +4,7 @@ var validate = require('../../middlewares/validation');
 var StageController = require('../../controllers/stage');
 
 const router = express.Router();
-
+const passport = require("../../middlewares/tokenStrategy/accessTokenStrategy");
 
 /**
  * @api {get} v1/stage/:stageId Read a stage by stage ID
@@ -123,6 +123,7 @@ router.post(
         .notEmpty()
         .withMessage("Case ID is required"),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     StageController.createStage
 )
 
@@ -133,7 +134,7 @@ router.post(
  * 
  * @apiBody {String} stageId Stage ID.
  * @apiBody {String} stageStatus Stage Status (0 - NOT_STARTED, 1 - PENDING, 2 - FINISHED, 3 - OVERDUE).
- * @apiBody {String} newTask Task ID to be added to the Stage.
+ * @apiBody {String} tasks Task orders of the Stage (TaskID not TTID!). 
  * 
  * 
  * @apiSuccess {String} stageId Stage ID.
@@ -161,10 +162,14 @@ router.post(
     "/update",
     check("stageId")
         .notEmpty()
+        .isUUID()
         .withMessage("Stage ID is required"),
     check("stageStatus")
-        .notEmpty()
-        .withMessage("Stage Status is required"),
+        .optional()
+        .isInt(),
+    check("tasks")
+        .optional()
+        .isArray(),
     validate,
     StageController.updateStage
 )
