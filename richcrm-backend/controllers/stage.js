@@ -205,7 +205,7 @@ class StageController {
     }
 
     async updateStage(req, res) {
-        const { stageId, stageStatus, newTask } = req.body;
+        const { stageId, stageStatus, tasks } = req.body;
 
         try {
             // Check if the stageId is valid
@@ -227,7 +227,7 @@ class StageController {
             };
 
             // Check if the stageStatus is valid
-            if (stageStatus !== undefined) {
+            if (stageStatus !== undefined && stageStatus !== null) {
                 const stageStatusEnum = Types.castIntToEnum(Types.status, stageStatus);
                 if (stageStatusEnum === null) {
                     return res.status(400).json({
@@ -245,8 +245,8 @@ class StageController {
                 stageObj.tasks = [];
             }
             
-            if (newTask !== undefined) {
-                stageObj.tasks = await this.updateTaskList(stageObj.tasks, newTask);
+            if (tasks !== undefined) {
+                stageObj.tasks = await this.updateTaskList(tasks);
             }
 
             const s = await StageService.updateStage(stageObj);
@@ -365,19 +365,17 @@ class StageController {
     }
 
     // Update new task to task list
-    async updateTaskList(tasks, newTask) {
-        if (newTask !== undefined) {
-            if (!tasks.includes(newTask)) {
-                // validate if task exists
-                const task = await TaskService.getTaskById(newTask);
-                if (task === null) {
-                    console.log(`[StageController][updateStage] Task not found: ${newTask}`);
-                    return tasks;
-                }
-                tasks.push(newTask);
+    async updateTaskList(newTasks) {
+        var newTaskList = [];
+        for (let i = 0; i < newTasks.length; i++) {
+            const newTask = newTasks[i];
+            const task = await TaskService.getTaskById(newTask);
+            if (task === null) {
+                continue;
             }
+            newTaskList.push(newTask);
         }
-        return tasks;
+        return newTaskList
     }
 }
 
