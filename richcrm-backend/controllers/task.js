@@ -1,6 +1,7 @@
 const TaskService = require('../db/task/task.service');
 const StageService = require('../db/stage/stage.service');
 const TemplateController = require('./template');
+const TaskTemplateService = require('../db/task-template/task-template.service');
 
 const Types = require('../db/types');
 const { v4: uuidv4 } = require('uuid');
@@ -41,6 +42,7 @@ class TaskController {
     }
 
     async createTask(req, res) {
+        const emailAddress = req.user.EmailAddress;
         const { taskType, stageId, name, status, templates, fileURL, ttid } = req.body;
         try {
             // Check if the taskType is valid
@@ -86,6 +88,26 @@ class TaskController {
                 fileURL: fileURL,
                 ttid: ttid,
             };
+
+            // Check if TTID is valid
+            if (ttid !== undefined) {
+                const taskTemplate = await TaskTemplateService.readTaskTemplateByTTID(ttid);
+                if (taskTemplate === null) {
+                    return res.status(400).json({
+                        status: "failed",
+                        data: [],
+                        message: `[TaskController][createTask] Task Template not found for ttid: ${ttid}`
+                    });
+                }
+            } else {
+                const taskTemplates = await TaskTemplateService.readTaskTemplateByTaskName(name, emailAddress);
+                if (taskTemplates && taskTemplates.length > 0) {
+                    taskObj.ttid = taskTemplates[0].TTID;
+                } else {
+                    console.log(`[TaskController][createTask] Task Template not found for taskName: ${name}`);
+                }
+            }
+
             const data = await TaskService.createTask(taskObj);
             return res.status(200).json({
                 status: "success",
