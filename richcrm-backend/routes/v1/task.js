@@ -4,6 +4,7 @@ var validate = require('../../middlewares/validation');
 var TaskController = require('../../controllers/task');
 
 const router = express.Router();
+const passport = require("../../middlewares/tokenStrategy/accessTokenStrategy");
 
 /**
  * @api {post} v1/task/create Create a new task
@@ -14,6 +15,7 @@ const router = express.Router();
  * @apiBody {String} name Task name.
  * @apiBody {String} status Task status (0 - NOT_STARTED, 1 - PENDING, 2 - FINISHED, 3 - OVERDUE).
  * @apiBody {List} templates List of templates titles.
+ * @apiBody {String} ttid Task Template ID that this task is based on.
  * 
  * @apiSuccess {String} taskId Task ID.
  * @apiSuccess {String} stageId Stage ID.
@@ -55,6 +57,7 @@ router.post(
         .optional()
         .isUUID(),
     validate,
+    passport.authenticate("user-jwtStrategy", {session: false}),
     TaskController.createTask
 )
 

@@ -138,7 +138,7 @@ class StageController {
                 const taskConfig = taskTemplates[i];
 
                 // Check if the templates exists
-                const templateTitles = await TemplateController.validateTemplates(taskConfig.Templates);
+                const templateTitles = await TemplateController.validateTemplates(taskConfig.templates);
 
                 const taskObj = {
                     taskId: taskId,

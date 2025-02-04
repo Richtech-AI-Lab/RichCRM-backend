@@ -14,8 +14,8 @@ POST http://localhost:3001/v1/auth/login
 content-type: application/json
 
 {
-    "emailAddress": "verkho404@gmail.com",
-    "password": "88888888"
+    "emailAddress": "test1@gmail.com",
+    "password": "1234561341"
 }
 
 ### Delete User

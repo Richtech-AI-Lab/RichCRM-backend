@@ -11,7 +11,7 @@ Content-Type: application/json
 GET http://localhost:3001/v1/stage/59f4581b-4360-4f2a-be37-b516cfd330ff
 
 ### Get Stage by Case ID and Stage Type
-GET http://localhost:3001/v1/stage/ae177344-1804-4b01-b322-d8e90e2dd370/0
+GET http://localhost:3001/v1/stage/6248c90b-268b-46c4-b3f0-21547ddc1f20/0
 
 
 ### Update Stage by Stage ID
